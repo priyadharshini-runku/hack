@@ -2111,7 +2111,7 @@
       "phone": "9133548765",
       "status": "Active",
       "createdAt": "2026-09-05T07:27:40.289Z",
-      "lastLoginAt": "2026-09-06T15:01:13.550Z"
+      "lastLoginAt": "2026-09-07T10:20:21.471Z"
     },
     {
       "id": "fac_1788590681676",
@@ -2180,6 +2180,17 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": "log_1788776421486_t3p5",
+      "timestamp": "2026-09-07T10:20:21.486Z",
+      "action": "FACULTY_LOGIN_SUCCESS",
+      "actorType": "College Faculty",
+      "actorName": "ramya",
+      "actorEmail": "ramya@gmail.com",
+      "collegeName": "SRKR ENGINEERING COLLEGE",
+      "details": "Authenticated successfully with SRKR ENGINEERING COLLEGE's shared faculty password.",
+      "status": "Success"
+    },
     {
       "id": "log_1788706873562_97l5",
       "timestamp": "2026-09-06T15:01:13.562Z",
