@@ -245,6 +245,20 @@ class DataStore {
       }
     });
 
+    // Ensure platform admin demo user exists
+    const adminGov = this.data.users.find(u => u.email.toLowerCase() === 'admin@skillbridge.gov.in');
+    if (!adminGov) {
+      this.data.users.push({
+        id: 'usr_admin_gov',
+        name: 'Platform Super Admin',
+        email: 'admin@skillbridge.gov.in',
+        password: 'password123',
+        role: 'admin',
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+        createdAt: '2026-01-01T00:00:00Z'
+      });
+    }
+
     this.save();
   }
 
@@ -681,6 +695,8 @@ class DataStore {
         avatar: student.avatar,
         collegeId: student.collegeId,
         collegeName: student.collegeName,
+        collegeCode: student.collegeCode || '',
+        district: student.district || '',
         title: student.targetRoleTitle || `${student.department || 'CS'} Student`
       };
       this.data.users.push(user);
@@ -786,6 +802,8 @@ class DataStore {
       avatar: avatar,
       collegeId: collegeId,
       collegeName: collegeName,
+      collegeCode: formData.collegeCode || '',
+      district: formData.district || '',
       title: role === 'college' ? collegeName : (formData.title || `${formData.department || 'CS'} Student`),
       createdAt: new Date().toISOString()
     };
@@ -817,6 +835,8 @@ class DataStore {
         avatar: avatar,
         collegeId: collegeId,
         collegeName: collegeName,
+        collegeCode: formData.collegeCode || '',
+        district: formData.district || '',
         department: formData.department || 'Computer Science & Engineering (CSE)',
         year: formData.year || '3rd Year — 5th Semester',
         batch: formData.batch || '2023 - 2027',
@@ -876,6 +896,9 @@ class DataStore {
       if (userIdx !== -1) {
         if (updates.avatar) this.data.users[userIdx].avatar = updates.avatar;
         if (updates.name) this.data.users[userIdx].name = updates.name;
+        if (updates.collegeName) this.data.users[userIdx].collegeName = updates.collegeName;
+        if (updates.collegeCode) this.data.users[userIdx].collegeCode = updates.collegeCode;
+        if (updates.district) this.data.users[userIdx].district = updates.district;
       }
       this.save();
       return this.data.students[idx];

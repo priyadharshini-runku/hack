@@ -31,6 +31,8 @@ import {
   TARGET_CAREER_ROLES, 
   TECHNICAL_SKILLS_LIBRARY 
 } from '../data/indianInstitutions';
+import { APCollegeSelector } from '../components/common/APCollegeSelector';
+import { AP_ENGINEERING_COLLEGES } from '../data/apColleges';
 import confetti from 'canvas-confetti';
 
 export const RegisterPage = ({ setActivePage }) => {
@@ -49,8 +51,11 @@ export const RegisterPage = ({ setActivePage }) => {
   
   // Colleges list from backend / data
   const [registeredCollegesList, setRegisteredCollegesList] = useState([]);
-  const [selectedCollege, setSelectedCollege] = useState(INDIAN_COLLEGES[0].name);
+  const [selectedDistrict, setSelectedDistrict] = useState('All Districts');
+  const [selectedCollege, setSelectedCollege] = useState(AP_ENGINEERING_COLLEGES[0].name);
+  const [selectedCollegeCode, setSelectedCollegeCode] = useState(AP_ENGINEERING_COLLEGES[0].code);
   const [customCollege, setCustomCollege] = useState('');
+  const [customCode, setCustomCode] = useState('');
   const [department, setDepartment] = useState(ALL_ENGINEERING_DEPARTMENTS[0]);
   
   // Student details
@@ -184,9 +189,19 @@ export const RegisterPage = ({ setActivePage }) => {
 
     setSubmitting(true);
 
-    const finalCollege = selectedCollege === 'Other / Custom Institution' 
+    const isCustom = selectedCollegeCode === 'OTHER' || 
+      selectedCollege === 'Other / Custom Engineering College in Andhra Pradesh' || 
+      selectedCollege === 'Other / Custom Institution';
+
+    const finalCollege = isCustom 
       ? (customCollege.trim() || 'Custom Engineering Institution') 
       : selectedCollege;
+
+    const finalCollegeCode = isCustom 
+      ? (customCode.trim() || 'CUSTOM') 
+      : (selectedCollegeCode || '');
+
+    const finalDistrict = selectedDistrict !== 'All Districts' ? selectedDistrict : undefined;
 
     const parsedCGPA = parseFloat(cgpa) > 0 ? parseFloat(cgpa) : 8.5;
 
@@ -197,6 +212,8 @@ export const RegisterPage = ({ setActivePage }) => {
       role,
       avatar: customAvatar || undefined,
       collegeName: finalCollege,
+      collegeCode: finalCollegeCode,
+      district: finalDistrict,
       department,
       year,
       cgpa: parsedCGPA,
@@ -497,23 +514,19 @@ export const RegisterPage = ({ setActivePage }) => {
             <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
               <div className="flex items-center gap-2 text-xs font-bold text-slate-700 uppercase tracking-wider">
                 <School className="w-4 h-4 text-brand-600" />
-                {role === 'student' ? 'College & Engineering Department (India)' : role === 'college' ? 'Assigned Registered College & Department' : 'Institutional Details'}
+                {role === 'student' ? 'Engineering College & Department (Andhra Pradesh)' : role === 'college' ? 'Assigned Registered College & Department' : 'Institutional Details'}
               </div>
 
-              {/* Colleges Dropdown */}
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="text-xs font-bold text-slate-700">
-                    {role === 'college' ? 'Select Your Registered College Institution' : 'Select College / University in India'}
-                  </label>
-                  {role === 'college' ? (
+              {/* Colleges Selection */}
+              {role === 'college' ? (
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-bold text-slate-700">
+                      Select Your Registered College Institution
+                    </label>
                     <span className="text-[10px] text-amber-700 font-bold bg-amber-100 px-2 py-0.5 rounded">Approved Colleges Only</span>
-                  ) : (
-                    <span className="text-[10px] text-slate-400">Over 50+ Top Indian Institutions Listed</span>
-                  )}
-                </div>
+                  </div>
 
-                {role === 'college' ? (
                   <select
                     value={selectedCollege}
                     onChange={(e) => setSelectedCollege(e.target.value)}
@@ -530,31 +543,27 @@ export const RegisterPage = ({ setActivePage }) => {
                       </option>
                     ))}
                   </select>
-                ) : (
-                  <select
-                    value={selectedCollege}
-                    onChange={(e) => setSelectedCollege(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-brand-500 outline-none bg-white font-medium text-slate-800"
-                  >
-                    {INDIAN_COLLEGES.map(col => (
-                      <option key={col.name} value={col.name}>
-                        {col.name} ({col.state})
-                      </option>
-                    ))}
-                  </select>
-                )}
-
-                {role !== 'college' && selectedCollege === 'Other / Custom Institution' && (
-                  <input
-                    type="text"
-                    placeholder="Type your complete college/institution name..."
-                    value={customCollege}
-                    onChange={(e) => setCustomCollege(e.target.value)}
-                    className="w-full mt-2 px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none bg-white font-medium"
-                    required
-                  />
-                )}
-              </div>
+                </div>
+              ) : (
+                <APCollegeSelector
+                  selectedDistrict={selectedDistrict}
+                  onDistrictChange={setSelectedDistrict}
+                  selectedCollege={selectedCollege}
+                  selectedCollegeCode={selectedCollegeCode}
+                  onCollegeSelect={(col) => {
+                    setSelectedCollege(col.name);
+                    setSelectedCollegeCode(col.code);
+                    if (col.district && col.district !== 'Other' && selectedDistrict === 'All Districts') {
+                      setSelectedDistrict(col.district);
+                    }
+                  }}
+                  customCollege={customCollege}
+                  onCustomCollegeChange={setCustomCollege}
+                  customCode={customCode}
+                  onCustomCodeChange={setCustomCode}
+                  required={true}
+                />
+              )}
 
               {/* Engineering Departments Dropdown */}
               <div>

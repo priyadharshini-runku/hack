@@ -223,6 +223,8 @@ export const AuthProvider = ({ children }) => {
           : 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80'),
         collegeId: collegeId,
         collegeName: collegeName,
+        collegeCode: formData.collegeCode || '',
+        district: formData.district || '',
         title: formData.role === 'college' ? collegeName : (formData.title || `${formData.department || 'CS'} Student`),
         createdAt: new Date().toISOString()
       };
@@ -230,7 +232,7 @@ export const AuthProvider = ({ children }) => {
       const newProfile = formData.role === 'college' ? {
         id: collegeId,
         name: collegeName,
-        code: collegeName.split(' ').map(w => w[0]).join('').substring(0, 6).toUpperCase(),
+        code: formData.collegeCode || collegeName.split(' ').map(w => w[0]).join('').substring(0, 6).toUpperCase(),
         deanName: formData.name,
         deanEmail: formData.email
       } : {
@@ -238,6 +240,8 @@ export const AuthProvider = ({ children }) => {
         name: formData.name,
         email: formData.email.toLowerCase(),
         collegeName: collegeName,
+        collegeCode: formData.collegeCode || '',
+        district: formData.district || '',
         department: formData.department || 'Computer Science & Engineering (CSE)',
         year: formData.year || '3rd Year — 5th Semester',
         cgpa: formData.cgpa || 8.5,

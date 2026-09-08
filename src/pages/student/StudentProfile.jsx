@@ -214,8 +214,17 @@ export const StudentProfile = ({ setActivePage }) => {
                 {student.department || 'Engineering Department'} · {student.year || 'Academic Year'}
               </p>
               
-              <p className="text-xs text-slate-500">
-                {student.collegeName || 'Registered Institute'} {student.batch ? `(${student.batch})` : ''}
+              <p className="text-xs text-slate-500 flex flex-wrap items-center gap-1.5">
+                <span className="font-medium text-slate-700">{student.collegeName || 'Registered Institute'}</span>
+                {student.collegeCode && (
+                  <span className="px-1.5 py-0.5 rounded bg-brand-50 text-brand-700 font-mono font-bold text-[11px] border border-brand-200">
+                    [{student.collegeCode}]
+                  </span>
+                )}
+                {student.district && (
+                  <span className="text-slate-400">· 📍 {student.district}</span>
+                )}
+                {student.batch ? <span>({student.batch})</span> : ''}
               </p>
 
               <div className="flex flex-wrap items-center gap-4 text-xs text-slate-600 pt-1">

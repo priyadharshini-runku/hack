@@ -50,8 +50,8 @@ app.post('/api/auth/login', (req, res) => {
   if (id) {
     const user = store.getUserById(id);
     if (user) {
-      const profile = user.role === 'student' 
-        ? store.getStudentById(user.id) 
+      const profile = user.role === 'student'
+        ? store.getStudentById(user.id)
         : user.role === 'college' ? store.getCollegeById(user.collegeId || 'col_apex') : store.getCompanyById(user.companyId || 'comp_technova');
       return res.json({ success: true, user, profile });
     }
