@@ -278,7 +278,7 @@ export const StudentProfile = ({ setActivePage }) => {
           <div className="space-y-1 bg-slate-50 p-3 rounded-xl border border-slate-100">
             <span className="font-semibold text-slate-500 uppercase tracking-wider text-[10px]">Target Career Path</span>
             <p className="text-slate-800 font-bold text-sm text-brand-700">{student.targetRoleTitle || 'Software Developer'}</p>
-            <p className="text-slate-500 text-[11px]">{student.preferredIndustry || 'Enterprise Software & Cloud'}</p>
+            <p className="text-slate-500 text-[11px]">{student.preferredIndustry || (student.targetDomains && student.targetDomains.length > 0 ? student.targetDomains.join(' · ') : student.targetDomain) || 'Enterprise Software & Cloud'}</p>
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { 
   GraduationCap, 
@@ -18,19 +18,26 @@ import {
   Award, 
   Plus, 
   Check, 
-  Search,
-  ShieldCheck,
-  Camera,
-  Upload,
-  Image as ImageIcon
+  Search, 
+  ShieldCheck, 
+  Camera, 
+  Upload, 
+  Image as ImageIcon,
+  Layers,
+  X,
+  Briefcase
 } from 'lucide-react';
 import { 
-  INDIAN_COLLEGES, 
   ALL_ENGINEERING_DEPARTMENTS, 
-  ALL_ACADEMIC_YEARS_AND_SEMESTERS,
-  TARGET_CAREER_ROLES, 
-  TECHNICAL_SKILLS_LIBRARY 
+  ALL_ACADEMIC_YEARS_AND_SEMESTERS 
 } from '../data/indianInstitutions';
+import { 
+  INDUSTRY_DOMAINS,
+  getDefaultDomainsForBranch,
+  getAvailableRoles,
+  getPrioritizedSkills,
+  getAllEngineeringSkills
+} from '../data/registrationCareerData';
 import { APCollegeSelector } from '../components/common/APCollegeSelector';
 import { AP_ENGINEERING_COLLEGES } from '../data/apColleges';
 import confetti from 'canvas-confetti';
@@ -56,19 +63,28 @@ export const RegisterPage = ({ setActivePage }) => {
   const [selectedCollegeCode, setSelectedCollegeCode] = useState(AP_ENGINEERING_COLLEGES[0].code);
   const [customCollege, setCustomCollege] = useState('');
   const [customCode, setCustomCode] = useState('');
+  
+  // Existing Engineering Branch Selection
   const [department, setDepartment] = useState(ALL_ENGINEERING_DEPARTMENTS[0]);
   
   // Student details
   const [year, setYear] = useState(ALL_ACADEMIC_YEARS_AND_SEMESTERS[4]); // 3rd Year — 5th Semester
   const [cgpa, setCgpa] = useState('');
-  const [targetRoleTitle, setTargetRoleTitle] = useState(TARGET_CAREER_ROLES[0].title);
-  const [selectedSkills, setSelectedSkills] = useState(['Java', 'Python', 'SQL']);
+  
+  // Target Career Role & Known Skills State
+  const [selectedDomains, setSelectedDomains] = useState(() => getDefaultDomainsForBranch(ALL_ENGINEERING_DEPARTMENTS[0]));
+  const [targetRoleId, setTargetRoleId] = useState('role_swe');
+  const [targetRoleTitle, setTargetRoleTitle] = useState('Software Developer');
+  const [selectedSkills, setSelectedSkills] = useState([]); // Must start EMPTY: no auto-marked skills
+  const [skillSearchQuery, setSkillSearchQuery] = useState('');
+  const [showAllSkills, setShowAllSkills] = useState(false);
   const [customSkillInput, setCustomSkillInput] = useState('');
+  
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
   // Fetch approved registered colleges from backend
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchRegisteredColleges = async () => {
       try {
         const res = await fetch('/api/colleges');
@@ -88,6 +104,30 @@ export const RegisterPage = ({ setActivePage }) => {
     fetchRegisteredColleges();
   }, [role]);
 
+  // Synchronize recommended domains whenever the student's branch changes
+  useEffect(() => {
+    if (role === 'student') {
+      const defaults = getDefaultDomainsForBranch(department);
+      setSelectedDomains(defaults);
+    }
+  }, [department, role]);
+
+  // Compute available roles dynamically from existing branch + selected domains
+  const availableRoles = useMemo(() => {
+    return getAvailableRoles(department, selectedDomains);
+  }, [department, selectedDomains]);
+
+  // Ensure targetRoleId remains valid within the filtered availableRoles
+  useEffect(() => {
+    if (availableRoles.length > 0) {
+      const exists = availableRoles.some(r => r.id === targetRoleId);
+      if (!exists) {
+        setTargetRoleId(availableRoles[0].id);
+        setTargetRoleTitle(availableRoles[0].title);
+      }
+    }
+  }, [availableRoles, targetRoleId]);
+
   const handleAvatarSelect = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -105,6 +145,26 @@ export const RegisterPage = ({ setActivePage }) => {
     reader.readAsDataURL(file);
   };
 
+  const toggleDomain = (domain) => {
+    if (selectedDomains.includes(domain)) {
+      if (selectedDomains.length === 1) {
+        showToast('Please keep at least one industry domain selected.', 'info');
+        return;
+      }
+      setSelectedDomains(selectedDomains.filter(d => d !== domain));
+    } else {
+      setSelectedDomains([...selectedDomains, domain]);
+    }
+  };
+
+  const handleSelectRole = (roleId) => {
+    const found = availableRoles.find(r => r.id === roleId);
+    if (found) {
+      setTargetRoleId(found.id);
+      setTargetRoleTitle(found.title);
+    }
+  };
+
   const toggleSkill = (skill) => {
     if (selectedSkills.includes(skill)) {
       setSelectedSkills(selectedSkills.filter(s => s !== skill));
@@ -114,13 +174,35 @@ export const RegisterPage = ({ setActivePage }) => {
   };
 
   const handleAddCustomSkill = (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     if (!customSkillInput.trim()) return;
-    if (!selectedSkills.includes(customSkillInput.trim())) {
-      setSelectedSkills([...selectedSkills, customSkillInput.trim()]);
-      setCustomSkillInput('');
+    const trimmed = customSkillInput.trim();
+    if (!selectedSkills.includes(trimmed)) {
+      setSelectedSkills([...selectedSkills, trimmed]);
+      showToast(`Added custom skill: ${trimmed}`, 'success');
     }
+    setCustomSkillInput('');
   };
+
+  // Skills library calculations
+  const prioritizedSkills = useMemo(() => {
+    return getPrioritizedSkills(targetRoleId, department, selectedDomains);
+  }, [targetRoleId, department, selectedDomains]);
+
+  const allSkillsList = useMemo(() => {
+    return getAllEngineeringSkills();
+  }, []);
+
+  const displayedSkills = useMemo(() => {
+    if (skillSearchQuery.trim()) {
+      const q = skillSearchQuery.toLowerCase().trim();
+      return allSkillsList.filter(s => s.toLowerCase().includes(q));
+    }
+    if (showAllSkills) {
+      return allSkillsList;
+    }
+    return prioritizedSkills;
+  }, [skillSearchQuery, showAllSkills, allSkillsList, prioritizedSkills]);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -176,7 +258,7 @@ export const RegisterPage = ({ setActivePage }) => {
       return;
     }
 
-    // Student & Recruiter Registration Flow
+    // Student & Recruiter Password Validation
     if (!password || password.length < 6) {
       setErrorMsg('Password must be at least 6 characters long for account security.');
       return;
@@ -185,6 +267,22 @@ export const RegisterPage = ({ setActivePage }) => {
     if (password !== confirmPassword) {
       setErrorMsg('Passwords do not match. Please re-type your password carefully.');
       return;
+    }
+
+    // Student Specific Field Validations (Industry Domain, Role, Known Skills)
+    if (role === 'student') {
+      if (!selectedDomains || selectedDomains.length === 0) {
+        setErrorMsg('Please select at least one Target Industry Domain.');
+        return;
+      }
+      if (!targetRoleTitle || !targetRoleTitle.trim()) {
+        setErrorMsg('Please select a Target Industry Role.');
+        return;
+      }
+      if (!selectedSkills || selectedSkills.length === 0) {
+        setErrorMsg('Please select at least one Known Skill that you possess.');
+        return;
+      }
     }
 
     setSubmitting(true);
@@ -202,7 +300,6 @@ export const RegisterPage = ({ setActivePage }) => {
       : (selectedCollegeCode || '');
 
     const finalDistrict = selectedDistrict !== 'All Districts' ? selectedDistrict : undefined;
-
     const parsedCGPA = parseFloat(cgpa) > 0 ? parseFloat(cgpa) : 8.5;
 
     const payload = {
@@ -217,11 +314,18 @@ export const RegisterPage = ({ setActivePage }) => {
       department,
       year,
       cgpa: parsedCGPA,
+      targetDomains: selectedDomains,
+      targetDomain: selectedDomains[0] || 'Software / IT',
+      targetRoleId,
       targetRoleTitle,
       initialSkills: selectedSkills.map(s => ({
         name: s,
         level: 'Intermediate',
-        category: (s === 'Communication & STAR' || s === 'Team Collaboration' || s === 'Problem Solving') ? 'Soft' : (s.includes('Git') || s.includes('Docker') || s.includes('AWS')) ? 'Tools' : 'Technical',
+        category: (s === 'Communication & STAR' || s === 'Team Collaboration' || s === 'Problem Solving' || s === 'Time Management') 
+          ? 'Soft' 
+          : (s.includes('Git') || s.includes('Docker') || s.includes('Linux') || s.includes('AWS')) 
+            ? 'Tools' 
+            : 'Technical',
         verified: false,
         rating: 3.8
       }))
@@ -565,7 +669,7 @@ export const RegisterPage = ({ setActivePage }) => {
                 />
               )}
 
-              {/* Engineering Departments Dropdown */}
+              {/* Engineering Departments Dropdown (Existing Branch Selection) */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
                   {role === 'college' ? 'Faculty Department' : 'Engineering Department / Branch'}
@@ -618,43 +722,194 @@ export const RegisterPage = ({ setActivePage }) => {
             </div>
           )}
 
-          {/* Student Specific: Target Role & Custom Skills Setup */}
+          {/* Student Specific: Target Career Role & Known Skills Setup */}
           {role === 'student' && (
-            <div className="p-5 rounded-2xl bg-brand-50/50 border border-brand-100 space-y-4">
-              <div className="flex items-center gap-2 text-xs font-bold text-brand-900 uppercase tracking-wider">
-                <Target className="w-4 h-4 text-brand-600" />
-                Target Career Role & Known Skills
+            <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200 shadow-xs space-y-6 animate-in fade-in duration-200">
+              
+              {/* Section Header */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-200 gap-2">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-brand-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <Target className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-900">
+                      Target Career Role & Known Skills
+                    </h3>
+                    <p className="text-[11px] text-slate-500">
+                      Personalize your career track and tell us which skills you already have
+                    </p>
+                  </div>
+                </div>
+
+                <div className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-3 py-1 rounded-full border border-brand-200 flex items-center gap-1.5 self-start sm:self-auto">
+                  <span>Selected Branch:</span>
+                  <strong className="truncate max-w-[180px]">{department.split('(')[0].trim()}</strong>
+                </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Target Industry Role</label>
+              {/* 1. TARGET INDUSTRY DOMAIN */}
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    1. Target Industry Domain(s) <span className="text-rose-500">*</span>
+                  </label>
+                  <span className="text-[10px] text-slate-500 font-medium">Multiple selections allowed</span>
+                </div>
+                <p className="text-[11px] text-slate-500">
+                  Select the engineering and technology sectors you want to target for placements and internships:
+                </p>
+
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {INDUSTRY_DOMAINS.map((domain) => {
+                    const isSelected = selectedDomains.includes(domain);
+                    return (
+                      <button
+                        key={domain}
+                        type="button"
+                        onClick={() => toggleDomain(domain)}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1.5 ${
+                          isSelected
+                            ? 'bg-brand-600 text-white border-brand-600 shadow-xs ring-1 ring-brand-400/40'
+                            : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100 hover:border-slate-300'
+                        }`}
+                      >
+                        {isSelected ? <Check className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5 text-slate-400" />}
+                        <span>{domain}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 2. TARGET INDUSTRY ROLE */}
+              <div className="space-y-2 pt-2 border-t border-slate-200/80">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    2. Target Industry Role <span className="text-rose-500">*</span>
+                  </label>
+                  <span className="text-[10px] text-brand-700 font-bold bg-brand-50 px-2 py-0.5 rounded">
+                    {availableRoles.length} Roles for {department.split('(')[0].trim()}
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-500">
+                  Choose your primary target role for benchmark evaluation and skill gap recommendations:
+                </p>
+
                 <select
-                  value={targetRoleTitle}
-                  onChange={(e) => setTargetRoleTitle(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-brand-200 text-xs focus:ring-2 focus:ring-brand-500 outline-none bg-white font-bold text-brand-950"
+                  value={targetRoleId}
+                  onChange={(e) => handleSelectRole(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-brand-500 outline-none bg-white font-bold text-slate-900 shadow-2xs"
                 >
-                  {TARGET_CAREER_ROLES.map(r => (
-                    <option key={r.id} value={r.title}>{r.title} ({r.category})</option>
+                  {availableRoles.map((r) => (
+                    <option key={r.id} value={r.id}>
+                      🎯 {r.title} ({r.category})
+                    </option>
                   ))}
                 </select>
+
+                <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between text-xs">
+                  <span className="text-slate-600">
+                    Active Target: <strong className="text-slate-900">{targetRoleTitle}</strong>
+                  </span>
+                  <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-bold border border-emerald-200">
+                    Industry Benchmark Connected
+                  </span>
+                </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  Select Skills You Already Possess (Click to Toggle)
-                </label>
-                <div className="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto p-2 bg-white rounded-xl border border-slate-200">
-                  {TECHNICAL_SKILLS_LIBRARY.map(skill => {
+              {/* 3. KNOWN SKILLS */}
+              <div className="space-y-3 pt-2 border-t border-slate-200/80">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                  <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    3. Known Skills <span className="text-rose-500">*</span>
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                      selectedSkills.length > 0 
+                        ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' 
+                        : 'bg-rose-50 text-rose-700 border border-rose-200'
+                    }`}>
+                      {selectedSkills.length} Selected
+                    </span>
+                  </div>
+                </div>
+
+                <p className="text-[11px] text-slate-500">
+                  Select the technical and engineering skills you <strong>already possess</strong>. Only explicitly chosen skills will be marked as known.
+                </p>
+
+                {/* Skill Search & View All Controls */}
+                <div className="flex flex-col sm:flex-row items-center gap-2">
+                  <div className="relative flex-1 w-full">
+                    <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3" />
+                    <input
+                      type="text"
+                      placeholder="Search skills (e.g. Python, Verilog, AutoCAD, DSA, SQL, PLC)..."
+                      value={skillSearchQuery}
+                      onChange={(e) => setSkillSearchQuery(e.target.value)}
+                      className="w-full pl-9 pr-8 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-brand-500 outline-none bg-white font-medium"
+                    />
+                    {skillSearchQuery && (
+                      <button
+                        type="button"
+                        onClick={() => setSkillSearchQuery('')}
+                        className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowAllSkills(!showAllSkills);
+                      setSkillSearchQuery('');
+                    }}
+                    className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all whitespace-nowrap flex items-center gap-1.5 w-full sm:w-auto justify-center ${
+                      showAllSkills
+                        ? 'bg-slate-900 text-white border-slate-900'
+                        : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
+                    }`}
+                  >
+                    <Layers className="w-3.5 h-3.5" />
+                    {showAllSkills ? 'Show Recommended Skills' : `View All Engineering Skills (${allSkillsList.length})`}
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between text-[11px] text-slate-500 px-1">
+                  <span>
+                    {skillSearchQuery.trim()
+                      ? `Found ${displayedSkills.length} skill(s) matching "${skillSearchQuery}"`
+                      : showAllSkills
+                      ? `Viewing all ${displayedSkills.length} engineering skills across disciplines`
+                      : `Showing ${displayedSkills.length} skills recommended for ${targetRoleTitle}`}
+                  </span>
+                  {!showAllSkills && !skillSearchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setShowAllSkills(true)}
+                      className="text-brand-600 hover:underline font-semibold"
+                    >
+                      Browse cross-disciplinary skills &rarr;
+                    </button>
+                  )}
+                </div>
+
+                {/* Skill Toggle Chips Grid */}
+                <div className="flex flex-wrap gap-1.5 max-h-48 overflow-y-auto p-3 bg-white rounded-2xl border border-slate-200 shadow-inner">
+                  {displayedSkills.map((skill) => {
                     const isSelected = selectedSkills.includes(skill);
                     return (
                       <button
                         key={skill}
                         type="button"
                         onClick={() => toggleSkill(skill)}
-                        className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all flex items-center gap-1 ${
+                        className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition-all flex items-center gap-1.5 ${
                           isSelected
                             ? 'bg-brand-600 text-white border-brand-600 shadow-xs'
-                            : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                            : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100 hover:border-slate-300'
                         }`}
                       >
                         {isSelected ? <Check className="w-3 h-3" /> : <Plus className="w-3 h-3 text-slate-400" />}
@@ -662,8 +917,69 @@ export const RegisterPage = ({ setActivePage }) => {
                       </button>
                     );
                   })}
+
+                  {displayedSkills.length === 0 && (
+                    <div className="text-center py-6 w-full text-slate-400 text-xs">
+                      No matching skill found. Add it as a custom skill below!
+                    </div>
+                  )}
                 </div>
+
+                {/* Selected Skills Review Strip */}
+                {selectedSkills.length > 0 && (
+                  <div className="p-3 bg-emerald-50/50 rounded-xl border border-emerald-100 space-y-1.5">
+                    <span className="text-[11px] font-bold text-emerald-900 block">
+                      Your Selected Known Skills ({selectedSkills.length}):
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {selectedSkills.map((skill) => (
+                        <span
+                          key={skill}
+                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white border border-emerald-200 text-emerald-800 text-[11px] font-semibold"
+                        >
+                          <Check className="w-3 h-3 text-emerald-600" />
+                          {skill}
+                          <button
+                            type="button"
+                            onClick={() => toggleSkill(skill)}
+                            className="text-slate-400 hover:text-rose-600 ml-0.5"
+                            title="Remove"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Custom Skill Input */}
+                <div className="pt-2 flex items-center gap-2">
+                  <input
+                    type="text"
+                    placeholder="Add other skill (e.g. ROS, Verilog-A, OpenFOAM)..."
+                    value={customSkillInput}
+                    onChange={(e) => setCustomSkillInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleAddCustomSkill(e);
+                      }
+                    }}
+                    className="flex-1 px-3 py-1.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-brand-500 outline-none bg-white"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddCustomSkill}
+                    disabled={!customSkillInput.trim()}
+                    className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 disabled:opacity-40 text-white font-semibold text-xs transition-colors flex items-center gap-1"
+                  >
+                    <Plus className="w-3.5 h-3.5" /> Add
+                  </button>
+                </div>
+
               </div>
+
             </div>
           )}
 

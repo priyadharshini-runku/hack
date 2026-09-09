@@ -244,14 +244,11 @@ export const AuthProvider = ({ children }) => {
         district: formData.district || '',
         department: formData.department || 'Computer Science & Engineering (CSE)',
         year: formData.year || '3rd Year — 5th Semester',
-        cgpa: formData.cgpa || 8.5,
-        targetRoleId: 'role_swe',
+        targetRoleId: formData.targetRoleId || 'role_swe',
         targetRoleTitle: formData.targetRoleTitle || 'Software Developer',
-        skills: formData.initialSkills || [
-          { name: 'Java', level: 'Intermediate', category: 'Technical', verified: true, rating: 4.2 },
-          { name: 'Python', level: 'Intermediate', category: 'Technical', verified: true, rating: 4.0 },
-          { name: 'SQL', level: 'Intermediate', category: 'Technical', verified: true, rating: 3.9 }
-        ],
+        targetDomains: formData.targetDomains || (formData.targetDomain ? [formData.targetDomain] : ['Software / IT']),
+        targetDomain: formData.targetDomain || formData.targetDomains?.[0] || 'Software / IT',
+        skills: formData.initialSkills || [],
         projects: [
           {
             id: `proj_${Date.now()}`,

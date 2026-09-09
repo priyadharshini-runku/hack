@@ -1,6 +1,6 @@
-// Comprehensive Career Roles, Industry Benchmarks & Skill Gap Computation Engine
+import { ALL_CAREER_ROLES } from './registrationCareerData.js';
 
-export const CAREER_ROLES = [
+const BASE_CAREER_ROLES = [
   {
     id: 'role_swe',
     title: 'Software Developer (Full Stack / Backend)',
@@ -76,6 +76,12 @@ export const CAREER_ROLES = [
       { skill: 'Excel & Statistical Modeling', level: 'Intermediate', weight: 20, category: 'Analytics', whyLearn: 'Hypothesis testing, pivot tables, regression analysis, and variance calculations.' }
     ]
   }
+];
+
+const baseRoleIds = new Set(BASE_CAREER_ROLES.map(r => r.id));
+export const CAREER_ROLES = [
+  ...BASE_CAREER_ROLES,
+  ...ALL_CAREER_ROLES.filter(r => !baseRoleIds.has(r.id))
 ];
 
 export const CURATED_LEARNING_RESOURCES = [
@@ -166,7 +172,12 @@ export const CURATED_LEARNING_RESOURCES = [
 ];
 
 export function computeClientSkillGap(student, targetRoleId = 'role_swe') {
-  const role = CAREER_ROLES.find(r => r.id === targetRoleId) || CAREER_ROLES[0];
+  const role = CAREER_ROLES.find(r => 
+    r.id === targetRoleId || 
+    r.title?.toLowerCase() === targetRoleId?.toLowerCase() ||
+    r.title?.toLowerCase() === student?.targetRoleTitle?.toLowerCase() ||
+    r.id === student?.targetRoleId
+  ) || CAREER_ROLES[0];
   
   const studentSkills = Array.isArray(student?.skills) ? student.skills : [];
   const studentSkillMap = new Map();
