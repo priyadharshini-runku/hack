@@ -132,12 +132,14 @@ export const Navbar = ({ activePage, setActivePage }) => {
                       ? 'bg-emerald-500/10 text-emerald-400 font-semibold shadow-[0_0_20px_rgba(34,197,94,0.08)] border border-emerald-500/10'
 : item.highlight
 ? 'text-emerald-400 hover:bg-emerald-500/10 font-semibold'
-: 'text-slate-400 hover:text-white hover:bg-white/5'
+: 'text-slate-400 hover:text-white hover:bg-white/5'}'
+                  }
                 >
                  <Icon
   className={`w-4 h-4 ${
     isActive ? 'text-emerald-400' : 'text-slate-500'
-  }`}
+                    
+ }`}
 />
                   <span>{item.label}</span>
                 </button>
