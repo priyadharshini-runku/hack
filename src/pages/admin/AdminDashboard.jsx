@@ -54,12 +54,13 @@ export const AdminDashboard = () => {
   const [newPasswordInput, setNewPasswordInput] = useState('');
   const [newResourceModal, setNewResourceModal] = useState(false);
 
-  // Form state for new college creation
-  const [newCollegeForm, setNewCollegeForm] = useState({
-    name: '',
-    code: '',
-    location: '',
-    sharedPassword: ''
+  // Form state for new institution creation
+  const [newInstitutionForm, setNewInstitutionForm] = useState({
+    institutionName: '',
+    email: '',
+    institutionId: '',
+    password: '',
+    location: ''
   });
 
   // Resource form
@@ -106,35 +107,47 @@ export const AdminDashboard = () => {
 
   const copyPasswordToClipboard = (pwd, colName) => {
     navigator.clipboard.writeText(pwd);
-    showToast(`Copied Shared Password for ${colName}!`, 'success');
+    showToast(`Copied Password for ${colName}!`, 'success');
   };
 
-  const handleCreateCollege = async (e) => {
+  const handleCreateInstitution = async (e) => {
     e.preventDefault();
-    if (!newCollegeForm.name.trim()) {
-      showToast('College name is required', 'error');
+    if (!newInstitutionForm.institutionName.trim()) {
+      showToast('Institution Name is required', 'error');
+      return;
+    }
+    if (!newInstitutionForm.email.trim()) {
+      showToast('Official Institution Email is required', 'error');
+      return;
+    }
+    if (!newInstitutionForm.institutionId.trim()) {
+      showToast('Unique Institution ID is required (e.g. INST001)', 'error');
+      return;
+    }
+    if (!newInstitutionForm.password || newInstitutionForm.password.length < 6) {
+      showToast('Password must be at least 6 characters long', 'error');
       return;
     }
 
     try {
-      const res = await fetch('/api/admin/colleges', {
+      const res = await fetch('/api/admin/institutions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newCollegeForm)
+        body: JSON.stringify(newInstitutionForm)
       });
 
       const data = await res.json();
       if (res.ok && data.success) {
         confetti({ particleCount: 50, spread: 60 });
-        showToast(`College "${newCollegeForm.name}" registered with faculty password!`, 'success');
+        showToast(`Institution "${newInstitutionForm.institutionName}" (${newInstitutionForm.institutionId.toUpperCase()}) created successfully!`, 'success');
         setNewCollegeModal(false);
-        setNewCollegeForm({ name: '', code: '', location: '', sharedPassword: '' });
+        setNewInstitutionForm({ institutionName: '', email: '', institutionId: '', password: '', location: '' });
         fetchAdminData();
       } else {
-        showToast(data.error || 'Failed to register college', 'error');
+        showToast(data.error || 'Failed to create institution account', 'error');
       }
     } catch (err) {
-      showToast('Network error while registering college', 'error');
+      showToast('Network error while creating institution account', 'error');
     }
   };
 
@@ -325,8 +338,8 @@ export const AdminDashboard = () => {
       {/* Tabs Navigation */}
       <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-2">
         {[
-          { id: 'colleges', label: '🏛️ Colleges & Shared Passwords', count: colleges.length },
-          { id: 'faculty', label: '👨‍🏫 Faculty Accounts & Approvals', count: facultyList.length },
+          { id: 'colleges', label: '🏛️ Registered Institutions', count: colleges.length },
+          { id: 'faculty', label: '👥 Institution User Directory', count: facultyList.length },
           { id: 'audit', label: '🛡️ Audit & Security Trail', count: auditLogs.length },
           { id: 'resources', label: '📚 Global Learning Catalog', count: resources.length }
         ].map(t => (
@@ -347,17 +360,17 @@ export const AdminDashboard = () => {
         ))}
       </div>
 
-      {/* TAB 1: COLLEGES & SHARED PASSWORDS */}
+      {/* TAB 1: REGISTERED INSTITUTIONS & DATA ISOLATION */}
       {activeTab === 'colleges' && (
         <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
             <div>
               <h2 className="text-lg font-bold text-slate-900 font-display flex items-center gap-2">
                 <KeyRound className="w-5 h-5 text-purple-600" />
-                College Shared Faculty Password Governance
+                Institution Governance & Strict Data Partitioning
               </h2>
               <p className="text-xs text-slate-500">
-                Every registered college possesses exactly ONE shared password used by all enrolled faculty members. Managed solely by Super Admin.
+                All institutions possess a unique Institution ID (e.g. INST001) ensuring students and analytics are strictly isolated. Managed solely by Super Admin.
               </p>
             </div>
 
@@ -366,7 +379,7 @@ export const AdminDashboard = () => {
               className="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold text-xs flex items-center gap-1.5 shadow-sm"
             >
               <Plus className="w-4 h-4" />
-              Register College
+              Provision Institution
             </button>
           </div>
 
@@ -374,19 +387,20 @@ export const AdminDashboard = () => {
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-200 bg-slate-50/70 text-slate-600 font-bold uppercase tracking-wider">
-                  <th className="py-3 px-4 rounded-l-xl">College / Institution</th>
-                  <th className="py-3 px-4">Code</th>
+                  <th className="py-3 px-4 rounded-l-xl">Institution Name</th>
+                  <th className="py-3 px-4">Institution ID</th>
+                  <th className="py-3 px-4">Official Email</th>
                   <th className="py-3 px-4">Location</th>
-                  <th className="py-3 px-4">Faculty Count</th>
                   <th className="py-3 px-4">Enrolled Students</th>
-                  <th className="py-3 px-4">Shared Faculty Password</th>
+                  <th className="py-3 px-4">Password (SHA-256)</th>
                   <th className="py-3 px-4 rounded-r-xl text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {colleges.map(col => {
                   const isVisible = visiblePasswords[col.id];
-                  const passwordText = col.sharedPasswordPlain || 'ApexFaculty#2026';
+                  const passwordText = col.sharedPasswordPlain || 'ApexInst#2026';
+                  const instId = col.institutionId || col.code || 'INST001';
 
                   return (
                     <tr key={col.id} className="hover:bg-slate-50/80 transition-colors">
@@ -399,16 +413,16 @@ export const AdminDashboard = () => {
                           </div>
                         </div>
                       </td>
-                      <td className="py-3.5 px-4 font-mono font-bold text-slate-700">
-                        <span className="px-2 py-0.5 rounded bg-slate-100 border border-slate-200">
-                          {col.code}
+                      <td className="py-3.5 px-4 font-mono font-bold text-brand-700">
+                        <span className="px-2.5 py-1 rounded-lg bg-brand-50 border border-brand-200 text-brand-800 text-[11px]">
+                          {instId}
                         </span>
                       </td>
                       <td className="py-3.5 px-4 text-slate-600 font-medium">
-                        {col.location}
+                        {col.email || `${instId.toLowerCase()}@skillbridge.edu`}
                       </td>
-                      <td className="py-3.5 px-4 font-semibold text-purple-700">
-                        {col.activeFacultyCount || 0} active / {col.facultyCount || 0} total
+                      <td className="py-3.5 px-4 text-slate-600 font-medium">
+                        {col.location}
                       </td>
                       <td className="py-3.5 px-4 font-semibold text-emerald-700">
                         {col.studentCount || 0} Students
@@ -707,35 +721,52 @@ export const AdminDashboard = () => {
         </div>
       )}
 
-      {/* MODAL 1: REGISTER NEW COLLEGE INSTITUTION */}
-      <Modal isOpen={newCollegeModal} onClose={() => setNewCollegeModal(false)} title="Register Approved College Institution">
-        <form onSubmit={handleCreateCollege} className="space-y-4">
+      {/* MODAL 1: CREATE NEW INSTITUTION ACCOUNT */}
+      <Modal isOpen={newCollegeModal} onClose={() => setNewCollegeModal(false)} title="Create New Institution Account">
+        <form onSubmit={handleCreateInstitution} className="space-y-4">
           <div>
             <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-              Official College Name <span className="text-rose-500">*</span>
+              Institution Name <span className="text-rose-500">*</span>
             </label>
             <input
               type="text"
-              placeholder="e.g. National Institute of Technology Karnataka (NITK)"
-              value={newCollegeForm.name}
-              onChange={(e) => setNewCollegeForm({ ...newCollegeForm, name: e.target.value })}
+              placeholder="e.g. VNR Vignana Jyothi Institute of Engineering & Technology"
+              value={newInstitutionForm.institutionName}
+              onChange={(e) => setNewInstitutionForm({ ...newInstitutionForm, institutionName: e.target.value })}
               className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none"
               required
             />
           </div>
 
+          <div>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              Official Institution Gmail / Email <span className="text-rose-500">*</span>
+            </label>
+            <input
+              type="email"
+              placeholder="e.g. vnr.institution@gmail.com"
+              value={newInstitutionForm.email}
+              onChange={(e) => setNewInstitutionForm({ ...newInstitutionForm, email: e.target.value })}
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none"
+              required
+            />
+            <p className="text-[10px] text-slate-500 mt-1">Must be unique across all institutions. Used for login.</p>
+          </div>
+
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                College Code / Abbr
+                Unique Institution ID <span className="text-rose-500">*</span>
               </label>
               <input
                 type="text"
-                placeholder="e.g. NITK"
-                value={newCollegeForm.code}
-                onChange={(e) => setNewCollegeForm({ ...newCollegeForm, code: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none uppercase"
+                placeholder="e.g. INST005"
+                value={newInstitutionForm.institutionId}
+                onChange={(e) => setNewInstitutionForm({ ...newInstitutionForm, institutionId: e.target.value.toUpperCase() })}
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none uppercase font-mono font-bold"
+                required
               />
+              <p className="text-[10px] text-slate-500 mt-1">Strict student data partition ID</p>
             </div>
 
             <div>
@@ -744,29 +775,30 @@ export const AdminDashboard = () => {
               </label>
               <input
                 type="text"
-                placeholder="e.g. Surathkal, Karnataka"
-                value={newCollegeForm.location}
-                onChange={(e) => setNewCollegeForm({ ...newCollegeForm, location: e.target.value })}
+                placeholder="e.g. Hyderabad, Telangana"
+                value={newInstitutionForm.location}
+                onChange={(e) => setNewInstitutionForm({ ...newInstitutionForm, location: e.target.value })}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none"
               />
             </div>
           </div>
 
-          {/* Assigned Shared Faculty Password */}
-          <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 space-y-2">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-amber-900">
-              <KeyRound className="w-4 h-4 text-amber-600" />
-              Initial Shared Faculty Password (Managed by Super Admin)
+          {/* Institution Password */}
+          <div className="p-4 rounded-2xl bg-purple-50 border border-purple-200 space-y-2">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-purple-900">
+              <KeyRound className="w-4 h-4 text-purple-600" />
+              Institution Account Password <span className="text-rose-500">*</span>
             </div>
             <input
               type="text"
-              placeholder="Leave blank to auto-generate (e.g. NITKFaculty#2026)"
-              value={newCollegeForm.sharedPassword}
-              onChange={(e) => setNewCollegeForm({ ...newCollegeForm, sharedPassword: e.target.value })}
-              className="w-full px-3.5 py-2 rounded-xl border border-amber-300 text-xs font-mono font-bold bg-white focus:ring-2 focus:ring-amber-500 outline-none"
+              placeholder="e.g. VNRInst#2026 (Min. 6 characters)"
+              value={newInstitutionForm.password}
+              onChange={(e) => setNewInstitutionForm({ ...newInstitutionForm, password: e.target.value })}
+              className="w-full px-3.5 py-2 rounded-xl border border-purple-300 text-xs font-mono font-bold bg-white focus:ring-2 focus:ring-purple-500 outline-none"
+              required
             />
-            <p className="text-[10px] text-amber-800">
-              🔒 All faculty members belonging to this institution will use this single shared password to sign in.
+            <p className="text-[10px] text-purple-800">
+              🔒 Will be securely hashed (SHA-256) before storing in the database.
             </p>
           </div>
 
@@ -782,7 +814,7 @@ export const AdminDashboard = () => {
               type="submit"
               className="px-5 py-2 rounded-xl text-xs font-semibold bg-purple-600 hover:bg-purple-700 text-white shadow-md shadow-purple-600/20"
             >
-              Register Institution
+              Create Institution Account
             </button>
           </div>
         </form>

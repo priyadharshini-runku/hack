@@ -42,7 +42,8 @@ import confetti from 'canvas-confetti';
 export const CollegeSkillAnalytics = ({ setActivePage }) => {
   const { user, profile, authFetch, showToast } = useAuth();
   
-  // Permanent lock: College Administrator belongs to ONE assigned college
+  // Permanent lock: Institution Administrator belongs to ONE assigned institution
+  const assignedInstId = user?.institutionId || 'INST001';
   const assignedCollegeName = profile?.name || user?.collegeName || user?.title || 'Apex Institute of Technology';
   const assignedCollegeId = user?.collegeId || 'col_apex';
 
@@ -64,15 +65,15 @@ export const CollegeSkillAnalytics = ({ setActivePage }) => {
     endDate: '2026-09-20',
     duration: '3 Days (18 Hours)',
     maxSeats: 150,
-    reasonForOrganizing: `College analytics detected a high percentage of students lacking modern React frameworks.`,
+    reasonForOrganizing: `Institution analytics detected a high percentage of students lacking modern React frameworks.`,
     description: 'Hands-on practical bootcamp covering Modern React 18, State Management, API integration, and deploying live production apps.'
   });
 
   const fetchCollegeData = async () => {
     try {
       const [analyticsRes, studentsRes] = await Promise.all([
-        authFetch(`/api/college/analytics?collegeName=${encodeURIComponent(assignedCollegeName)}`),
-        authFetch(`/api/students?collegeName=${encodeURIComponent(assignedCollegeName)}`)
+        authFetch('/api/college/analytics'),
+        authFetch('/api/students')
       ]);
 
       if (analyticsRes.ok) {
@@ -99,7 +100,7 @@ export const CollegeSkillAnalytics = ({ setActivePage }) => {
 
   useEffect(() => {
     fetchCollegeData();
-  }, [assignedCollegeName]);
+  }, [assignedCollegeName, assignedInstId]);
 
   const handleCreateWorkshop = async (e) => {
     e.preventDefault();
@@ -109,6 +110,7 @@ export const CollegeSkillAnalytics = ({ setActivePage }) => {
         body: JSON.stringify({
           collegeName: assignedCollegeName,
           collegeId: assignedCollegeId,
+          institutionId: assignedInstId,
           ...workshopData
         })
       });
@@ -142,25 +144,25 @@ export const CollegeSkillAnalytics = ({ setActivePage }) => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-in fade-in duration-300">
       
-      {/* Header Banner - Locked to Assigned College */}
+      {/* Header Banner - Locked to Assigned Institution */}
       <div className="bg-gradient-to-r from-amber-700 via-amber-600 to-orange-700 rounded-3xl p-6 sm:p-8 text-white shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 text-white text-xs font-semibold backdrop-blur-xs">
             <School className="w-4 h-4 text-amber-200" />
-            {assignedCollegeName} · Assigned Institutional Administrator
+            {assignedCollegeName} · Institution ID: {assignedInstId}
           </div>
           <h1 className="text-2xl sm:text-4xl font-extrabold font-display">
-            College Skill Gap & Placement Analytics
+            Institution Skill Gap & Placement Analytics
           </h1>
           <p className="text-amber-100 text-sm max-w-2xl">
-            Real-time cohort intelligence identifying student skill gaps, branch-wise readiness, and automated workshop recommendations exclusively for <strong>{assignedCollegeName}</strong>.
+            Real-time cohort intelligence identifying student skill gaps, branch-wise readiness, and automated workshop recommendations exclusively for <strong>{assignedCollegeName} (ID: {assignedInstId})</strong>.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <div className="bg-white/15 px-3.5 py-2 rounded-xl text-xs font-semibold border border-white/20 flex items-center gap-1.5 backdrop-blur-xs">
             <Lock className="w-3.5 h-3.5 text-amber-200" />
-            <span>Assigned: {assignedCollegeName}</span>
+            <span>Locked to ID: {assignedInstId}</span>
           </div>
           <button
             onClick={() => setWorkshopModalOpen(true)}

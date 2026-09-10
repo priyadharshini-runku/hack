@@ -7,6 +7,7 @@ export const initialData = {
       role: 'student',
       avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80',
       collegeId: 'col_apex',
+      institutionId: 'INST001',
       createdAt: '2026-01-10T10:00:00Z'
     },
     {
@@ -16,25 +17,52 @@ export const initialData = {
       role: 'student',
       avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
       collegeId: 'col_apex',
+      institutionId: 'INST001',
       createdAt: '2026-01-12T10:00:00Z'
     },
     {
       id: 'usr_student_3',
       name: 'Amit Verma',
-      email: 'amit.verma@apex.edu',
+      email: 'amit.verma@iitb.ac.in',
       role: 'student',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
-      collegeId: 'col_apex',
+      collegeId: 'col_iitb',
+      institutionId: 'INST002',
       createdAt: '2026-01-15T10:00:00Z'
     },
     {
-      id: 'usr_college_1',
-      name: 'Dr. Suresh Kumar (Dean)',
-      email: 'dean@apex.edu',
+      id: 'usr_student_4',
+      name: 'Sneha Reddy',
+      email: 'sneha.reddy@iitb.ac.in',
+      role: 'student',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+      collegeId: 'col_iitb',
+      institutionId: 'INST002',
+      createdAt: '2026-01-18T10:00:00Z'
+    },
+    {
+      id: 'usr_inst_1',
+      name: 'Apex Institute of Technology',
+      email: 'apex.institution@gmail.com',
       role: 'college',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80',
+      avatar: 'https://images.unsplash.com/photo-1562774053-701939374585?w=150&auto=format&fit=crop&q=80',
       collegeId: 'col_apex',
+      institutionId: 'INST001',
+      collegeName: 'Apex Institute of Technology',
+      badge: 'Institution (INST001)',
       createdAt: '2025-11-01T10:00:00Z'
+    },
+    {
+      id: 'usr_inst_2',
+      name: 'IIT Bombay',
+      email: 'iitb.institution@gmail.com',
+      role: 'college',
+      avatar: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=150&auto=format&fit=crop&q=80',
+      collegeId: 'col_iitb',
+      institutionId: 'INST002',
+      collegeName: 'Indian Institute of Technology Bombay (IIT Bombay)',
+      badge: 'Institution (INST002)',
+      createdAt: '2025-11-05T10:00:00Z'
     },
     {
       id: 'usr_company_1',
@@ -56,8 +84,8 @@ export const initialData = {
     },
     {
       id: 'usr_admin_1',
-      name: 'Platform Admin',
-      email: 'admin@skillbridge.edu',
+      name: 'Platform Super Admin',
+      email: 'admin@skillbridge.gov.in',
       role: 'admin',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
       createdAt: '2025-01-01T00:00:00Z'
@@ -67,13 +95,15 @@ export const initialData = {
   colleges: [
     {
       id: 'col_apex',
+      institutionId: 'INST001',
       name: 'Apex Institute of Technology',
-      code: 'AIT-BANGALORE',
+      code: 'AIT',
+      email: 'apex.institution@gmail.com',
+      passwordPlain: 'ApexInst#2026',
       location: 'Bangalore, Karnataka',
       established: 2004,
       accreditation: 'NAAC A++ | NBA Accredited',
-      deanName: 'Dr. Suresh Kumar',
-      email: 'info@apex.edu',
+      deanName: 'Prof. Suresh Kumar',
       phone: '+91 80 2345 6789',
       logo: 'https://images.unsplash.com/photo-1562774053-701939374585?w=150&auto=format&fit=crop&q=80',
       departments: [
@@ -86,6 +116,50 @@ export const initialData = {
       placementRate: '84.6%',
       avgPackage: '₹8.4 LPA',
       highestPackage: '₹42 LPA'
+    },
+    {
+      id: 'col_iitb',
+      institutionId: 'INST002',
+      name: 'Indian Institute of Technology Bombay (IIT Bombay)',
+      code: 'IITB',
+      email: 'iitb.institution@gmail.com',
+      passwordPlain: 'IITBInst#2026',
+      location: 'Mumbai, Maharashtra',
+      established: 1958,
+      accreditation: 'Institute of National Importance',
+      deanName: 'Dr. Sunita Rao',
+      phone: '+91 22 2572 2545',
+      logo: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=150&auto=format&fit=crop&q=80',
+      departments: [
+        { id: 'dept_cs', name: 'Computer Science & Engineering', studentCount: 520, hod: 'Dr. A. Sen' },
+        { id: 'dept_ee', name: 'Electrical Engineering', studentCount: 400, hod: 'Dr. K. Joshi' }
+      ],
+      totalStudents: 1800,
+      placementRate: '96.2%',
+      avgPackage: '₹21.5 LPA',
+      highestPackage: '₹1.2 CPA'
+    },
+    {
+      id: 'col_anna',
+      institutionId: 'INST003',
+      name: 'Anna University (CEG Campus, Chennai)',
+      code: 'AU-CEG',
+      email: 'anna.institution@gmail.com',
+      passwordPlain: 'AnnaInst#2026',
+      location: 'Chennai, Tamil Nadu',
+      established: 1978,
+      accreditation: 'State Technical University',
+      deanName: 'Prof. Meenakshi Sundaram',
+      phone: '+91 44 2235 7004',
+      logo: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=150&auto=format&fit=crop&q=80',
+      departments: [
+        { id: 'dept_cs', name: 'Computer Science & Engineering', studentCount: 450, hod: 'Dr. S. Raman' },
+        { id: 'dept_it', name: 'Information Technology', studentCount: 380, hod: 'Dr. G. Natarajan' }
+      ],
+      totalStudents: 1500,
+      placementRate: '91.0%',
+      avgPackage: '₹9.0 LPA',
+      highestPackage: '₹38 LPA'
     }
   ],
 
@@ -220,6 +294,7 @@ export const initialData = {
       phone: '+91 98765 43210',
       avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80',
       collegeId: 'col_apex',
+      institutionId: 'INST001',
       collegeName: 'Apex Institute of Technology',
       department: 'Computer Science & Engineering',
       year: '3rd Year (6th Semester)',
@@ -303,6 +378,7 @@ export const initialData = {
       phone: '+91 98765 11223',
       avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
       collegeId: 'col_apex',
+      institutionId: 'INST001',
       collegeName: 'Apex Institute of Technology',
       department: 'Information Technology',
       year: '4th Year (8th Semester)',
@@ -354,11 +430,12 @@ export const initialData = {
     {
       id: 'usr_student_3',
       name: 'Amit Verma',
-      email: 'amit.verma@apex.edu',
+      email: 'amit.verma@iitb.ac.in',
       phone: '+91 98765 88990',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
-      collegeId: 'col_apex',
-      collegeName: 'Apex Institute of Technology',
+      collegeId: 'col_iitb',
+      institutionId: 'INST002',
+      collegeName: 'Indian Institute of Technology Bombay (IIT Bombay)',
       department: 'Artificial Intelligence & Data Science',
       year: '3rd Year (6th Semester)',
       batch: '2023 - 2027',
@@ -403,6 +480,62 @@ export const initialData = {
       achievements: [
         'Published research paper in IEEE Student Conference 2025',
         'Kaggle Competitions Expert (Top 2% in Computer Vision Challenge)'
+      ]
+    },
+    {
+      id: 'usr_student_4',
+      name: 'Sneha Reddy',
+      email: 'sneha.reddy@iitb.ac.in',
+      phone: '+91 98765 77112',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+      collegeId: 'col_iitb',
+      institutionId: 'INST002',
+      collegeName: 'Indian Institute of Technology Bombay (IIT Bombay)',
+      department: 'Computer Science & Engineering',
+      year: '4th Year (7th Semester)',
+      batch: '2022 - 2026',
+      cgpa: 9.18,
+      targetRoleId: 'role_swe',
+      targetRoleTitle: 'Software Developer',
+      preferredIndustry: 'Enterprise Software & Cloud Platforms',
+      bio: 'IIT Bombay CS undergraduate focused on distributed consensus algorithms, high throughput microservices, and database internals.',
+      resumeUrl: 'https://example.com/resumes/sneha_reddy_cs.pdf',
+      visibilitySettings: {
+        showCGPA: true,
+        showContact: true,
+        allowCompanyScouting: true
+      },
+      skills: [
+        { name: 'C++', level: 'Advanced', category: 'Technical', verified: true, rating: 4.8 },
+        { name: 'Java', level: 'Intermediate', category: 'Technical', verified: true, rating: 4.2 },
+        { name: 'System Design', level: 'Advanced', category: 'Technical', verified: true, rating: 4.5 },
+        { name: 'Data Structures', level: 'Advanced', category: 'Technical', verified: true, rating: 4.9 },
+        { name: 'Docker', level: 'Intermediate', category: 'Tools', verified: true, rating: 4.0 }
+      ],
+      certifications: [
+        {
+          id: 'cert_5',
+          title: 'AWS Certified Solutions Architect',
+          issuer: 'Amazon Web Services',
+          date: 'Dec 2025',
+          credentialUrl: 'https://aws.amazon.com/verify/98711',
+          verified: true
+        }
+      ],
+      projects: [
+        {
+          id: 'proj_5',
+          title: 'Raft Distributed Key-Value Store',
+          description: 'Implementation of the Raft consensus protocol in C++ handling leader elections, log replications, and network partitioning.',
+          technologies: ['C++', 'gRPC', 'Protobuf', 'Docker'],
+          githubUrl: 'https://github.com/sneha/raft-kv',
+          liveUrl: 'https://raftkv.demo.dev'
+        }
+      ],
+      internships: [],
+      achievements: [
+        'Finalist: ACM ICPC Regional Contest 2025',
+        'Academic Merit Scholar at IIT Bombay'
       ]
     }
   ],

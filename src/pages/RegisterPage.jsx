@@ -43,7 +43,7 @@ import { AP_ENGINEERING_COLLEGES } from '../data/apColleges';
 import confetti from 'canvas-confetti';
 
 export const RegisterPage = ({ setActivePage }) => {
-  const { registerUserAccount, registerFaculty, showToast } = useAuth();
+  const { registerUserAccount, showToast } = useAuth();
   
   const fileInputRef = useRef(null);
   const [role, setRole] = useState('student');
@@ -218,43 +218,9 @@ export const RegisterPage = ({ setActivePage }) => {
       return;
     }
 
-    // Faculty Registration Flow (Shared Institutional Password Policy)
+    // Institutions cannot self-register
     if (role === 'college') {
-      if (!facultyId.trim()) {
-        setErrorMsg('Please enter your Faculty ID / Employee ID (e.g. FAC-1001).');
-        return;
-      }
-      if (!selectedCollege) {
-        setErrorMsg('Please select your registered college institution.');
-        return;
-      }
-
-      setSubmitting(true);
-      const facultyPayload = {
-        name: name.trim(),
-        email: email.trim().toLowerCase(),
-        facultyId: facultyId.trim().toUpperCase(),
-        collegeName: selectedCollege,
-        department,
-        phone: phone.trim() || undefined,
-        avatar: customAvatar || undefined
-      };
-
-      try {
-        const result = await registerFaculty(facultyPayload);
-        setSubmitting(false);
-
-        if (result && result.success) {
-          confetti({ particleCount: 70, spread: 70, origin: { y: 0.6 } });
-          showToast(`Faculty registered! Sign in using ${selectedCollege}'s shared faculty password.`, 'success');
-          setActivePage('login');
-        } else if (result && result.error) {
-          setErrorMsg(result.error);
-        }
-      } catch (err) {
-        setSubmitting(false);
-        setErrorMsg('Faculty registration failed. Please try again.');
-      }
+      setErrorMsg('Institution accounts cannot self-register. Please contact the platform administrator to provision your institution credentials.');
       return;
     }
 
@@ -302,11 +268,19 @@ export const RegisterPage = ({ setActivePage }) => {
     const finalDistrict = selectedDistrict !== 'All Districts' ? selectedDistrict : undefined;
     const parsedCGPA = parseFloat(cgpa) > 0 ? parseFloat(cgpa) : 8.5;
 
+    // Resolve institution ID for student data isolation
+    const matchedInst = registeredCollegesList.find(c => 
+      (c.name && c.name.toLowerCase() === finalCollege.toLowerCase()) ||
+      (c.code && finalCollegeCode && c.code.toLowerCase() === finalCollegeCode.toLowerCase())
+    );
+    const assignedInstitutionId = matchedInst ? (matchedInst.institutionId || 'INST001') : 'INST001';
+
     const payload = {
       name: name.trim(),
       email: email.trim().toLowerCase(),
       password,
       role,
+      institutionId: assignedInstitutionId,
       avatar: customAvatar || undefined,
       collegeName: finalCollege,
       collegeCode: finalCollegeCode,
@@ -384,10 +358,9 @@ export const RegisterPage = ({ setActivePage }) => {
             <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
               Select Your Stakeholder Role
             </label>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-3 gap-2">
               {[
                 { id: 'student', label: '🎓 Student' },
-                { id: 'college', label: '🏛️ Faculty' },
                 { id: 'company', label: '🏢 Recruiter' },
                 { id: 'admin', label: '⚡ Super Admin' }
               ].map(r => (
@@ -462,13 +435,13 @@ export const RegisterPage = ({ setActivePage }) => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                {role === 'student' ? 'Student Full Name' : role === 'college' ? 'Faculty Full Name' : role === 'admin' ? 'Super Admin Name' : 'Recruiter Name'}
+                {role === 'student' ? 'Student Full Name' : role === 'admin' ? 'Super Admin Name' : 'Recruiter Name'}
               </label>
               <div className="relative">
                 <User className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
                 <input
                   type="text"
-                  placeholder={role === 'college' ? 'e.g. Dr. Suresh Kumar (Professor)' : role === 'admin' ? 'e.g. Platform Administrator' : 'e.g. Aryan Gupta'}
+                  placeholder={role === 'admin' ? 'e.g. Platform Administrator' : role === 'company' ? 'e.g. Ananya Mehta (HR)' : 'e.g. Aryan Gupta'}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none"
@@ -479,13 +452,13 @@ export const RegisterPage = ({ setActivePage }) => {
 
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                {role === 'college' ? 'Faculty Official Email' : role === 'admin' ? 'Super Admin Official Email' : 'Official Email Address'}
+                {role === 'admin' ? 'Super Admin Official Email' : 'Official Email Address'}
               </label>
               <div className="relative">
                 <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
                 <input
                   type="email"
-                  placeholder={role === 'college' ? 'suresh.kumar@apex.edu' : role === 'admin' ? 'admin@skillbridge.gov.in' : 'aryan.gupta@college.edu'}
+                  placeholder={role === 'admin' ? 'admin@skillbridge.gov.in' : 'aryan.gupta@college.edu'}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none"
@@ -495,109 +468,57 @@ export const RegisterPage = ({ setActivePage }) => {
             </div>
           </div>
 
-          {/* College Faculty Specific Fields: Faculty ID / Employee ID & Phone */}
-          {role === 'college' && (
+          {/* Password & Security Fields */}
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+            <div className="flex items-center gap-2 text-xs font-bold text-slate-700 uppercase tracking-wider">
+              <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              {role === 'admin' ? 'Super Admin Account Security' : 'Account Security & Password Protection'}
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                  Faculty ID / Employee ID <span className="text-rose-500">*</span>
-                </label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Create Password</label>
                 <div className="relative">
-                  <Award className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                  <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
                   <input
-                    type="text"
-                    placeholder="e.g. FAC-1001 or EMP-889"
-                    value={facultyId}
-                    onChange={(e) => setFacultyId(e.target.value)}
-                    className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none font-semibold uppercase"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Min. 6 characters"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full pl-9 pr-9 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-3 text-slate-400 hover:text-slate-600"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Confirm Password</label>
+                <div className="relative">
+                  <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Confirm password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white"
                     required
                   />
                 </div>
-                <p className="text-[10px] text-slate-500 mt-1">Unique identifier provided by your institution</p>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                  Phone Number <span className="text-slate-400 font-normal">(Optional)</span>
-                </label>
-                <input
-                  type="tel"
-                  placeholder="+91 98765 00000"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none"
-                />
               </div>
             </div>
-          )}
+            <p className="text-[11px] text-slate-500">
+              🔒 Your password secures your verified account credentials, profile data, and access permissions.
+            </p>
+          </div>
 
-          {/* Password & Security Fields OR Institutional Shared Password Policy Banner */}
-          {role === 'college' ? (
-            <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 space-y-2">
-              <div className="flex items-center gap-2 text-xs font-bold text-amber-900 uppercase tracking-wider">
-                <ShieldCheck className="w-4 h-4 text-amber-600" />
-                Institutional Shared Password Policy
-              </div>
-              <p className="text-xs text-amber-950 font-medium leading-relaxed">
-                🏛️ <strong>One Shared Password Per College:</strong> All faculty members belonging to <strong>{selectedCollege}</strong> authenticate using your institution's single shared Faculty Password (managed securely by the Super Admin).
-              </p>
-              <div className="pt-1 flex items-center gap-1.5 text-[11px] text-amber-800 font-medium">
-                <CheckCircle2 className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                <span>Individual faculty do NOT create separate passwords. Use your Email/ID + College Password at login.</span>
-              </div>
-            </div>
-          ) : (
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-              <div className="flex items-center gap-2 text-xs font-bold text-slate-700 uppercase tracking-wider">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                {role === 'admin' ? 'Super Admin Account Security' : 'Account Security & Password Protection'}
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1">Create Password</label>
-                  <div className="relative">
-                    <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder="Min. 6 characters"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full pl-9 pr-9 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white"
-                      required
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-3 text-slate-400 hover:text-slate-600"
-                    >
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1">Confirm Password</label>
-                  <div className="relative">
-                    <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder="Confirm password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-              <p className="text-[11px] text-slate-500">
-                🔒 Your password secures your administrative privileges, governance tools, and audit monitoring access.
-              </p>
-            </div>
-          )}
-
-          {/* Institutional / Academic Dropdown Selection (Only for Student and College) */}
+          {/* Institutional / Academic Dropdown Selection (Only for Student and Recruiter) */}
           {role === 'admin' ? (
             <div className="p-5 rounded-2xl bg-purple-50 border border-purple-200 space-y-2">
               <div className="flex items-center gap-2 text-xs font-bold text-purple-900 uppercase tracking-wider">
@@ -608,10 +529,9 @@ export const RegisterPage = ({ setActivePage }) => {
                 ⚡ As a <strong>Platform Super Admin</strong>, you will possess global authority to:
               </p>
               <ul className="text-[11px] text-purple-900 space-y-1 list-disc list-inside">
-                <li>Register new colleges and configure their single shared faculty passwords.</li>
-                <li>Reset college faculty passwords and activate/deactivate faculty accounts.</li>
-                <li>Audit real-time system login events and cross-college data access.</li>
-                <li>Curate and manage open-access learning roadmaps for all students.</li>
+                <li>Create and provision new institution accounts with unique Institution IDs.</li>
+                <li>Reset institution passwords and govern access policies.</li>
+                <li>Audit real-time system login events and verify data isolation.</li>
               </ul>
             </div>
           ) : (
@@ -991,11 +911,9 @@ export const RegisterPage = ({ setActivePage }) => {
           >
             {submitting 
               ? 'Registering Account...' 
-              : role === 'college' 
-                ? 'Register College Faculty Account' 
-                : role === 'admin'
-                  ? 'Register Platform Super Admin Account'
-                  : 'Create Secure Account & Launch'}
+              : role === 'admin'
+                ? 'Register Platform Super Admin Account'
+                : 'Create Secure Account & Launch'}
             <ArrowRight className="w-4 h-4" />
           </button>
 

@@ -18,56 +18,31 @@ import {
 import { INDIAN_COLLEGES } from '../data/indianInstitutions';
 
 export const LoginPage = ({ setActivePage }) => {
-  const { loginWithCredentials, loginFaculty } = useAuth();
+  const { loginWithCredentials, loginInstitution } = useAuth();
   
   const [email, setEmail] = useState('');
-  const [facultyIdentifier, setFacultyIdentifier] = useState('');
-  const [selectedCollege, setSelectedCollege] = useState('Apex Institute of Technology');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('student');
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-  const [registeredCollegesList, setRegisteredCollegesList] = useState([]);
-
-  useEffect(() => {
-    const fetchColleges = async () => {
-      try {
-        const res = await fetch('/api/colleges');
-        if (res.ok) {
-          const data = await res.json();
-          if (Array.isArray(data) && data.length > 0) {
-            setRegisteredCollegesList(data);
-            setSelectedCollege(data[0].name);
-          }
-        }
-      } catch (e) {
-        console.warn('Backend colleges fetch note:', e);
-      }
-    };
-    fetchColleges();
-  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrorMsg('');
 
     if (role === 'college') {
-      if (!facultyIdentifier.trim()) {
-        setErrorMsg('Please enter your Faculty Official Email or Employee ID (e.g. FAC-1001).');
-        return;
-      }
-      if (!selectedCollege) {
-        setErrorMsg('Please select your registered college.');
+      if (!email.trim()) {
+        setErrorMsg('Please enter your Registered Institution Email.');
         return;
       }
       if (!password) {
-        setErrorMsg('Please enter your institution\'s shared Faculty Password.');
+        setErrorMsg('Please enter your Institution Password.');
         return;
       }
 
       setSubmitting(true);
-      const result = await loginFaculty(facultyIdentifier.trim(), selectedCollege, password);
+      const result = await loginInstitution(email.trim().toLowerCase(), password);
       setSubmitting(false);
 
       if (result && result.success) {
@@ -101,11 +76,10 @@ export const LoginPage = ({ setActivePage }) => {
     }
   };
 
-  const handleQuickFillFaculty = (identifier, colName, sharedPwd) => {
+  const handleQuickFillInstitution = (instEmail, instPwd) => {
     setRole('college');
-    setFacultyIdentifier(identifier);
-    setSelectedCollege(colName);
-    setPassword(sharedPwd);
+    setEmail(instEmail);
+    setPassword(instPwd);
     setErrorMsg('');
   };
 
@@ -130,8 +104,8 @@ export const LoginPage = ({ setActivePage }) => {
           </h2>
           <p className="text-xs text-slate-500">
             {role === 'college' 
-              ? 'Institutional Faculty Authentication with Single Shared Password' 
-              : 'Secure password-authenticated access for Students, Colleges & Companies'}
+              ? 'Authorized Institution Administrator Access' 
+              : 'Secure password-authenticated access for Students, Recruiters & Admin'}
           </p>
         </div>
 
@@ -153,7 +127,7 @@ export const LoginPage = ({ setActivePage }) => {
             <div className="grid grid-cols-4 gap-1.5">
               {[
                 { id: 'student', label: '🎓 Student' },
-                { id: 'college', label: '🏛️ Faculty' },
+                { id: 'college', label: '🏛️ Institution' },
                 { id: 'company', label: '🏢 Recruiter' },
                 { id: 'admin', label: '⚡ Admin' }
               ].map(r => (
@@ -176,75 +150,50 @@ export const LoginPage = ({ setActivePage }) => {
             </div>
           </div>
 
-          {/* COLLEGE FACULTY AUTHENTICATION FIELDS */}
+          {/* INSTITUTION AUTHENTICATION FIELDS */}
           {role === 'college' ? (
-            <div className="space-y-3.5 p-4 rounded-2xl bg-amber-50/50 border border-amber-200">
-              <div className="flex items-center justify-between text-xs font-bold text-amber-900">
+            <div className="space-y-3.5 p-4 rounded-2xl bg-brand-50/50 border border-brand-200">
+              <div className="flex items-center justify-between text-xs font-bold text-brand-900">
                 <span className="flex items-center gap-1.5">
-                  <KeyRound className="w-4 h-4 text-amber-600" />
-                  College Faculty Sign In
+                  <Building2 className="w-4 h-4 text-brand-600" />
+                  Institution Sign In
                 </span>
-                <span className="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-semibold">
-                  1 Password / College
+                <span className="text-[10px] bg-brand-100 text-brand-800 px-2 py-0.5 rounded font-semibold">
+                  Admin Provisioned
                 </span>
               </div>
 
-              {/* Identifier: Email OR Faculty ID */}
+              {/* Registered Institution Email */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                  Faculty Email or Faculty ID / Employee ID
+                  REGISTERED INSTITUTION EMAIL
                 </label>
                 <div className="relative">
-                  <Award className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                  <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
                   <input
-                    type="text"
-                    placeholder="e.g. suresh.kumar@apex.edu OR FAC-1001"
-                    value={facultyIdentifier}
-                    onChange={(e) => setFacultyIdentifier(e.target.value)}
+                    type="email"
+                    placeholder="Enter institution email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white font-medium"
                     required
                   />
                 </div>
               </div>
 
-              {/* College Dropdown */}
-              <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                  Select Registered College
-                </label>
-                <div className="relative">
-                  <select
-                    value={selectedCollege}
-                    onChange={(e) => setSelectedCollege(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-brand-500 outline-none bg-white font-bold text-slate-900"
-                  >
-                    {(registeredCollegesList.length > 0 ? registeredCollegesList : [
-                      { name: 'Apex Institute of Technology' },
-                      { name: 'Indian Institute of Technology Bombay (IIT Bombay)' },
-                      { name: 'Anna University (CEG Campus, Chennai)' },
-                      { name: 'BITS Pilani (Pilani Campus)' }
-                    ]).map(col => (
-                      <option key={col.id || col.name} value={col.name}>
-                        🏛️ {col.name} {col.code ? `(${col.code})` : ''}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Shared Password */}
+              {/* Institution Password */}
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                    College's Shared Faculty Password
+                    INSTITUTION PASSWORD
                   </label>
-                  <span className="text-[10px] text-amber-700 font-semibold">Institutional Key</span>
+                  <span className="text-[10px] text-slate-400 font-medium">Secure SHA-256</span>
                 </div>
                 <div className="relative">
                   <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
                   <input
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Enter college shared faculty password"
+                    placeholder="Enter password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="w-full pl-9 pr-9 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white font-medium"
@@ -258,9 +207,6 @@ export const LoginPage = ({ setActivePage }) => {
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
-                <p className="text-[10px] text-slate-500 mt-1">
-                  💡 All faculty from your college share this single password configured by Super Admin.
-                </p>
               </div>
             </div>
           ) : (
@@ -319,7 +265,7 @@ export const LoginPage = ({ setActivePage }) => {
             disabled={submitting}
             className="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-md shadow-brand-500/20 transition-all flex items-center justify-center gap-2"
           >
-            {submitting ? 'Verifying...' : role === 'college' ? 'Authenticate Faculty Access' : 'Sign In with Password'}
+            {submitting ? 'Verifying...' : role === 'college' ? 'Sign In as Institution' : 'Sign In with Password'}
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
@@ -339,33 +285,33 @@ export const LoginPage = ({ setActivePage }) => {
               <div className="grid grid-cols-2 gap-1.5 text-[10px]">
                 <button
                   type="button"
-                  onClick={() => handleQuickFillFaculty('suresh.kumar@apex.edu', 'Apex Institute of Technology', 'ApexFaculty#2026')}
-                  className="p-2 bg-white hover:bg-amber-50 rounded-lg border border-amber-200 text-left font-medium"
+                  onClick={() => handleQuickFillInstitution('apex.institution@gmail.com', 'ApexInst#2026')}
+                  className="p-2 bg-white hover:bg-brand-50 rounded-lg border border-brand-200 text-left font-medium"
                 >
-                  🏛️ <strong className="text-slate-800">Apex (Email):</strong> Dr. Suresh
+                  🏛️ <strong className="text-slate-800">Apex (INST001):</strong> Apex Tech
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleQuickFillFaculty('FAC-1001', 'Apex Institute of Technology', 'ApexFaculty#2026')}
-                  className="p-2 bg-white hover:bg-amber-50 rounded-lg border border-amber-200 text-left font-medium"
+                  onClick={() => handleQuickFillInstitution('iitb.institution@gmail.com', 'IITBInst#2026')}
+                  className="p-2 bg-white hover:bg-brand-50 rounded-lg border border-brand-200 text-left font-medium"
                 >
-                  🏛️ <strong className="text-slate-800">Apex (ID):</strong> FAC-1001
+                  🏛️ <strong className="text-slate-800">IIT Bombay (INST002):</strong> IITB
                 </button>
               </div>
               <div className="grid grid-cols-2 gap-1.5 text-[10px]">
                 <button
                   type="button"
-                  onClick={() => handleQuickFillFaculty('sunita.rao@iitb.ac.in', 'Indian Institute of Technology Bombay (IIT Bombay)', 'IITBFaculty#2026')}
-                  className="p-2 bg-white hover:bg-amber-50 rounded-lg border border-slate-200 text-left font-medium"
+                  onClick={() => handleQuickFillInstitution('anna.institution@gmail.com', 'AnnaInst#2026')}
+                  className="p-2 bg-white hover:bg-brand-50 rounded-lg border border-slate-200 text-left font-medium"
                 >
-                  🏛️ <strong className="text-slate-800">IIT Bombay:</strong> Dr. Sunita
+                  🏛️ <strong className="text-slate-800">Anna Univ (INST003):</strong> AU-CEG
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleQuickFillFaculty('m.sundaram@annauniv.edu', 'Anna University (CEG Campus, Chennai)', 'AnnaFaculty#2026')}
-                  className="p-2 bg-white hover:bg-amber-50 rounded-lg border border-slate-200 text-left font-medium"
+                  onClick={() => handleQuickFillInstitution('bits.institution@gmail.com', 'BITSInst#2026')}
+                  className="p-2 bg-white hover:bg-brand-50 rounded-lg border border-slate-200 text-left font-medium"
                 >
-                  🏛️ <strong className="text-slate-800">Anna Univ:</strong> Prof. Sundaram
+                  🏛️ <strong className="text-slate-800">BITS Pilani (INST004):</strong> BITS
                 </button>
               </div>
             </div>
@@ -396,15 +342,23 @@ export const LoginPage = ({ setActivePage }) => {
           )}
         </div>
 
-        {/* Footer */}
-        <div className="text-center pt-2">
-          <p className="text-xs text-slate-500">
-            {role === 'college' ? 'New faculty member?' : 'Don\'t have an account yet?'}{' '}
-            <button onClick={() => setActivePage('register')} className="text-brand-600 font-bold hover:underline">
-              {role === 'college' ? 'Register Faculty Profile' : 'Create Secure Account'}
-            </button>
-          </p>
-        </div>
+        {/* Footer: Do NOT show registration option for Institution */}
+        {role !== 'college' ? (
+          <div className="text-center pt-2">
+            <p className="text-xs text-slate-500">
+              Don't have an account yet?{' '}
+              <button onClick={() => setActivePage('register')} className="text-brand-600 font-bold hover:underline">
+                Create Secure Account
+              </button>
+            </p>
+          </div>
+        ) : (
+          <div className="text-center pt-2">
+            <p className="text-xs text-slate-400">
+              No self-registration. Institution accounts are provisioned exclusively by Platform Admin.
+            </p>
+          </div>
+        )}
 
       </div>
     </div>

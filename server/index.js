@@ -64,13 +64,29 @@ app.post('/api/auth/login', (req, res) => {
   res.json(result);
 });
 
-// ==================== FACULTY SPECIFIC AUTH ====================
-app.post('/api/auth/faculty/register', (req, res) => {
-  const result = store.registerFaculty(req.body);
+// ==================== INSTITUTION AUTHENTICATION ====================
+app.post('/api/auth/institution/login', (req, res) => {
+  const { email, password } = req.body;
+  const result = store.authenticateInstitution(email, password);
   if (result.error) {
-    return res.status(400).json({ success: false, error: result.error });
+    return res.status(401).json({ success: false, error: result.error });
   }
-  res.status(201).json(result);
+  res.json(result);
+});
+
+// Self-registration for institutions is disabled per requirements
+app.post('/api/auth/institution/register', (req, res) => {
+  return res.status(403).json({
+    success: false,
+    error: 'Institutions cannot self-register. Institution accounts can only be created by the Platform Administrator.'
+  });
+});
+
+app.post('/api/auth/faculty/register', (req, res) => {
+  return res.status(403).json({
+    success: false,
+    error: 'Self-registration for institutions is disabled. Institution accounts must be created by the Platform Administrator.'
+  });
 });
 
 app.post('/api/auth/faculty/login', (req, res) => {
@@ -89,6 +105,18 @@ app.post('/api/auth/faculty/login', (req, res) => {
 // ==================== ADMIN GOVERNANCE & AUDIT ====================
 app.get('/api/admin/colleges', (req, res) => {
   res.json(store.getCollegesAdminView());
+});
+
+app.get('/api/admin/institutions', (req, res) => {
+  res.json(store.getCollegesAdminView());
+});
+
+app.post('/api/admin/institutions', (req, res) => {
+  const result = store.createInstitutionAccount(req.body);
+  if (result.error) {
+    return res.status(400).json({ success: false, error: result.error });
+  }
+  res.status(201).json(result);
 });
 
 app.post('/api/admin/colleges', (req, res) => {
@@ -134,26 +162,31 @@ app.get('/api/students', (req, res) => {
 
   let students = store.getStudents();
 
-  // 1. If requester is a COLLEGE administrator, enforce strict scoping to their assigned college ONLY:
-  if (requesterRole === 'college' && requester) {
-    const assignedCollege = (requester.collegeName || requester.title || '').toLowerCase().trim();
-    const assignedCollegeId = (requester.collegeId || '').toLowerCase().trim();
+  // 1. If requester is an INSTITUTION administrator, enforce strict scoping to their assigned institution ONLY:
+  if (requesterRole === 'college') {
+    const assignedInstId = (requester?.institutionId || '').toLowerCase().trim();
+    const assignedCollege = (requester?.collegeName || requester?.title || '').toLowerCase().trim();
+    const assignedCollegeId = (requester?.collegeId || '').toLowerCase().trim();
 
     students = students.filter(s => {
-      const sColId = (s.collegeId || '').toLowerCase();
-      const sColName = (s.collegeName || '').toLowerCase();
+      const sInstId = (s.institutionId || '').toLowerCase().trim();
+      const sColId = (s.collegeId || '').toLowerCase().trim();
+      const sColName = (s.collegeName || '').toLowerCase().trim();
+
+      if (assignedInstId && sInstId) {
+        return sInstId === assignedInstId;
+      }
       return (assignedCollegeId && sColId === assignedCollegeId) ||
-        (assignedCollege && (sColName.includes(assignedCollege) || assignedCollege.includes(sColName))) ||
-        (assignedCollege.includes('apex') && (sColId === 'col_apex' || sColName.includes('apex')));
+        (assignedCollege && (sColName.includes(assignedCollege) || assignedCollege.includes(sColName)));
     });
-  } else if (collegeName || collegeId) {
-    // For Industry Recruiters filtering by college
-    const term = (collegeName || collegeId).toLowerCase().trim();
+  } else if (collegeName || collegeId || req.query.institutionId) {
+    // For Industry Recruiters or Admins filtering by institution/college
+    const term = (req.query.institutionId || collegeName || collegeId).toLowerCase().trim();
     students = students.filter(s => {
-      const cId = (s.collegeId || '').toLowerCase();
-      const cName = (s.collegeName || '').toLowerCase();
-      return cId === term || cName.includes(term) || term.includes(cId) ||
-        (term.includes('apex') && (cId === 'col_apex' || cName.includes('apex')));
+      const sInstId = (s.institutionId || '').toLowerCase().trim();
+      const cId = (s.collegeId || '').toLowerCase().trim();
+      const cName = (s.collegeName || '').toLowerCase().trim();
+      return sInstId === term || cId === term || cName.includes(term) || term.includes(cName);
     });
   }
 
@@ -189,19 +222,25 @@ app.get('/api/students/:id', (req, res) => {
     return res.status(403).json({ error: 'Access denied: Students can only view their own profile.' });
   }
 
-  // 2. College administrators can only view students of their assigned college
-  if (requesterRole === 'college' && requester) {
-    const assignedCollege = (requester.collegeName || requester.title || '').toLowerCase().trim();
-    const assignedCollegeId = (requester.collegeId || '').toLowerCase().trim();
-    const sColId = (student.collegeId || '').toLowerCase();
-    const sColName = (student.collegeName || '').toLowerCase();
+  // 2. Institution administrators can only view students of their assigned institution
+  if (requesterRole === 'college') {
+    const assignedInstId = (requester?.institutionId || '').toLowerCase().trim();
+    const assignedCollege = (requester?.collegeName || requester?.title || '').toLowerCase().trim();
+    const assignedCollegeId = (requester?.collegeId || '').toLowerCase().trim();
+    const sInstId = (student.institutionId || '').toLowerCase().trim();
+    const sColId = (student.collegeId || '').toLowerCase().trim();
+    const sColName = (student.collegeName || '').toLowerCase().trim();
 
-    const matches = (assignedCollegeId && sColId === assignedCollegeId) ||
-      (assignedCollege && (sColName.includes(assignedCollege) || assignedCollege.includes(sColName))) ||
-      (assignedCollege.includes('apex') && (sColId === 'col_apex' || sColName.includes('apex')));
+    let matches = false;
+    if (assignedInstId && sInstId) {
+      matches = (assignedInstId === sInstId);
+    } else {
+      matches = (assignedCollegeId && sColId === assignedCollegeId) ||
+        (assignedCollege && (sColName.includes(assignedCollege) || assignedCollege.includes(sColName)));
+    }
 
     if (!matches) {
-      return res.status(403).json({ error: 'Access denied: College administrators cannot view students from other colleges.' });
+      return res.status(403).json({ error: 'Access denied: Institution administrators cannot view students from other institutions.' });
     }
   }
 
@@ -266,19 +305,25 @@ app.get('/api/gap-analysis/:studentId', (req, res) => {
     return res.status(403).json({ error: 'Access denied: Students can only view their own skill gap analysis.' });
   }
 
-  // College admin can only access gap analysis for students of their assigned college
+  // Institution admin can only access gap analysis for students of their assigned institution
   if (requesterRole === 'college' && requester && student) {
-    const assignedCollege = (requester.collegeName || requester.title || '').toLowerCase().trim();
-    const assignedCollegeId = (requester.collegeId || '').toLowerCase().trim();
-    const sColId = (student.collegeId || '').toLowerCase();
-    const sColName = (student.collegeName || '').toLowerCase();
+    const assignedInstId = (requester?.institutionId || '').toLowerCase().trim();
+    const assignedCollege = (requester?.collegeName || requester?.title || '').toLowerCase().trim();
+    const assignedCollegeId = (requester?.collegeId || '').toLowerCase().trim();
+    const sInstId = (student.institutionId || '').toLowerCase().trim();
+    const sColId = (student.collegeId || '').toLowerCase().trim();
+    const sColName = (student.collegeName || '').toLowerCase().trim();
 
-    const matches = (assignedCollegeId && sColId === assignedCollegeId) ||
-      (assignedCollege && (sColName.includes(assignedCollege) || assignedCollege.includes(sColName))) ||
-      (assignedCollege.includes('apex') && (sColId === 'col_apex' || sColName.includes('apex')));
+    let matches = false;
+    if (assignedInstId && sInstId) {
+      matches = (assignedInstId === sInstId);
+    } else {
+      matches = (assignedCollegeId && sColId === assignedCollegeId) ||
+        (assignedCollege && (sColName.includes(assignedCollege) || assignedCollege.includes(sColName)));
+    }
 
     if (!matches) {
-      return res.status(403).json({ error: 'Access denied: Cannot access skill gap analysis for students outside your college.' });
+      return res.status(403).json({ error: 'Access denied: Cannot access skill gap analysis for students outside your institution.' });
     }
   }
 
@@ -388,10 +433,10 @@ app.get('/api/college/analytics', (req, res) => {
   const requester = req.user;
   const requesterRole = req.userRole || requester?.role;
 
-  // If college administrator, strictly use their assigned college
-  let targetCollege = req.query.collegeName || req.query.collegeId;
+  // If institution administrator, strictly use their assigned institution
+  let targetCollege = req.query.institutionId || req.query.collegeName || req.query.collegeId;
   if (requesterRole === 'college' && requester) {
-    targetCollege = requester.collegeName || requester.title || requester.collegeId;
+    targetCollege = requester.institutionId || requester.collegeId || requester.collegeName;
   }
 
   res.json(store.getCollegeAnalytics(targetCollege));

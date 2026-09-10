@@ -22,9 +22,9 @@ import { Modal } from '../../components/common/Modal';
 export const StudentRoster = () => {
   const { user, profile, authFetch } = useAuth();
   
-  // Permanent lock: College Administrator can ONLY see their assigned college
+  // Permanent lock: Institution Administrator can ONLY see their assigned institution
+  const assignedInstId = user?.institutionId || 'INST001';
   const assignedCollegeName = profile?.name || user?.collegeName || user?.title || 'Apex Institute of Technology';
-  const assignedCollegeId = user?.collegeId || 'col_apex';
 
   const [students, setStudents] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -37,16 +37,18 @@ export const StudentRoster = () => {
   const fetchStudents = async () => {
     try {
       setLoading(true);
-      const res = await authFetch(`/api/students?collegeName=${encodeURIComponent(assignedCollegeName)}`);
+      const res = await authFetch('/api/students');
       if (res.ok) {
         const data = await res.json();
-        // Strict client-side filter guarantee: College admin only sees their college students
+        // Strict client-side filter guarantee: Institution admin only sees their institution's students
         const scopedStudents = (data || []).filter(s => {
+          if (assignedInstId && s.institutionId) {
+            return s.institutionId.toLowerCase() === assignedInstId.toLowerCase();
+          }
           const sColId = (s.collegeId || '').toLowerCase();
           const sColName = (s.collegeName || '').toLowerCase();
           const targetCol = assignedCollegeName.toLowerCase();
-          return sColName.includes(targetCol) || targetCol.includes(sColName) || 
-            (targetCol.includes('apex') && (sColId === 'col_apex' || sColName.includes('apex')));
+          return sColName.includes(targetCol) || targetCol.includes(sColName);
         });
         setStudents(scopedStudents);
       }
@@ -59,7 +61,7 @@ export const StudentRoster = () => {
 
   useEffect(() => {
     fetchStudents();
-  }, [assignedCollegeName]);
+  }, [assignedCollegeName, assignedInstId]);
 
   const filtered = students.filter(s => {
     const matchesSearch = s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -78,19 +80,19 @@ export const StudentRoster = () => {
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-semibold border border-amber-500/30">
             <School className="w-4 h-4 text-amber-400" />
-            {assignedCollegeName} · Institutional Talent Directory
+            {assignedCollegeName} · Institution ID: {assignedInstId}
           </div>
           <h1 className="text-2xl sm:text-4xl font-extrabold font-display">
             Enrolled Student Skill Profiles
           </h1>
           <p className="text-slate-300 text-sm max-w-2xl">
-            Strict institutional access: You are viewing verified skill profiles and placement dossiers exclusively for students enrolled at <strong>{assignedCollegeName}</strong>.
+            Strict institutional access: You are viewing verified skill profiles exclusively for students enrolled at <strong>{assignedCollegeName} (ID: {assignedInstId})</strong>.
           </p>
         </div>
 
         <div className="bg-white/10 px-4 py-2.5 rounded-2xl border border-white/20 text-amber-300 font-semibold text-xs flex items-center gap-2 shrink-0">
           <Lock className="w-4 h-4" />
-          <span>Locked to {assignedCollegeName}</span>
+          <span>Locked to ID: {assignedInstId}</span>
         </div>
       </div>
 

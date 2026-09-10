@@ -42,7 +42,7 @@ export const Navbar = ({ activePage, setActivePage }) => {
         ];
       case 'college':
         return [
-          { id: 'college-dashboard', label: 'College Overview', icon: School },
+          { id: 'college-dashboard', label: 'Institution Overview', icon: School },
           { id: 'college-analytics', label: 'Skill Gap Analytics', icon: BarChart3, highlight: true },
           { id: 'workshops', label: 'Workshops & Training', icon: Award },
           { id: 'student-roster', label: 'Student Directory', icon: Users },
@@ -161,7 +161,9 @@ export const Navbar = ({ activePage, setActivePage }) => {
             {/* Role Badge */}
             <div className={`px-2.5 py-1 rounded-full text-xs font-semibold border flex items-center gap-1.5 ${roleColors[user.role]}`}>
               <span className="w-2 h-2 rounded-full bg-current animate-pulse" />
-              <span className="capitalize">{user.role} View</span>
+              <span className="capitalize">
+                {user.role === 'college' ? `Institution (${user.institutionId || 'INST'})` : `${user.role} View`}
+              </span>
             </div>
 
             {/* Profile Avatar Pill */}
@@ -189,7 +191,9 @@ export const Navbar = ({ activePage, setActivePage }) => {
                   <div className="px-4 py-2 border-b border-slate-100">
                     <p className="text-xs text-slate-500">Signed in as</p>
                     <p className="text-sm font-semibold text-slate-800 truncate">{user.name}</p>
-                    <p className="text-xs text-brand-600 font-medium">{user.role.toUpperCase()}</p>
+                    <p className="text-xs text-brand-600 font-medium">
+                      {user.role === 'college' ? `INSTITUTION (${user.institutionId || 'INST001'})` : user.role.toUpperCase()}
+                    </p>
                   </div>
 
                   <div className="py-1">

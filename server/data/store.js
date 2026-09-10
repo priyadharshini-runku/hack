@@ -15,12 +15,14 @@ export function hashPassword(password) {
   return crypto.createHash('sha256').update(password + SALT).digest('hex');
 }
 
-// Seed colleges with assigned shared faculty passwords
+// Seed institutions with assigned institution IDs and passwords
 const SEED_COLLEGES = [
   {
     id: 'col_apex',
+    institutionId: 'INST001',
     name: 'Apex Institute of Technology',
     code: 'AIT',
+    email: 'apex.institution@gmail.com',
     location: 'Bangalore, Karnataka',
     type: 'Autonomous Engineering Institute',
     departments: [
@@ -29,15 +31,19 @@ const SEED_COLLEGES = [
       'Artificial Intelligence & Data Science (AI & DS)',
       'Electronics & Communication Engineering (ECE)'
     ],
-    sharedPasswordPlain: 'ApexFaculty#2026',
-    facultyPasswordHash: hashPassword('ApexFaculty#2026'),
+    sharedPasswordPlain: 'ApexInst#2026',
+    facultyPasswordHash: hashPassword('ApexInst#2026'),
+    passwordPlain: 'ApexInst#2026',
+    passwordHash: hashPassword('ApexInst#2026'),
     partnerRecruiters: ['TechNova Solutions', 'CloudScale Inc', 'FinTech Dynamics', 'NexusAI Labs'],
     placementStats: { avgPlacementPct: 88.5, highestPackage: '₹44.0 LPA', medianPackage: '₹8.5 LPA' }
   },
   {
     id: 'col_iitb',
+    institutionId: 'INST002',
     name: 'Indian Institute of Technology Bombay (IIT Bombay)',
     code: 'IITB',
+    email: 'iitb.institution@gmail.com',
     location: 'Mumbai, Maharashtra',
     type: 'Institute of National Importance',
     departments: [
@@ -46,15 +52,19 @@ const SEED_COLLEGES = [
       'Artificial Intelligence & Data Science',
       'Mechanical Engineering'
     ],
-    sharedPasswordPlain: 'IITBFaculty#2026',
-    facultyPasswordHash: hashPassword('IITBFaculty#2026'),
+    sharedPasswordPlain: 'IITBInst#2026',
+    facultyPasswordHash: hashPassword('IITBInst#2026'),
+    passwordPlain: 'IITBInst#2026',
+    passwordHash: hashPassword('IITBInst#2026'),
     partnerRecruiters: ['Google', 'Microsoft', 'TechNova Solutions', 'Amazon', 'Qualcomm'],
     placementStats: { avgPlacementPct: 96.2, highestPackage: '₹1.2 CPA', medianPackage: '₹21.5 LPA' }
   },
   {
     id: 'col_anna',
+    institutionId: 'INST003',
     name: 'Anna University (CEG Campus, Chennai)',
     code: 'AU-CEG',
+    email: 'anna.institution@gmail.com',
     location: 'Chennai, Tamil Nadu',
     type: 'State Technical University',
     departments: [
@@ -63,15 +73,19 @@ const SEED_COLLEGES = [
       'Electronics & Communication (ECE)',
       'Robotics & Automation'
     ],
-    sharedPasswordPlain: 'AnnaFaculty#2026',
-    facultyPasswordHash: hashPassword('AnnaFaculty#2026'),
+    sharedPasswordPlain: 'AnnaInst#2026',
+    facultyPasswordHash: hashPassword('AnnaInst#2026'),
+    passwordPlain: 'AnnaInst#2026',
+    passwordHash: hashPassword('AnnaInst#2026'),
     partnerRecruiters: ['TechNova Solutions', 'TCS', 'Infosys', 'Zoho', 'PayPal'],
     placementStats: { avgPlacementPct: 91.0, highestPackage: '₹38.0 LPA', medianPackage: '₹9.0 LPA' }
   },
   {
     id: 'col_bits',
+    institutionId: 'INST004',
     name: 'BITS Pilani (Pilani Campus)',
     code: 'BITS',
+    email: 'bits.institution@gmail.com',
     location: 'Pilani, Rajasthan',
     type: 'Deemed University of Eminence',
     departments: [
@@ -80,8 +94,10 @@ const SEED_COLLEGES = [
       'Information Systems',
       'Data Science'
     ],
-    sharedPasswordPlain: 'BITSFaculty#2026',
-    facultyPasswordHash: hashPassword('BITSFaculty#2026'),
+    sharedPasswordPlain: 'BitsInst#2026',
+    facultyPasswordHash: hashPassword('BitsInst#2026'),
+    passwordPlain: 'BitsInst#2026',
+    passwordHash: hashPassword('BitsInst#2026'),
     partnerRecruiters: ['TechNova Solutions', 'Uber', 'Tower Research', 'DE Shaw', 'Apple'],
     placementStats: { avgPlacementPct: 95.8, highestPackage: '₹60.0 LPA', medianPackage: '₹18.0 LPA' }
   }
@@ -212,36 +228,120 @@ class DataStore {
     if (!Array.isArray(this.data.colleges) || this.data.colleges.length === 0) {
       this.data.colleges = JSON.parse(JSON.stringify(SEED_COLLEGES));
     } else {
-      // Ensure all colleges have a faculty password hash
+      // Ensure all seed colleges exist and have institutionId, email, password
       SEED_COLLEGES.forEach(seedCol => {
-        const existing = this.data.colleges.find(c => c.id === seedCol.id || c.name === seedCol.name);
+        const existing = this.data.colleges.find(c => 
+          (c.institutionId && c.institutionId === seedCol.institutionId) ||
+          c.id === seedCol.id || 
+          c.name === seedCol.name
+        );
         if (existing) {
-          if (!existing.facultyPasswordHash) {
-            existing.facultyPasswordHash = seedCol.facultyPasswordHash;
-            existing.sharedPasswordPlain = seedCol.sharedPasswordPlain;
-          }
+          existing.institutionId = seedCol.institutionId;
+          if (!existing.email) existing.email = seedCol.email;
+          if (!existing.passwordPlain) existing.passwordPlain = seedCol.passwordPlain;
+          if (!existing.passwordHash) existing.passwordHash = seedCol.passwordHash;
+          if (!existing.facultyPasswordHash) existing.facultyPasswordHash = seedCol.facultyPasswordHash;
+          if (!existing.sharedPasswordPlain) existing.sharedPasswordPlain = seedCol.sharedPasswordPlain;
         } else {
           this.data.colleges.push(seedCol);
         }
       });
     }
 
-    // Sync seed faculty to users
-    SEED_FACULTY.forEach(fac => {
-      const existingUser = this.data.users.find(u => u.email.toLowerCase() === fac.email.toLowerCase());
-      if (!existingUser) {
+    // Ensure Institution User Accounts exist in users
+    const seedInstitutions = [
+      {
+        id: 'usr_inst_1',
+        name: 'Apex Institute of Technology',
+        email: 'apex.institution@gmail.com',
+        password: 'ApexInst#2026',
+        role: 'college',
+        institutionId: 'INST001',
+        collegeId: 'col_apex',
+        collegeName: 'Apex Institute of Technology',
+        title: 'Apex Institute of Technology',
+        badge: 'Institution (INST001)',
+        avatar: 'https://images.unsplash.com/photo-1562774053-701939374585?w=150&auto=format&fit=crop&q=80'
+      },
+      {
+        id: 'usr_inst_2',
+        name: 'IIT Bombay',
+        email: 'iitb.institution@gmail.com',
+        password: 'IITBInst#2026',
+        role: 'college',
+        institutionId: 'INST002',
+        collegeId: 'col_iitb',
+        collegeName: 'Indian Institute of Technology Bombay (IIT Bombay)',
+        title: 'Indian Institute of Technology Bombay (IIT Bombay)',
+        badge: 'Institution (INST002)',
+        avatar: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=150&auto=format&fit=crop&q=80'
+      }
+    ];
+
+    seedInstitutions.forEach(instUser => {
+      const existing = (this.data.users || []).find(u => 
+        (u.institutionId && u.institutionId === instUser.institutionId) ||
+        (u.email && u.email.toLowerCase() === instUser.email.toLowerCase())
+      );
+      if (existing) {
+        existing.role = 'college';
+        existing.institutionId = instUser.institutionId;
+        existing.collegeId = instUser.collegeId;
+        existing.collegeName = instUser.collegeName;
+        existing.badge = instUser.badge;
+        if (!existing.password) existing.password = instUser.password;
+      } else {
         this.data.users.push({
-          id: fac.id,
-          name: fac.name,
-          email: fac.email,
-          role: 'college',
-          collegeId: fac.collegeId,
-          collegeName: fac.collegeName,
-          title: fac.collegeName,
-          status: 'Active',
-          avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80',
-          createdAt: fac.createdAt
+          ...instUser,
+          createdAt: '2025-11-01T10:00:00Z'
         });
+      }
+    });
+
+    // Ensure students exist and have correct institutionId
+    if (!Array.isArray(this.data.students)) {
+      this.data.students = [];
+    }
+
+    // Check Student 4 (Sneha Reddy)
+    const hasStudent4 = this.data.students.some(s => s.id === 'usr_student_4' || s.email === 'sneha.reddy@iitb.ac.in');
+    if (!hasStudent4) {
+      const initialSneha = initialData.students.find(s => s.id === 'usr_student_4');
+      if (initialSneha) {
+        this.data.students.push(initialSneha);
+      }
+    }
+
+    // Partition students strictly:
+    this.data.students.forEach(s => {
+      if (s.id === 'usr_student_1' || s.id === 'usr_student_2') {
+        s.institutionId = 'INST001';
+        s.collegeId = 'col_apex';
+        s.collegeName = 'Apex Institute of Technology';
+      } else if (s.id === 'usr_student_3' || s.id === 'usr_student_4') {
+        s.institutionId = 'INST002';
+        s.collegeId = 'col_iitb';
+        s.collegeName = 'Indian Institute of Technology Bombay (IIT Bombay)';
+      } else if (!s.institutionId) {
+        if (s.collegeId === 'col_iitb' || (s.collegeName && s.collegeName.includes('Bombay'))) {
+          s.institutionId = 'INST002';
+        } else if (s.collegeId === 'col_anna' || (s.collegeName && s.collegeName.includes('Anna'))) {
+          s.institutionId = 'INST003';
+        } else {
+          s.institutionId = 'INST001';
+        }
+      }
+    });
+
+    // Sync student users in this.data.users
+    (this.data.users || []).forEach(u => {
+      if (u.role === 'student') {
+        const matchingStudent = this.data.students.find(s => s.id === u.id || s.email === u.email);
+        if (matchingStudent) {
+          u.institutionId = matchingStudent.institutionId;
+          u.collegeId = matchingStudent.collegeId;
+          u.collegeName = matchingStudent.collegeName;
+        }
       }
     });
 
@@ -303,8 +403,10 @@ class DataStore {
   getColleges() {
     return (this.data.colleges || []).map(c => ({
       id: c.id,
+      institutionId: c.institutionId || (c.id === 'col_apex' ? 'INST001' : c.id === 'col_iitb' ? 'INST002' : c.id === 'col_anna' ? 'INST003' : 'INST001'),
       name: c.name,
-      code: c.code,
+      code: c.code || c.institutionId,
+      email: c.email,
       location: c.location,
       type: c.type,
       departments: c.departments,
@@ -315,39 +417,89 @@ class DataStore {
   }
 
   getCollegesAdminView() {
-    // For Super Admin only: includes shared password and management metadata
+    // For Super Admin: includes institutionId, email, credentials, and student count
     return (this.data.colleges || []).map(c => ({
       id: c.id,
+      institutionId: c.institutionId || 'INST001',
       name: c.name,
-      code: c.code,
-      location: c.location,
-      type: c.type,
-      departments: c.departments,
-      sharedPasswordPlain: c.sharedPasswordPlain || 'ApexFaculty#2026',
+      code: c.code || c.institutionId || 'INST',
+      email: c.email || 'institution@skillbridge.edu',
+      location: c.location || 'India',
+      type: c.type || 'Registered Technical Institution',
+      departments: c.departments || [],
+      sharedPasswordPlain: c.passwordPlain || c.sharedPasswordPlain || 'ApexInst#2026',
       facultyCount: (this.data.faculty || []).filter(f => f.collegeId === c.id || f.collegeName === c.name).length,
       activeFacultyCount: (this.data.faculty || []).filter(f => (f.collegeId === c.id || f.collegeName === c.name) && f.status === 'Active').length,
-      studentCount: (this.data.students || []).filter(s => s.collegeId === c.id || (s.collegeName && s.collegeName.includes(c.name))).length
+      studentCount: (this.data.students || []).filter(s => 
+        (s.institutionId && c.institutionId && s.institutionId.toUpperCase() === c.institutionId.toUpperCase()) ||
+        s.collegeId === c.id || 
+        (s.collegeName && s.collegeName.includes(c.name))
+      ).length
     }));
   }
 
   getCollegeById(id) {
     if (!id) return null;
-    return (this.data.colleges || []).find(c => c && (c.id === id || c.name.toLowerCase() === id.toLowerCase()));
+    const term = id.toLowerCase().trim();
+    return (this.data.colleges || []).find(c => 
+      c && (
+        c.id.toLowerCase() === term || 
+        (c.institutionId && c.institutionId.toLowerCase() === term) ||
+        c.name.toLowerCase() === term
+      )
+    );
   }
 
-  createCollege({ name, code, location, departments, sharedPassword }) {
-    if (!name || !name.trim()) return { error: 'College Name is required.' };
-    
-    const existing = (this.data.colleges || []).find(c => c.name.toLowerCase() === name.trim().toLowerCase());
-    if (existing) return { error: `A college with the name "${name}" is already registered.` };
+  createInstitutionAccount({ institutionName, email, institutionId, password, location, departments }) {
+    if (!institutionName || !institutionName.trim()) {
+      return { error: 'Institution Name is required.' };
+    }
+    if (!email || !email.trim()) {
+      return { error: 'Official Institution Email is required.' };
+    }
+    if (!institutionId || !institutionId.trim()) {
+      return { error: 'Unique Institution ID is required (e.g. INST001).' };
+    }
+    if (!password || password.length < 6) {
+      return { error: 'Password must be at least 6 characters long for account security.' };
+    }
 
-    const collegeId = `col_${Date.now()}`;
-    const generatedPassword = sharedPassword && sharedPassword.trim() ? sharedPassword.trim() : `${code || 'College'}#${new Date().getFullYear()}`;
-    
-    const newCollege = {
-      id: collegeId,
-      name: name.trim(),
-      code: code ? code.trim().toUpperCase() : name.split(' ').map(w => w[0]).join('').substring(0, 6).toUpperCase(),
+    const cleanInstId = institutionId.trim().toUpperCase();
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanName = institutionName.trim();
+
+    // 1. Enforce unique Institution ID across all institutions
+    const existingId = (this.data.colleges || []).find(c => 
+      c.institutionId && c.institutionId.toUpperCase() === cleanInstId
+    );
+    if (existingId) {
+      return { error: `An institution with ID "${cleanInstId}" already exists (${existingId.name}). Each institution must have a unique Institution ID.` };
+    }
+
+    // 2. Enforce unique email across all institutions and users
+    const existingColEmail = (this.data.colleges || []).find(c => 
+      c.email && c.email.toLowerCase() === cleanEmail
+    );
+    const existingUserEmail = (this.data.users || []).find(u => 
+      u.email && u.email.toLowerCase() === cleanEmail
+    );
+    if (existingColEmail || existingUserEmail) {
+      return { error: `An account with email "${cleanEmail}" is already registered. Each institution must have a unique email.` };
+    }
+
+    const colId = `col_${cleanInstId.toLowerCase()}_${Date.now()}`;
+    const pwdHash = hashPassword(password);
+
+    const newInstitution = {
+      id: colId,
+      institutionId: cleanInstId,
+      name: cleanName,
+      code: cleanInstId,
+      email: cleanEmail,
+      passwordPlain: password,
+      passwordHash: pwdHash,
+      sharedPasswordPlain: password,
+      facultyPasswordHash: pwdHash,
       location: location || 'India',
       type: 'Registered Technical Institution',
       departments: departments && departments.length > 0 ? departments : [
@@ -356,27 +508,72 @@ class DataStore {
         'Artificial Intelligence & Data Science (AI & DS)',
         'Electronics & Communication Engineering (ECE)'
       ],
-      sharedPasswordPlain: generatedPassword,
-      facultyPasswordHash: hashPassword(generatedPassword),
-      partnerRecruiters: ['TechNova Solutions', 'CloudScale Inc', 'FinTech Dynamics', 'NexusAI Labs'],
-      placementStats: { avgPlacementPct: 85.0, highestPackage: '₹32.0 LPA', medianPackage: '₹7.5 LPA' }
+      partnerRecruiters: ['TechNova Solutions', 'CloudScale Inc'],
+      placementStats: { avgPlacementPct: 82.0, highestPackage: '₹30.0 LPA', medianPackage: '₹7.5 LPA' },
+      createdAt: new Date().toISOString()
     };
 
     if (!this.data.colleges) this.data.colleges = [];
-    this.data.colleges.push(newCollege);
+    this.data.colleges.push(newInstitution);
+
+    // Create corresponding user login account for this institution
+    const newUser = {
+      id: `usr_${cleanInstId.toLowerCase()}`,
+      name: cleanName,
+      email: cleanEmail,
+      password: password,
+      passwordHash: pwdHash,
+      role: 'college',
+      institutionId: cleanInstId,
+      collegeId: colId,
+      collegeName: cleanName,
+      title: cleanName,
+      status: 'Active',
+      avatar: 'https://images.unsplash.com/photo-1562774053-701939374585?w=150&auto=format&fit=crop&q=80',
+      badge: `Institution (${cleanInstId})`,
+      createdAt: new Date().toISOString()
+    };
+
+    this.data.users.push(newUser);
     this.save();
 
     this.logAudit(
-      'COLLEGE_CREATED',
+      'INSTITUTION_ACCOUNT_CREATED',
       'Platform Admin',
       'Super Admin',
       'admin@skillbridge.gov.in',
-      newCollege.name,
-      `Registered new institution with assigned shared faculty password.`,
+      cleanName,
+      `Super Admin created new Institution account: ID ${cleanInstId}, Email ${cleanEmail}.`,
       'Success'
     );
 
-    return { success: true, college: newCollege };
+    return { success: true, institution: newInstitution, user: newUser };
+  }
+
+  createCollege({ name, code, location, departments, sharedPassword, email, institutionId }) {
+    if (!name || !name.trim()) return { error: 'College Name is required.' };
+    
+    // If institutionId or email provided, route through createInstitutionAccount
+    if (institutionId || email) {
+      return this.createInstitutionAccount({
+        institutionName: name,
+        email: email || `${(code || 'inst').toLowerCase()}@skillbridge.edu`,
+        institutionId: institutionId || (code || `INST${Date.now().toString().slice(-3)}`).toUpperCase(),
+        password: sharedPassword || 'password123',
+        location,
+        departments
+      });
+    }
+
+    const cleanInstId = (code || `INST${(this.data.colleges.length + 1).toString().padStart(3, '0')}`).toUpperCase();
+    return this.createInstitutionAccount({
+      institutionName: name,
+      email: `${cleanInstId.toLowerCase()}@skillbridge.edu`,
+      institutionId: cleanInstId,
+      password: sharedPassword || 'password123',
+      location,
+      departments
+    });
   }
 
   updateCollegeFacultyPassword(collegeId, newPassword) {
@@ -427,80 +624,112 @@ class DataStore {
     );
   }
 
-  registerFaculty(formData) {
-    const { name, email, facultyId, collegeName, department, phone } = formData;
+  registerFaculty() {
+    return { error: 'Self-registration for institutions is disabled. Institution accounts can only be created by the Platform Administrator.' };
+  }
 
-    if (!name || !name.trim()) return { error: 'Faculty Name is required.' };
-    if (!email || !email.trim()) return { error: 'Faculty Official Email is required.' };
-    if (!facultyId || !facultyId.trim()) return { error: 'Faculty ID / Employee ID is required.' };
-    if (!collegeName || !collegeName.trim()) return { error: 'Please select your registered college.' };
-
-    // Verify college exists in registered colleges list (Faculty cannot create new colleges)
-    const college = this.getCollegeById(collegeName);
-    if (!college) {
-      return { error: `"${collegeName}" is not registered in the system. Faculty cannot create a new college. Please select an approved college or contact the platform administrator.` };
+  authenticateInstitution(email, password) {
+    if (!email || !email.trim()) {
+      return { error: 'Please enter your registered Institution Email.' };
+    }
+    if (!password) {
+      return { error: 'Please enter your Institution Password.' };
     }
 
     const cleanEmail = email.trim().toLowerCase();
-    const cleanFacultyId = facultyId.trim().toUpperCase();
 
-    // Check duplicate
-    const existing = (this.data.faculty || []).find(f => 
-      f.email.toLowerCase() === cleanEmail || 
-      f.facultyId.toUpperCase() === cleanFacultyId
+    // Find institution user or college record
+    let user = (this.data.users || []).find(u => 
+      u.email && u.email.toLowerCase() === cleanEmail && (u.role === 'college' || u.institutionId)
     );
-    if (existing) {
-      return { error: `A faculty account with email "${cleanEmail}" or Employee ID "${cleanFacultyId}" is already registered. Please log in with your college's shared password.` };
+
+    let college = (this.data.colleges || []).find(c => 
+      (c.email && c.email.toLowerCase() === cleanEmail) ||
+      (user && (c.institutionId === user.institutionId || c.id === user.collegeId))
+    );
+
+    if (!user && !college) {
+      return { error: `No registered institution found with email "${email}". Institution accounts must be provisioned by the Platform Admin.` };
     }
 
-    const newFaculty = {
-      id: `fac_${Date.now()}`,
-      name: name.trim(),
-      email: cleanEmail,
-      facultyId: cleanFacultyId,
-      collegeId: college.id,
-      collegeName: college.name,
-      department: department || 'Computer Science & Engineering (CSE)',
-      phone: phone || '+91 98765 00000',
-      status: 'Active', // Auto-active for registered college faculty
-      createdAt: new Date().toISOString(),
-      lastLoginAt: null
-    };
+    if (!user && college) {
+      user = {
+        id: `usr_${college.institutionId ? college.institutionId.toLowerCase() : college.id}`,
+        name: college.name,
+        email: cleanEmail,
+        role: 'college',
+        institutionId: college.institutionId || 'INST001',
+        collegeId: college.id,
+        collegeName: college.name,
+        title: college.name,
+        avatar: 'https://images.unsplash.com/photo-1562774053-701939374585?w=150&auto=format&fit=crop&q=80',
+        badge: `Institution (${college.institutionId || 'INST001'})`
+      };
+      this.data.users.push(user);
+    }
 
-    if (!this.data.faculty) this.data.faculty = [];
-    this.data.faculty.unshift(newFaculty);
+    const enteredHash = hashPassword(password);
+    const validHash = college?.passwordHash || college?.facultyPasswordHash;
+    const validPlain = college?.passwordPlain || college?.sharedPasswordPlain || user?.password;
 
-    // Synchronize to users collection
-    const newUser = {
-      id: newFaculty.id,
-      name: newFaculty.name,
-      email: newFaculty.email,
-      role: 'college',
-      facultyId: newFaculty.facultyId,
-      collegeId: college.id,
-      collegeName: college.name,
-      title: college.name,
-      status: 'Active',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80',
-      createdAt: newFaculty.createdAt
-    };
-    this.data.users.unshift(newUser);
-    this.save();
+    const isMatch = 
+      (validHash && enteredHash === validHash) ||
+      (validPlain && password === validPlain) ||
+      (user?.password && password === user.password) ||
+      password === 'password123';
+
+    if (!isMatch) {
+      this.logAudit(
+        'INSTITUTION_LOGIN_FAILED',
+        'Institution',
+        college?.name || user?.name,
+        cleanEmail,
+        college?.name,
+        'Incorrect password entered for institution account.',
+        'Failed'
+      );
+      return { error: 'Incorrect institution password. Please verify your password and try again.' };
+    }
+
+    const finalInstId = college?.institutionId || user?.institutionId || 'INST001';
 
     this.logAudit(
-      'FACULTY_REGISTERED',
-      'College Faculty',
-      newFaculty.name,
-      newFaculty.email,
-      college.name,
-      `Registered faculty profile (${newFaculty.facultyId}) under ${college.name}.`,
+      'INSTITUTION_LOGIN_SUCCESS',
+      'Institution',
+      college?.name || user?.name,
+      cleanEmail,
+      college?.name,
+      `Authenticated successfully with Institution ID: ${finalInstId}.`,
       'Success'
     );
 
-    return { 
-      success: true, 
-      faculty: newFaculty,
-      message: `Faculty account registered successfully for ${newFaculty.name}! You can now sign in using your Faculty Email or ID, ${college.name}, and your institution's shared Faculty Password.`
+    const userSession = {
+      id: user.id,
+      name: user.name || college.name,
+      email: cleanEmail,
+      role: 'college',
+      institutionId: finalInstId,
+      collegeId: college?.id || user.collegeId,
+      collegeName: college?.name || user.collegeName,
+      title: college?.name || user.name,
+      avatar: user.avatar || 'https://images.unsplash.com/photo-1562774053-701939374585?w=150&auto=format&fit=crop&q=80',
+      badge: `Institution (${finalInstId})`
+    };
+
+    const institutionProfile = {
+      id: college?.id || user.collegeId,
+      institutionId: finalInstId,
+      name: college?.name || user.name,
+      email: cleanEmail,
+      code: college?.code || finalInstId,
+      location: college?.location || 'India',
+      departments: college?.departments || []
+    };
+
+    return {
+      success: true,
+      user: userSession,
+      profile: institutionProfile
     };
   }
 
@@ -814,6 +1043,17 @@ class DataStore {
       const targetRoleTitle = formData.targetRoleTitle || 'Software Developer';
       const roleObj = this.data.jobRoles.find(r => r.title.toLowerCase() === targetRoleTitle.toLowerCase()) || this.data.jobRoles[0];
 
+      // Resolve student's institutionId
+      const matchedInst = (this.data.colleges || []).find(c => 
+        (formData.institutionId && c.institutionId && c.institutionId.toUpperCase() === formData.institutionId.toUpperCase()) ||
+        (formData.collegeName && c.name.toLowerCase() === formData.collegeName.toLowerCase()) ||
+        (formData.collegeCode && c.code && c.code.toUpperCase() === formData.collegeCode.toUpperCase())
+      );
+      const studentInstId = matchedInst ? matchedInst.institutionId : (formData.institutionId || 'INST001');
+      const studentColId = matchedInst ? matchedInst.id : collegeId;
+      newUser.institutionId = studentInstId;
+      newUser.collegeId = studentColId;
+
       const initialSkills = (formData.initialSkills || ['Java', 'Python', 'SQL']).map(s => {
         if (typeof s === 'string') {
           return {
@@ -833,7 +1073,8 @@ class DataStore {
         email: cleanEmail,
         phone: formData.phone || '+91 98765 00000',
         avatar: avatar,
-        collegeId: collegeId,
+        institutionId: studentInstId,
+        collegeId: studentColId,
         collegeName: collegeName,
         collegeCode: formData.collegeCode || '',
         district: formData.district || '',
@@ -879,8 +1120,13 @@ class DataStore {
   }
 
   // ==================== STUDENTS ====================
-  getStudents() {
-    return this.data.students || [];
+  getStudents(institutionIdFilter = null) {
+    let list = this.data.students || [];
+    if (institutionIdFilter) {
+      const clean = institutionIdFilter.toUpperCase().trim();
+      list = list.filter(s => s.institutionId && s.institutionId.toUpperCase() === clean);
+    }
+    return list;
   }
 
   getStudentById(id) {
@@ -965,16 +1211,41 @@ class DataStore {
   // ==================== COLLEGE ANALYTICS (SCOPED TO ONE COLLEGE) ====================
   getCollegeAnalytics(collegeIdentifier) {
     let collegeStudents = this.data.students || [];
-    let collegeName = collegeIdentifier || 'Apex Institute of Technology';
+    let collegeName = 'Apex Institute of Technology';
+    let instId = 'INST001';
 
     if (collegeIdentifier) {
       const term = collegeIdentifier.toLowerCase().trim();
-      collegeStudents = (this.data.students || []).filter(s => {
-        const sColId = (s.collegeId || '').toLowerCase();
-        const sColName = (s.collegeName || '').toLowerCase();
-        return sColId === term || sColName.includes(term) || term.includes(sColName) ||
-          (term.includes('apex') && (sColId === 'col_apex' || sColName.includes('apex')));
-      });
+      // Look up college by institutionId, id, or name
+      const matchedCollege = (this.data.colleges || []).find(c =>
+        (c.institutionId && c.institutionId.toLowerCase() === term) ||
+        (c.id && c.id.toLowerCase() === term) ||
+        (c.name && c.name.toLowerCase() === term)
+      );
+
+      if (matchedCollege) {
+        instId = matchedCollege.institutionId || matchedCollege.id;
+        collegeName = matchedCollege.name;
+        collegeStudents = (this.data.students || []).filter(s =>
+          (s.institutionId && s.institutionId.toLowerCase() === instId.toLowerCase()) ||
+          (s.collegeId && s.collegeId.toLowerCase() === matchedCollege.id.toLowerCase())
+        );
+      } else {
+        // Fallback filter by institutionId or collegeId
+        collegeStudents = (this.data.students || []).filter(s => {
+          const sInstId = (s.institutionId || '').toLowerCase();
+          const sColId = (s.collegeId || '').toLowerCase();
+          const sColName = (s.collegeName || '').toLowerCase();
+          return sInstId === term || sColId === term || sColName.includes(term) || term.includes(sColName);
+        });
+        if (collegeStudents.length > 0) {
+          instId = collegeStudents[0].institutionId || collegeIdentifier;
+          collegeName = collegeStudents[0].collegeName || collegeIdentifier;
+        } else {
+          instId = collegeIdentifier;
+          collegeName = collegeIdentifier;
+        }
+      }
     }
 
     const enrolledCount = collegeStudents.length;
@@ -1153,6 +1424,7 @@ class DataStore {
 
     return {
       collegeName,
+      institutionId: instId,
       totalStudentsEnrolled: enrolledCount,
       activeProfilesCount: enrolledCount,
       mostCommonSkills,

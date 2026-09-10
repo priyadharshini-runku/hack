@@ -11,6 +11,7 @@ export const DEMO_PERSONAS = [
     avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80',
     collegeName: 'Apex Institute of Technology',
     collegeId: 'col_apex',
+    institutionId: 'INST001',
     badge: 'Student'
   },
   {
@@ -21,17 +22,32 @@ export const DEMO_PERSONAS = [
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
     collegeName: 'Apex Institute of Technology',
     collegeId: 'col_apex',
+    institutionId: 'INST001',
     badge: 'Student'
   },
   {
-    id: 'usr_college_1',
-    name: 'Dr. Suresh Kumar (Dean)',
+    id: 'usr_inst_1',
+    name: 'Apex Institute of Technology',
     role: 'college',
     title: 'Apex Institute of Technology',
     collegeName: 'Apex Institute of Technology',
     collegeId: 'col_apex',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80',
-    badge: 'College Admin'
+    institutionId: 'INST001',
+    email: 'apex.institution@gmail.com',
+    avatar: 'https://images.unsplash.com/photo-1562774053-701939374585?w=150&auto=format&fit=crop&q=80',
+    badge: 'Institution (INST001)'
+  },
+  {
+    id: 'usr_inst_2',
+    name: 'IIT Bombay',
+    role: 'college',
+    title: 'Indian Institute of Technology Bombay',
+    collegeName: 'Indian Institute of Technology Bombay (IIT Bombay)',
+    collegeId: 'col_iitb',
+    institutionId: 'INST002',
+    email: 'iitb.institution@gmail.com',
+    avatar: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=150&auto=format&fit=crop&q=80',
+    badge: 'Institution (INST002)'
   },
   {
     id: 'usr_company_1',
@@ -478,6 +494,67 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const loginInstitution = async (email, password) => {
+    try {
+      setLoading(true);
+      const cleanEmail = (email || '').trim().toLowerCase();
+
+      // 1. Try Backend Institution Login
+      try {
+        const res = await fetch('/api/auth/institution/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: cleanEmail, password })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.success) {
+            setUser(data.user);
+            setProfile(data.profile);
+            showToast(`Welcome ${data.user.name}! (ID: ${data.user.institutionId})`, 'success');
+            return data;
+          }
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          if (errData.error) {
+            showToast(errData.error, 'error');
+            return { error: errData.error };
+          }
+        }
+      } catch (e) {
+        console.warn('Backend offline, checking local personas for institution:', e);
+      }
+
+      // 2. Fallback to demo personas or local storage
+      const instPersona = DEMO_PERSONAS.find(p => p.role === 'college' && (
+        p.email?.toLowerCase() === cleanEmail || 
+        p.id === cleanEmail || 
+        p.institutionId?.toLowerCase() === cleanEmail
+      ));
+      if (instPersona) {
+        setUser(instPersona);
+        setProfile({
+          id: instPersona.collegeId,
+          institutionId: instPersona.institutionId,
+          name: instPersona.collegeName,
+          email: instPersona.email
+        });
+        showToast(`Welcome ${instPersona.name}! (ID: ${instPersona.institutionId})`, 'success');
+        return { success: true, user: instPersona };
+      }
+
+      showToast(`No registered institution found matching "${email}".`, 'error');
+      return { error: `No registered institution found matching "${email}".` };
+    } catch (err) {
+      console.error(err);
+      showToast('Institution login failed. Please check your credentials.', 'error');
+      return { error: err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem(STORAGE_KEY_USER);
     localStorage.removeItem(STORAGE_KEY_PROFILE);
@@ -500,6 +577,7 @@ export const AuthProvider = ({ children }) => {
       registerFaculty,
       loginWithCredentials,
       loginFaculty,
+      loginInstitution,
       logout,
       refreshProfile: () => fetchProfile(user)
     }}>
