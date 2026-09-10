@@ -617,7 +617,7 @@ export const CollegeSkillAnalytics = ({ setActivePage }) => {
               type="text"
               value={workshopData.title}
               onChange={(e) => setWorkshopData({ ...workshopData, title: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               required
             />
           </div>
@@ -629,7 +629,7 @@ export const CollegeSkillAnalytics = ({ setActivePage }) => {
                 type="text"
                 value={workshopData.targetSkill}
                 onChange={(e) => setWorkshopData({ ...workshopData, targetSkill: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
                 required
               />
             </div>
@@ -638,7 +638,7 @@ export const CollegeSkillAnalytics = ({ setActivePage }) => {
               <select
                 value={workshopData.department}
                 onChange={(e) => setWorkshopData({ ...workshopData, department: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white text-slate-900 font-medium"
               >
                 <option value="Computer Science & Engineering">Computer Science & Engineering</option>
                 <option value="Information Technology">Information Technology</option>
@@ -655,7 +655,7 @@ export const CollegeSkillAnalytics = ({ setActivePage }) => {
                 type="text"
                 value={workshopData.instructor}
                 onChange={(e) => setWorkshopData({ ...workshopData, instructor: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
                 required
               />
             </div>
@@ -665,7 +665,7 @@ export const CollegeSkillAnalytics = ({ setActivePage }) => {
                 type="text"
                 value={workshopData.duration}
                 onChange={(e) => setWorkshopData({ ...workshopData, duration: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
                 required
               />
             </div>
@@ -677,7 +677,7 @@ export const CollegeSkillAnalytics = ({ setActivePage }) => {
               rows={2}
               value={workshopData.reasonForOrganizing}
               onChange={(e) => setWorkshopData({ ...workshopData, reasonForOrganizing: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               required
             />
           </div>

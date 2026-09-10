@@ -129,6 +129,38 @@
       "avatar": "https://images.unsplash.com/photo-1562774053-701939374585?w=150&auto=format&fit=crop&q=80",
       "badge": "Institution (INST009)",
       "createdAt": "2026-09-10T19:08:40.159Z"
+    },
+    {
+      "id": "usr_inst6266",
+      "name": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "email": "vnr6266.institution@gmail.com",
+      "password": "VNRInst#2026",
+      "passwordHash": "90ec62fd6c5012686140d4daec6429141c821fc0c8017315f45d9b50d81240f3",
+      "role": "college",
+      "institutionId": "INST6266",
+      "collegeId": "col_inst6266_1789068646266",
+      "collegeName": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "title": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "status": "Active",
+      "avatar": "https://images.unsplash.com/photo-1562774053-701939374585?w=150&auto=format&fit=crop&q=80",
+      "badge": "Institution (INST6266)",
+      "createdAt": "2026-09-10T19:30:46.266Z"
+    },
+    {
+      "id": "usr_inst5812",
+      "name": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "email": "vnr5812.institution@gmail.com",
+      "password": "VNRInst#2026",
+      "passwordHash": "90ec62fd6c5012686140d4daec6429141c821fc0c8017315f45d9b50d81240f3",
+      "role": "college",
+      "institutionId": "INST5812",
+      "collegeId": "col_inst5812_1789068695813",
+      "collegeName": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "title": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "status": "Active",
+      "avatar": "https://images.unsplash.com/photo-1562774053-701939374585?w=150&auto=format&fit=crop&q=80",
+      "badge": "Institution (INST5812)",
+      "createdAt": "2026-09-10T19:31:35.813Z"
     }
   ],
   "colleges": [
@@ -312,6 +344,64 @@
         "medianPackage": "₹7.5 LPA"
       },
       "createdAt": "2026-09-10T19:08:40.159Z"
+    },
+    {
+      "id": "col_inst6266_1789068646266",
+      "institutionId": "INST6266",
+      "name": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "code": "INST6266",
+      "email": "vnr6266.institution@gmail.com",
+      "passwordPlain": "VNRInst#2026",
+      "passwordHash": "90ec62fd6c5012686140d4daec6429141c821fc0c8017315f45d9b50d81240f3",
+      "sharedPasswordPlain": "VNRInst#2026",
+      "facultyPasswordHash": "90ec62fd6c5012686140d4daec6429141c821fc0c8017315f45d9b50d81240f3",
+      "location": "Hyderabad, Telangana",
+      "type": "Registered Technical Institution",
+      "departments": [
+        "Computer Science & Engineering (CSE)",
+        "Information Technology (IT)",
+        "Artificial Intelligence & Data Science (AI & DS)",
+        "Electronics & Communication Engineering (ECE)"
+      ],
+      "partnerRecruiters": [
+        "TechNova Solutions",
+        "CloudScale Inc"
+      ],
+      "placementStats": {
+        "avgPlacementPct": 82,
+        "highestPackage": "₹30.0 LPA",
+        "medianPackage": "₹7.5 LPA"
+      },
+      "createdAt": "2026-09-10T19:30:46.266Z"
+    },
+    {
+      "id": "col_inst5812_1789068695813",
+      "institutionId": "INST5812",
+      "name": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "code": "INST5812",
+      "email": "vnr5812.institution@gmail.com",
+      "passwordPlain": "VNRInst#2026",
+      "passwordHash": "90ec62fd6c5012686140d4daec6429141c821fc0c8017315f45d9b50d81240f3",
+      "sharedPasswordPlain": "VNRInst#2026",
+      "facultyPasswordHash": "90ec62fd6c5012686140d4daec6429141c821fc0c8017315f45d9b50d81240f3",
+      "location": "Hyderabad, Telangana",
+      "type": "Registered Technical Institution",
+      "departments": [
+        "Computer Science & Engineering (CSE)",
+        "Information Technology (IT)",
+        "Artificial Intelligence & Data Science (AI & DS)",
+        "Electronics & Communication Engineering (ECE)"
+      ],
+      "partnerRecruiters": [
+        "TechNova Solutions",
+        "CloudScale Inc"
+      ],
+      "placementStats": {
+        "avgPlacementPct": 82,
+        "highestPackage": "₹30.0 LPA",
+        "medianPackage": "₹7.5 LPA"
+      },
+      "createdAt": "2026-09-10T19:31:35.813Z"
     }
   ],
   "companies": [
@@ -1840,6 +1930,160 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": "log_1789068695815_i70l",
+      "timestamp": "2026-09-10T19:31:35.815Z",
+      "action": "INSTITUTION_LOGIN_SUCCESS",
+      "actorType": "Institution",
+      "actorName": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "actorEmail": "vnr5812.institution@gmail.com",
+      "collegeName": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "details": "Authenticated successfully with Institution ID: INST5812.",
+      "status": "Success"
+    },
+    {
+      "id": "log_1789068695814_kmmk",
+      "timestamp": "2026-09-10T19:31:35.814Z",
+      "action": "INSTITUTION_ACCOUNT_CREATED",
+      "actorType": "Platform Admin",
+      "actorName": "Super Admin",
+      "actorEmail": "admin@skillbridge.gov.in",
+      "collegeName": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "details": "Super Admin created new Institution account: ID INST5812, Email vnr5812.institution@gmail.com.",
+      "status": "Success"
+    },
+    {
+      "id": "log_1789068695811_dksp",
+      "timestamp": "2026-09-10T19:31:35.811Z",
+      "action": "INSTITUTION_LOGIN_FAILED",
+      "actorType": "Institution",
+      "actorName": "Apex Institute of Technology",
+      "actorEmail": "apex.institution@gmail.com",
+      "collegeName": "Apex Institute of Technology",
+      "details": "Incorrect password entered for institution account.",
+      "status": "Failed"
+    },
+    {
+      "id": "log_1789068695809_15iu",
+      "timestamp": "2026-09-10T19:31:35.809Z",
+      "action": "INSTITUTION_LOGIN_SUCCESS",
+      "actorType": "Institution",
+      "actorName": "Indian Institute of Technology Bombay (IIT Bombay)",
+      "actorEmail": "iitb.institution@gmail.com",
+      "collegeName": "Indian Institute of Technology Bombay (IIT Bombay)",
+      "details": "Authenticated successfully with Institution ID: INST002.",
+      "status": "Success"
+    },
+    {
+      "id": "log_1789068695807_y7p9",
+      "timestamp": "2026-09-10T19:31:35.807Z",
+      "action": "INSTITUTION_LOGIN_SUCCESS",
+      "actorType": "Institution",
+      "actorName": "Apex Institute of Technology",
+      "actorEmail": "apex.institution@gmail.com",
+      "collegeName": "Apex Institute of Technology",
+      "details": "Authenticated successfully with Institution ID: INST001.",
+      "status": "Success"
+    },
+    {
+      "id": "log_1789068646268_0uh2",
+      "timestamp": "2026-09-10T19:30:46.268Z",
+      "action": "INSTITUTION_LOGIN_SUCCESS",
+      "actorType": "Institution",
+      "actorName": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "actorEmail": "vnr6266.institution@gmail.com",
+      "collegeName": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "details": "Authenticated successfully with Institution ID: INST6266.",
+      "status": "Success"
+    },
+    {
+      "id": "log_1789068646267_nckv",
+      "timestamp": "2026-09-10T19:30:46.267Z",
+      "action": "INSTITUTION_ACCOUNT_CREATED",
+      "actorType": "Platform Admin",
+      "actorName": "Super Admin",
+      "actorEmail": "admin@skillbridge.gov.in",
+      "collegeName": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "details": "Super Admin created new Institution account: ID INST6266, Email vnr6266.institution@gmail.com.",
+      "status": "Success"
+    },
+    {
+      "id": "log_1789068646265_he0o",
+      "timestamp": "2026-09-10T19:30:46.265Z",
+      "action": "INSTITUTION_LOGIN_FAILED",
+      "actorType": "Institution",
+      "actorName": "Apex Institute of Technology",
+      "actorEmail": "apex.institution@gmail.com",
+      "collegeName": "Apex Institute of Technology",
+      "details": "Incorrect password entered for institution account.",
+      "status": "Failed"
+    },
+    {
+      "id": "log_1789068646264_ju69",
+      "timestamp": "2026-09-10T19:30:46.264Z",
+      "action": "INSTITUTION_LOGIN_SUCCESS",
+      "actorType": "Institution",
+      "actorName": "Indian Institute of Technology Bombay (IIT Bombay)",
+      "actorEmail": "iitb.institution@gmail.com",
+      "collegeName": "Indian Institute of Technology Bombay (IIT Bombay)",
+      "details": "Authenticated successfully with Institution ID: INST002.",
+      "status": "Success"
+    },
+    {
+      "id": "log_1789068646262_rv03",
+      "timestamp": "2026-09-10T19:30:46.262Z",
+      "action": "INSTITUTION_LOGIN_SUCCESS",
+      "actorType": "Institution",
+      "actorName": "Apex Institute of Technology",
+      "actorEmail": "apex.institution@gmail.com",
+      "collegeName": "Apex Institute of Technology",
+      "details": "Authenticated successfully with Institution ID: INST001.",
+      "status": "Success"
+    },
+    {
+      "id": "log_1789068630101_7ml5",
+      "timestamp": "2026-09-10T19:30:30.101Z",
+      "action": "INSTITUTION_LOGIN_SUCCESS",
+      "actorType": "Institution",
+      "actorName": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "actorEmail": "vnr.institution@gmail.com",
+      "collegeName": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "details": "Authenticated successfully with Institution ID: INST005.",
+      "status": "Success"
+    },
+    {
+      "id": "log_1789068630097_ckga",
+      "timestamp": "2026-09-10T19:30:30.097Z",
+      "action": "INSTITUTION_LOGIN_FAILED",
+      "actorType": "Institution",
+      "actorName": "Apex Institute of Technology",
+      "actorEmail": "apex.institution@gmail.com",
+      "collegeName": "Apex Institute of Technology",
+      "details": "Incorrect password entered for institution account.",
+      "status": "Failed"
+    },
+    {
+      "id": "log_1789068630095_07oa",
+      "timestamp": "2026-09-10T19:30:30.095Z",
+      "action": "INSTITUTION_LOGIN_SUCCESS",
+      "actorType": "Institution",
+      "actorName": "Indian Institute of Technology Bombay (IIT Bombay)",
+      "actorEmail": "iitb.institution@gmail.com",
+      "collegeName": "Indian Institute of Technology Bombay (IIT Bombay)",
+      "details": "Authenticated successfully with Institution ID: INST002.",
+      "status": "Success"
+    },
+    {
+      "id": "log_1789068630093_qf0a",
+      "timestamp": "2026-09-10T19:30:30.093Z",
+      "action": "INSTITUTION_LOGIN_SUCCESS",
+      "actorType": "Institution",
+      "actorName": "Apex Institute of Technology",
+      "actorEmail": "apex.institution@gmail.com",
+      "collegeName": "Apex Institute of Technology",
+      "details": "Authenticated successfully with Institution ID: INST001.",
+      "status": "Success"
+    },
     {
       "id": "log_1789067320160_tjsc",
       "timestamp": "2026-09-10T19:08:40.160Z",

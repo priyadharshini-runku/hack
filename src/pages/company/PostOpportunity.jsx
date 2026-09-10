@@ -104,7 +104,7 @@ export const PostOpportunity = ({ setActivePage }) => {
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+      <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6 text-slate-900">
         
         <div>
           <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Opportunity Title</label>
@@ -113,7 +113,7 @@ export const PostOpportunity = ({ setActivePage }) => {
             placeholder="e.g. Backend Microservices Engineer Intern"
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+            className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
             required
           />
         </div>
@@ -124,7 +124,7 @@ export const PostOpportunity = ({ setActivePage }) => {
             <select
               value={formData.type}
               onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white text-slate-900 font-medium"
             >
               <option value="Internship">Internship</option>
               <option value="Full-Time Placement">Full-Time Placement</option>
@@ -136,7 +136,7 @@ export const PostOpportunity = ({ setActivePage }) => {
             <select
               value={formData.workMode}
               onChange={(e) => setFormData({ ...formData, workMode: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white text-slate-900 font-medium"
             >
               <option value="Remote">Remote</option>
               <option value="Hybrid">Hybrid</option>
@@ -151,7 +151,7 @@ export const PostOpportunity = ({ setActivePage }) => {
               placeholder="e.g. ₹25,000 / month"
               value={formData.stipend}
               onChange={(e) => setFormData({ ...formData, stipend: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               required
             />
           </div>
@@ -165,7 +165,7 @@ export const PostOpportunity = ({ setActivePage }) => {
               placeholder="e.g. 6 Months"
               value={formData.duration}
               onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               required
             />
           </div>
@@ -177,7 +177,7 @@ export const PostOpportunity = ({ setActivePage }) => {
               placeholder="e.g. Bangalore, India"
               value={formData.location}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               required
             />
           </div>
@@ -188,7 +188,7 @@ export const PostOpportunity = ({ setActivePage }) => {
               type="date"
               value={formData.deadline}
               onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white text-slate-900 font-medium"
               required
             />
           </div>
@@ -201,7 +201,7 @@ export const PostOpportunity = ({ setActivePage }) => {
             placeholder="e.g. B.Tech / M.Tech CS, IT, AI-DS (Pre-final & Final Year, CGPA >= 7.5)"
             value={formData.eligibility}
             onChange={(e) => setFormData({ ...formData, eligibility: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
             required
           />
         </div>
@@ -213,7 +213,7 @@ export const PostOpportunity = ({ setActivePage }) => {
             placeholder="Describe candidate expectations, tech stack, and learning outcomes..."
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
             required
           />
         </div>
@@ -246,7 +246,7 @@ export const PostOpportunity = ({ setActivePage }) => {
               placeholder="Add skill requirement (e.g. Docker, Git, Spring Boot)"
               value={newSkillName}
               onChange={(e) => setNewSkillName(e.target.value)}
-              className="flex-1 px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none"
+              className="flex-1 px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
             />
             <select
               value={newSkillLevel}

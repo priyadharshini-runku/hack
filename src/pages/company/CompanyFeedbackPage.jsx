@@ -161,7 +161,7 @@ export const CompanyFeedbackPage = ({ setActivePage }) => {
               type="text"
               value={roleTitle}
               onChange={(e) => setRoleTitle(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               required
             />
           </div>
@@ -172,7 +172,7 @@ export const CompanyFeedbackPage = ({ setActivePage }) => {
               type="text"
               value={duration}
               onChange={(e) => setDuration(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               required
             />
           </div>
@@ -253,7 +253,7 @@ export const CompanyFeedbackPage = ({ setActivePage }) => {
             rows={4}
             value={qualitativeFeedback}
             onChange={(e) => setQualitativeFeedback(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+            className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
             required
           />
         </div>

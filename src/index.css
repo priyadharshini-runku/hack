@@ -6,6 +6,79 @@
   body {
     @apply bg-[#050806] text-white;
   }
+
+  /* Universal form control base styling - default to high contrast dark text */
+  input,
+  select,
+  textarea {
+    color: #0f172a; /* Slate-900: high contrast dark text */
+    caret-color: #026fc7; /* Visible brand blue typing cursor */
+  }
+
+  /* Accessible placeholders: clearly visible, lighter than typed text */
+  input::placeholder,
+  textarea::placeholder {
+    color: #64748b !important; /* Slate-500 */
+    opacity: 1 !important;
+  }
+
+  /* Password masking: keep masked as dots, but bullets must be bold, dark, and clearly visible */
+  input[type="password"] {
+    color: #0f172a !important;
+    letter-spacing: 0.15em;
+  }
+
+  /* WebKit, Blink & Firefox Autofill: keep text dark and background clean */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:active,
+  input:autofill {
+    -webkit-text-fill-color: #0f172a !important;
+    caret-color: #0f172a !important;
+    box-shadow: 0 0 0 1000px #ffffff inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  /* Support for dark-themed inputs where background is explicitly dark */
+  input.bg-slate-800,
+  input.bg-slate-900,
+  input.bg-slate-950,
+  input.bg-black,
+  textarea.bg-slate-800,
+  textarea.bg-slate-900,
+  textarea.bg-slate-950,
+  textarea.bg-black,
+  select.bg-slate-800,
+  select.bg-slate-900,
+  select.bg-slate-950,
+  select.bg-black,
+  .dark-input {
+    color: #f8fafc !important;
+    caret-color: #38a9f7 !important;
+  }
+
+  input.bg-slate-800::placeholder,
+  input.bg-slate-900::placeholder,
+  input.bg-slate-950::placeholder,
+  input.bg-black::placeholder,
+  textarea.bg-slate-800::placeholder,
+  textarea.bg-slate-900::placeholder,
+  textarea.bg-slate-950::placeholder,
+  textarea.bg-black::placeholder,
+  .dark-input::placeholder {
+    color: #94a3b8 !important;
+    opacity: 1 !important;
+  }
+
+  .dark-input:-webkit-autofill,
+  .dark-input:autofill,
+  input.bg-slate-800:-webkit-autofill,
+  input.bg-slate-900:-webkit-autofill {
+    -webkit-text-fill-color: #f8fafc !important;
+    caret-color: #f8fafc !important;
+    box-shadow: 0 0 0 1000px #0f172a inset !important;
+  }
 }
 
 /* Custom scrollbar */

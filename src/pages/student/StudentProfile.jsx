@@ -478,7 +478,7 @@ export const StudentProfile = ({ setActivePage }) => {
               placeholder="e.g. React, Docker, Kubernetes, Communication"
               value={newSkill.name}
               onChange={(e) => setNewSkill({ ...newSkill, name: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               required
             />
           </div>
@@ -489,7 +489,7 @@ export const StudentProfile = ({ setActivePage }) => {
               <select
                 value={newSkill.level}
                 onChange={(e) => setNewSkill({ ...newSkill, level: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white text-slate-900 font-medium"
               >
                 <option value="Beginner">Beginner (Fundamentals)</option>
                 <option value="Intermediate">Intermediate (Project Ready)</option>
@@ -502,7 +502,7 @@ export const StudentProfile = ({ setActivePage }) => {
               <select
                 value={newSkill.category}
                 onChange={(e) => setNewSkill({ ...newSkill, category: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white text-slate-900 font-medium"
               >
                 <option value="Technical">Technical</option>
                 <option value="Soft">Soft Skill</option>
@@ -539,7 +539,7 @@ export const StudentProfile = ({ setActivePage }) => {
               placeholder="e.g. Distributed Task Queue Engine"
               value={newProject.title}
               onChange={(e) => setNewProject({ ...newProject, title: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               required
             />
           </div>
@@ -551,7 +551,7 @@ export const StudentProfile = ({ setActivePage }) => {
               placeholder="e.g. Java, Spring Boot, Redis, Docker"
               value={newProject.technologies}
               onChange={(e) => setNewProject({ ...newProject, technologies: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
             />
           </div>
 
@@ -562,7 +562,7 @@ export const StudentProfile = ({ setActivePage }) => {
               placeholder="Explain architecture, key features, and problem solved..."
               value={newProject.description}
               onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               required
             />
           </div>
@@ -575,7 +575,7 @@ export const StudentProfile = ({ setActivePage }) => {
                 placeholder="https://github.com/..."
                 value={newProject.githubUrl}
                 onChange={(e) => setNewProject({ ...newProject, githubUrl: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               />
             </div>
             <div>
@@ -585,7 +585,7 @@ export const StudentProfile = ({ setActivePage }) => {
                 placeholder="https://demo.app/..."
                 value={newProject.liveUrl}
                 onChange={(e) => setNewProject({ ...newProject, liveUrl: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               />
             </div>
           </div>
@@ -618,7 +618,7 @@ export const StudentProfile = ({ setActivePage }) => {
               placeholder="e.g. AWS Certified Solutions Architect"
               value={newCert.title}
               onChange={(e) => setNewCert({ ...newCert, title: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               required
             />
           </div>
@@ -631,7 +631,7 @@ export const StudentProfile = ({ setActivePage }) => {
                 placeholder="e.g. Amazon Web Services / Oracle"
                 value={newCert.issuer}
                 onChange={(e) => setNewCert({ ...newCert, issuer: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
                 required
               />
             </div>
@@ -642,7 +642,7 @@ export const StudentProfile = ({ setActivePage }) => {
                 placeholder="e.g. Nov 2025"
                 value={newCert.date}
                 onChange={(e) => setNewCert({ ...newCert, date: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               />
             </div>
           </div>
@@ -654,7 +654,7 @@ export const StudentProfile = ({ setActivePage }) => {
               placeholder="https://verify.credly.com/..."
               value={newCert.credentialUrl}
               onChange={(e) => setNewCert({ ...newCert, credentialUrl: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
             />
           </div>
 

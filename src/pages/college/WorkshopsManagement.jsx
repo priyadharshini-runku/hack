@@ -187,7 +187,7 @@ export const WorkshopsManagement = () => {
               placeholder="e.g. Modern React 18 & Component Patterns"
               value={newWorkshop.title}
               onChange={(e) => setNewWorkshop({ ...newWorkshop, title: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               required
             />
           </div>
@@ -200,7 +200,7 @@ export const WorkshopsManagement = () => {
                 placeholder="e.g. React"
                 value={newWorkshop.targetSkill}
                 onChange={(e) => setNewWorkshop({ ...newWorkshop, targetSkill: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
                 required
               />
             </div>
@@ -209,7 +209,7 @@ export const WorkshopsManagement = () => {
               <select
                 value={newWorkshop.department}
                 onChange={(e) => setNewWorkshop({ ...newWorkshop, department: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white text-slate-900 font-medium"
               >
                 <option value="Computer Science & Engineering">Computer Science & Engineering</option>
                 <option value="Information Technology">Information Technology</option>
@@ -227,7 +227,7 @@ export const WorkshopsManagement = () => {
                 placeholder="e.g. Staff Architect at TechNova"
                 value={newWorkshop.instructor}
                 onChange={(e) => setNewWorkshop({ ...newWorkshop, instructor: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
                 required
               />
             </div>
@@ -238,7 +238,7 @@ export const WorkshopsManagement = () => {
                 placeholder="e.g. 3 Days (18 Hours)"
                 value={newWorkshop.duration}
                 onChange={(e) => setNewWorkshop({ ...newWorkshop, duration: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
                 required
               />
             </div>
@@ -251,7 +251,7 @@ export const WorkshopsManagement = () => {
               placeholder="e.g. College gap analytics detected 71% of CS students lacking React frameworks."
               value={newWorkshop.reasonForOrganizing}
               onChange={(e) => setNewWorkshop({ ...newWorkshop, reasonForOrganizing: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               required
             />
           </div>

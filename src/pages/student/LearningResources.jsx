@@ -523,7 +523,7 @@ export const LearningResources = () => {
               placeholder="Search courses (e.g. C, Python, SQL, DSA, VLSI, Networks, AI)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
             />
           </div>
 

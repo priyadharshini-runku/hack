@@ -24,7 +24,7 @@ export const Modal = ({ isOpen, onClose, title, children, maxWidth = 'max-w-2xl'
         className="fixed inset-0" 
         onClick={onClose}
       />
-      <div className={`relative bg-white rounded-2xl shadow-2xl border border-slate-100 w-full ${maxWidth} overflow-hidden transform transition-all z-10 my-8`}>
+      <div className={`relative bg-white rounded-2xl shadow-2xl border border-slate-100 w-full ${maxWidth} overflow-hidden transform transition-all z-10 my-8 text-slate-900`}>
         {title && (
           <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/70">
             <h3 className="text-lg font-semibold text-slate-800 font-display">{title}</h3>

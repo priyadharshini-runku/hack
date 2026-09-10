@@ -503,7 +503,7 @@ export const AdminDashboard = () => {
                   placeholder="Search faculty by name, ID, email..."
                   value={facultySearch}
                   onChange={(e) => setFacultySearch(e.target.value)}
-                  className="pl-8 pr-3 py-1.5 rounded-xl border border-slate-300 text-xs outline-none w-60"
+                  className="pl-8 pr-3 py-1.5 rounded-xl border border-slate-300 text-xs outline-none w-60 bg-white text-slate-900 placeholder:text-slate-400 font-medium"
                 />
               </div>
             </div>
@@ -595,7 +595,7 @@ export const AdminDashboard = () => {
                 placeholder="Search audit trail..."
                 value={auditSearch}
                 onChange={(e) => setAuditSearch(e.target.value)}
-                className="pl-8 pr-3 py-1.5 rounded-xl border border-slate-300 text-xs outline-none w-64"
+                className="pl-8 pr-3 py-1.5 rounded-xl border border-slate-300 text-xs outline-none w-64 bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               />
             </div>
           </div>
@@ -733,7 +733,7 @@ export const AdminDashboard = () => {
               placeholder="e.g. VNR Vignana Jyothi Institute of Engineering & Technology"
               value={newInstitutionForm.institutionName}
               onChange={(e) => setNewInstitutionForm({ ...newInstitutionForm, institutionName: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               required
             />
           </div>
@@ -747,7 +747,7 @@ export const AdminDashboard = () => {
               placeholder="e.g. vnr.institution@gmail.com"
               value={newInstitutionForm.email}
               onChange={(e) => setNewInstitutionForm({ ...newInstitutionForm, email: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               required
             />
             <p className="text-[10px] text-slate-500 mt-1">Must be unique across all institutions. Used for login.</p>
@@ -763,7 +763,7 @@ export const AdminDashboard = () => {
                 placeholder="e.g. INST005"
                 value={newInstitutionForm.institutionId}
                 onChange={(e) => setNewInstitutionForm({ ...newInstitutionForm, institutionId: e.target.value.toUpperCase() })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none uppercase font-mono font-bold"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none uppercase font-mono font-bold bg-white text-slate-900 placeholder:text-slate-400"
                 required
               />
               <p className="text-[10px] text-slate-500 mt-1">Strict student data partition ID</p>
@@ -778,7 +778,7 @@ export const AdminDashboard = () => {
                 placeholder="e.g. Hyderabad, Telangana"
                 value={newInstitutionForm.location}
                 onChange={(e) => setNewInstitutionForm({ ...newInstitutionForm, location: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               />
             </div>
           </div>
@@ -794,7 +794,7 @@ export const AdminDashboard = () => {
               placeholder="e.g. VNRInst#2026 (Min. 6 characters)"
               value={newInstitutionForm.password}
               onChange={(e) => setNewInstitutionForm({ ...newInstitutionForm, password: e.target.value })}
-              className="w-full px-3.5 py-2 rounded-xl border border-purple-300 text-xs font-mono font-bold bg-white focus:ring-2 focus:ring-purple-500 outline-none"
+              className="w-full px-3.5 py-2 rounded-xl border border-purple-300 text-xs font-mono font-bold bg-white text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-purple-500 outline-none"
               required
             />
             <p className="text-[10px] text-purple-800">
@@ -841,7 +841,7 @@ export const AdminDashboard = () => {
                 type="text"
                 value={newPasswordInput}
                 onChange={(e) => setNewPasswordInput(e.target.value)}
-                className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-mono font-bold focus:ring-2 focus:ring-purple-500 outline-none"
+                className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-mono font-bold focus:ring-2 focus:ring-purple-500 outline-none bg-white text-slate-900 placeholder:text-slate-400"
                 required
               />
             </div>
@@ -877,7 +877,7 @@ export const AdminDashboard = () => {
                 placeholder="e.g. React, Docker, Git"
                 value={newRes.skill}
                 onChange={(e) => setNewRes({ ...newRes, skill: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
                 required
               />
             </div>
@@ -888,7 +888,7 @@ export const AdminDashboard = () => {
                 placeholder="e.g. YouTube (freeCodeCamp), GeeksforGeeks"
                 value={newRes.platform}
                 onChange={(e) => setNewRes({ ...newRes, platform: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
                 required
               />
             </div>
@@ -901,7 +901,7 @@ export const AdminDashboard = () => {
               placeholder="e.g. React 18 Full Course – Build Modern Web Apps"
               value={newRes.title}
               onChange={(e) => setNewRes({ ...newRes, title: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               required
             />
           </div>
@@ -914,7 +914,7 @@ export const AdminDashboard = () => {
                 placeholder="e.g. 12 Hours"
                 value={newRes.estimatedHours}
                 onChange={(e) => setNewRes({ ...newRes, estimatedHours: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
                 required
               />
             </div>
@@ -925,7 +925,7 @@ export const AdminDashboard = () => {
                 placeholder="https://youtube.com/watch?v=..."
                 value={newRes.url}
                 onChange={(e) => setNewRes({ ...newRes, url: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
                 required
               />
             </div>
@@ -938,7 +938,7 @@ export const AdminDashboard = () => {
               placeholder="Overview of curriculum and learning outcomes..."
               value={newRes.description}
               onChange={(e) => setNewRes({ ...newRes, description: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-purple-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
               required
             />
           </div>

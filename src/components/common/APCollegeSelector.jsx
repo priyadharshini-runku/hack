@@ -210,7 +210,7 @@ export const APCollegeSelector = ({
                   placeholder="Type college name (e.g. Gayatri, JNTU) or code (e.g. AUCE, GVPE, SRKR)..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full bg-white px-3 py-1.5 rounded-lg border border-slate-300 text-xs sm:text-sm outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 font-medium"
+                  className="w-full bg-white px-3 py-1.5 rounded-lg border border-slate-300 text-xs sm:text-sm outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 font-medium text-slate-900 placeholder:text-slate-400"
                 />
                 {searchTerm && (
                   <button
@@ -331,7 +331,7 @@ export const APCollegeSelector = ({
                 placeholder="e.g. Government Engineering College, Vijayawada"
                 value={customCollege}
                 onChange={(e) => onCustomCollegeChange && onCustomCollegeChange(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-amber-300 text-xs sm:text-sm outline-none bg-white font-medium text-slate-800 focus:ring-2 focus:ring-brand-500"
+                className="w-full px-3 py-2 rounded-xl border border-amber-300 text-xs sm:text-sm outline-none bg-white font-medium text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-brand-500"
                 required
               />
             </div>
@@ -345,7 +345,7 @@ export const APCollegeSelector = ({
                 placeholder="e.g. GECV"
                 value={customCode}
                 onChange={(e) => onCustomCodeChange && onCustomCodeChange(e.target.value.toUpperCase())}
-                className="w-full px-3 py-2 rounded-xl border border-amber-300 text-xs sm:text-sm outline-none bg-white font-bold text-slate-800 uppercase focus:ring-2 focus:ring-brand-500"
+                className="w-full px-3 py-2 rounded-xl border border-amber-300 text-xs sm:text-sm outline-none bg-white font-bold text-slate-900 placeholder:text-slate-400 uppercase focus:ring-2 focus:ring-brand-500"
               />
             </div>
           </div>
