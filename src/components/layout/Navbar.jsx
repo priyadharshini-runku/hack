@@ -109,7 +109,7 @@ export const Navbar = ({ activePage, setActivePage }) => {
               <span className="text-xl font-extrabold tracking-tight text-white font-display">
   Skill<span className="text-emerald-400">Bridge</span>
 </span>
-                </span>
+                </div>
               <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 rounded-md border border-emerald-500/20">
                   Portal
                 </span>
@@ -140,7 +140,6 @@ export const Navbar = ({ activePage, setActivePage }) => {
   }`}
 />
                   <span>{item.label}</span>
-                  )}
                 </button>
               );
             })}
