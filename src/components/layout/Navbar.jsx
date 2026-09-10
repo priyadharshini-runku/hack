@@ -137,7 +137,8 @@ export const Navbar = ({ activePage, setActivePage }) => {
                 >
                  <Icon
   className={`w-4 h-4 ${
-    isActive ? 'text-emerald-400' : 'text-slate-500'
+    isActive ? 'text-emerald-400' :
+  'text-slate-500'
                     
  }`}
 />
