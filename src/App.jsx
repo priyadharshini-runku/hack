@@ -114,7 +114,7 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#050806] text-white".> </div> font-sans selection:bg-brand-500 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-[#050806] text-white".> </divfont-sans selection:bg-brand-500 selection:text-white">
       {/* 1-Click Persona Switcher for Hackathon Judges */}
       <DemoSwitcherToolbar />
 
