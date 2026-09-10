@@ -106,6 +106,13 @@ export const StudentDashboard = ({ setActivePage }) => {
 
           <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
             <button
+              onClick={() => setActivePage('assessment')}
+              className="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold text-sm shadow-md transition-all flex items-center gap-2"
+            >
+              <Award className="w-4 h-4 text-slate-900" />
+              Career Assessment
+            </button>
+            <button
               onClick={() => setActivePage('skill-gap')}
               className="px-4 py-2.5 rounded-xl bg-white text-brand-700 hover:bg-brand-50 font-semibold text-sm shadow-sm transition-all flex items-center gap-2"
             >
@@ -375,6 +382,25 @@ export const StudentDashboard = ({ setActivePage }) => {
           <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
             <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Quick Actions</h4>
             
+            <button
+              onClick={() => setActivePage('assessment')}
+              className="w-full text-left p-3 rounded-xl hover:bg-amber-50/70 border border-amber-200/80 bg-amber-50/30 transition-all flex items-center justify-between group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-sm">
+                  <Award className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                    Career Assessment
+                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-200 text-amber-900 font-bold">New</span>
+                  </p>
+                  <p className="text-[10px] text-slate-500">Test skills & evaluate gaps</p>
+                </div>
+              </div>
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-amber-700 transition-colors" />
+            </button>
+
             <button
               onClick={() => setActivePage('student-profile')}
               className="w-full text-left p-3 rounded-xl hover:bg-slate-50 border border-slate-100 transition-colors flex items-center justify-between"

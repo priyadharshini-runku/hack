@@ -15,6 +15,7 @@ import { RegisterPage } from './pages/RegisterPage';
 import { StudentDashboard } from './pages/student/StudentDashboard';
 import { StudentProfile } from './pages/student/StudentProfile';
 import { SkillGapAnalysis } from './pages/student/SkillGapAnalysis';
+import { SkillBridgeAssessment } from './pages/student/SkillBridgeAssessment';
 import { LearningResources } from './pages/student/LearningResources';
 import { InternshipListings } from './pages/student/InternshipListings';
 import { ApplicationTracking } from './pages/student/ApplicationTracking';
@@ -69,6 +70,9 @@ function AppContent() {
         return <StudentProfile setActivePage={setActivePage} />;
       case 'skill-gap':
         return <SkillGapAnalysis setActivePage={setActivePage} />;
+      case 'assessment':
+      case 'career-assessment':
+        return <SkillBridgeAssessment setActivePage={setActivePage} />;
       case 'learning-resources':
       case 'manage-resources':
         return <LearningResources />;

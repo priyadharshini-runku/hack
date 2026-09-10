@@ -34,7 +34,8 @@ export const Navbar = ({ activePage, setActivePage }) => {
         return [
           { id: 'student-dashboard', label: 'Dashboard', icon: LayoutDashboard },
           { id: 'student-profile', label: 'My Skill Profile', icon: User },
-          { id: 'skill-gap', label: 'Skill Gap Analysis', icon: Compass, highlight: true },
+          { id: 'skill-gap', label: 'Skill Gap Analysis', icon: Compass },
+          { id: 'assessment', label: 'Career Assessment', icon: Award, highlight: true },
           { id: 'learning-resources', label: 'Learning Hub', icon: BookOpen },
           { id: 'internships', label: 'Internships & Jobs', icon: Briefcase },
           { id: 'application-tracking', label: 'Applications & Reviews', icon: FileCheck },
