@@ -79,6 +79,10 @@ export const RegisterPage = ({ setActivePage }) => {
   const [skillSearchQuery, setSkillSearchQuery] = useState('');
   const [showAllSkills, setShowAllSkills] = useState(false);
   const [customSkillInput, setCustomSkillInput] = useState('');
+
+  // Institution specific inputs
+  const [institutionIdInput, setInstitutionIdInput] = useState('');
+  const [institutionLocationInput, setInstitutionLocationInput] = useState('');
   
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -218,13 +222,7 @@ export const RegisterPage = ({ setActivePage }) => {
       return;
     }
 
-    // Institutions cannot self-register
-    if (role === 'college') {
-      setErrorMsg('Institution accounts cannot self-register. Please contact the platform administrator to provision your institution credentials.');
-      return;
-    }
-
-    // Student & Industry Password Validation
+    // Password Validation
     if (!password || password.length < 6) {
       setErrorMsg('Password must be at least 6 characters long for account security.');
       return;
@@ -268,22 +266,24 @@ export const RegisterPage = ({ setActivePage }) => {
     const finalDistrict = selectedDistrict !== 'All Districts' ? selectedDistrict : undefined;
     const parsedCGPA = parseFloat(cgpa) > 0 ? parseFloat(cgpa) : 8.5;
 
-    // Resolve institution ID for student data isolation
+    // Resolve institution ID for student or institution data isolation
     const matchedInst = registeredCollegesList.find(c => 
       (c.name && c.name.toLowerCase() === finalCollege.toLowerCase()) ||
       (c.code && finalCollegeCode && c.code.toLowerCase() === finalCollegeCode.toLowerCase())
     );
-    const assignedInstitutionId = matchedInst ? (matchedInst.institutionId || 'INST001') : 'INST001';
+    const resolvedInstId = institutionIdInput.trim().toUpperCase() || (matchedInst ? matchedInst.institutionId : 'INST001');
 
     const payload = {
       name: name.trim(),
       email: email.trim().toLowerCase(),
       password,
       role,
-      institutionId: assignedInstitutionId,
+      institutionId: resolvedInstId,
+      institutionName: finalCollege,
+      location: institutionLocationInput.trim() || finalDistrict || 'Andhra Pradesh, India',
       avatar: customAvatar || undefined,
       collegeName: finalCollege,
-      collegeCode: finalCollegeCode,
+      collegeCode: finalCollegeCode || resolvedInstId,
       district: finalDistrict,
       department,
       year,
@@ -313,6 +313,8 @@ export const RegisterPage = ({ setActivePage }) => {
         confetti({ particleCount: 70, spread: 70, origin: { y: 0.6 } });
         if (role === 'student') {
           setActivePage('student-dashboard');
+        } else if (role === 'college') {
+          setActivePage('college-analytics');
         } else if (role === 'admin') {
           setActivePage('admin-dashboard');
         } else {
@@ -329,24 +331,24 @@ export const RegisterPage = ({ setActivePage }) => {
 
   return (
     <div className="min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 animate-in fade-in duration-300">
-      <div className="max-w-2xl w-full space-y-8 bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-xl text-slate-900">
+      <div className="max-w-2xl w-full space-y-8 bg-[#161616] p-8 sm:p-10 rounded-3xl border border-[#3D4D55] shadow-2xl text-[#D3C3B9]">
         
         {/* Header */}
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-sky-400 flex items-center justify-center text-white shadow-md mx-auto">
-            <GraduationCap className="w-7 h-7" />
+          <div className="w-12 h-12 rounded-2xl bg-[#B58863] flex items-center justify-center text-[#102A38] shadow-md mx-auto">
+            <GraduationCap className="w-7 h-7 stroke-[2.5]" />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-display">
-            Secure Registration · <span className="text-brand-600">SkillBridge</span>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#D3C3B9] font-display">
+            Secure Registration · <span className="text-[#B58863]">SkillBridge</span>
           </h2>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-[#A79E9C]">
             Create a password-protected verified account to securely manage your skills and placement data.
           </p>
         </div>
 
         {errorMsg && (
-          <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-medium flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+          <div className="p-4 rounded-xl bg-[#102A38] border border-[#B58863]/50 text-[#D3C3B9] text-xs font-medium flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-[#B58863] shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
@@ -355,12 +357,13 @@ export const RegisterPage = ({ setActivePage }) => {
           
           {/* Role selector tabs */}
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+            <label className="block text-xs font-bold text-[#D3C3B9] uppercase tracking-wider mb-2">
               Select Your Stakeholder Role
             </label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {[
                 { id: 'student', label: '🎓 Student' },
+                { id: 'college', label: '🏛️ Institution' },
                 { id: 'company', label: '🏢 Industry' },
                 { id: 'admin', label: '⚡ Super Admin' }
               ].map(r => (
@@ -373,8 +376,8 @@ export const RegisterPage = ({ setActivePage }) => {
                   }}
                   className={`py-2.5 px-2 rounded-xl text-xs font-bold border transition-all text-center ${
                     role === r.id
-                      ? 'bg-brand-600 text-white border-brand-600 shadow-sm ring-2 ring-brand-400/40'
-                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                      ? 'bg-[#B58863] text-[#161616] border-[#B58863] shadow-md font-bold'
+                      : 'bg-[#102A38] text-[#D3C3B9] border-[#3D4D55] hover:bg-[#3D4D55]/50'
                   }`}
                 >
                   {r.label}
@@ -384,22 +387,22 @@ export const RegisterPage = ({ setActivePage }) => {
           </div>
 
           {/* Profile Photo from Gallery / Device */}
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="p-4 rounded-2xl bg-[#102A38] border border-[#3D4D55] flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
                 <img 
                   src={customAvatar || (role === 'student' ? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80' : role === 'admin' ? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80' : 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80')} 
                   alt="Avatar Preview" 
-                  className="w-14 h-14 rounded-2xl object-cover ring-2 ring-brand-300 shadow-xs group-hover:opacity-85 transition-opacity"
+                  className="w-14 h-14 rounded-2xl object-cover ring-2 ring-[#B58863] shadow-xs group-hover:opacity-85 transition-opacity"
                 />
-                <div className="absolute inset-0 rounded-2xl bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                <div className="absolute inset-0 rounded-2xl bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
                   <Camera className="w-4 h-4" />
                 </div>
               </div>
 
               <div>
-                <h4 className="text-xs font-bold text-slate-800">Profile Photo (Photos / Gallery)</h4>
-                <p className="text-[11px] text-slate-500">Upload your own photo or use default portrait</p>
+                <h4 className="text-xs font-bold text-[#D3C3B9]">Profile Photo (Photos / Gallery)</h4>
+                <p className="text-[11px] text-[#A79E9C]">Upload your own photo or use default portrait</p>
               </div>
             </div>
 
@@ -414,16 +417,16 @@ export const RegisterPage = ({ setActivePage }) => {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 text-xs font-semibold shadow-2xs transition-colors flex items-center gap-1.5"
+                className="px-3.5 py-1.5 rounded-xl bg-[#3D4D55] hover:bg-[#3D4D55]/80 border border-[#3D4D55] text-[#D3C3B9] text-xs font-semibold shadow-2xs transition-colors flex items-center gap-1.5"
               >
-                <Upload className="w-3.5 h-3.5 text-brand-600" />
+                <Upload className="w-3.5 h-3.5 text-[#B58863]" />
                 {customAvatar ? 'Change Photo' : 'Upload From Gallery'}
               </button>
               {customAvatar && (
                 <button
                   type="button"
                   onClick={() => setCustomAvatar(null)}
-                  className="text-xs text-rose-600 hover:text-rose-700 font-medium px-2 py-1"
+                  className="text-xs text-[#B58863] hover:underline font-medium px-2 py-1"
                 >
                   Reset
                 </button>
@@ -434,34 +437,34 @@ export const RegisterPage = ({ setActivePage }) => {
           {/* Full Name & Official Email */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                {role === 'student' ? 'Student Full Name' : role === 'admin' ? 'Super Admin Name' : 'Industry Representative Name'}
+              <label className="block text-xs font-bold text-[#D3C3B9] uppercase tracking-wider mb-1">
+                {role === 'student' ? 'Student Full Name' : role === 'college' ? 'Institution / Dean / SPOC Name' : role === 'admin' ? 'Super Admin Name' : 'Industry Representative Name'}
               </label>
               <div className="relative">
-                <User className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                <User className="w-4 h-4 text-[#A79E9C] absolute left-3 top-3" />
                 <input
                   type="text"
-                  placeholder={role === 'admin' ? 'e.g. Platform Administrator' : role === 'company' ? 'e.g. Ananya Mehta (HR)' : 'e.g. Aryan Gupta'}
+                  placeholder={role === 'admin' ? 'e.g. Platform Administrator' : role === 'college' ? 'e.g. Dr. K. Venkatesh (Dean)' : role === 'company' ? 'e.g. Ananya Mehta (HR)' : 'e.g. Aryan Gupta'}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white font-medium text-slate-900 placeholder:text-slate-400"
+                  className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-[#3D4D55] text-sm focus:ring-2 focus:ring-[#B58863] outline-none bg-[#102A38] font-medium text-[#D3C3B9] placeholder:text-[#A79E9C]"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                {role === 'admin' ? 'Super Admin Official Email' : 'Official Email Address'}
+              <label className="block text-xs font-bold text-[#D3C3B9] uppercase tracking-wider mb-1">
+                {role === 'admin' ? 'Super Admin Official Email' : role === 'college' ? 'Official Institution Email' : 'Official Email Address'}
               </label>
               <div className="relative">
-                <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                <Mail className="w-4 h-4 text-[#A79E9C] absolute left-3 top-3" />
                 <input
                   type="email"
-                  placeholder={role === 'admin' ? 'admin@skillbridge.gov.in' : 'aryan.gupta@college.edu'}
+                  placeholder={role === 'admin' ? 'admin@skillbridge.gov.in' : role === 'college' ? 'institution@college.edu.in' : 'aryan.gupta@college.edu'}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white font-medium text-slate-900 placeholder:text-slate-400"
+                  className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-[#3D4D55] text-sm focus:ring-2 focus:ring-[#B58863] outline-none bg-[#102A38] font-medium text-[#D3C3B9] placeholder:text-[#A79E9C]"
                   required
                 />
               </div>
@@ -469,29 +472,29 @@ export const RegisterPage = ({ setActivePage }) => {
           </div>
 
           {/* Password & Security Fields */}
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-            <div className="flex items-center gap-2 text-xs font-bold text-slate-700 uppercase tracking-wider">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              {role === 'admin' ? 'Super Admin Account Security' : 'Account Security & Password Protection'}
+          <div className="p-4 rounded-2xl bg-[#102A38] border border-[#3D4D55] space-y-3">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#D3C3B9] uppercase tracking-wider">
+              <ShieldCheck className="w-4 h-4 text-[#B58863]" />
+              {role === 'admin' ? 'Super Admin Account Security' : role === 'college' ? 'Institution Account Password' : 'Account Security & Password Protection'}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Create Password</label>
+                <label className="block text-xs font-semibold text-[#A79E9C] mb-1">Create Password</label>
                 <div className="relative">
-                  <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                  <Lock className="w-4 h-4 text-[#A79E9C] absolute left-3 top-3" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Min. 6 characters"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-9 pr-9 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white font-medium text-slate-900 placeholder:text-slate-400 tracking-wider"
+                    className="w-full pl-9 pr-9 py-2.5 rounded-xl border border-[#3D4D55] text-sm focus:ring-2 focus:ring-[#B58863] outline-none bg-[#161616] font-medium text-[#D3C3B9] placeholder:text-[#A79E9C] tracking-wider"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-slate-400 hover:text-slate-600"
+                    className="absolute right-3 top-3 text-[#A79E9C] hover:text-[#D3C3B9]"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -499,108 +502,118 @@ export const RegisterPage = ({ setActivePage }) => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Confirm Password</label>
+                <label className="block text-xs font-semibold text-[#A79E9C] mb-1">Confirm Password</label>
                 <div className="relative">
-                  <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                  <Lock className="w-4 h-4 text-[#A79E9C] absolute left-3 top-3" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Confirm password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none bg-white font-medium text-slate-900 placeholder:text-slate-400 tracking-wider"
+                    className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-[#3D4D55] text-sm focus:ring-2 focus:ring-[#B58863] outline-none bg-[#161616] font-medium text-[#D3C3B9] placeholder:text-[#A79E9C] tracking-wider"
                     required
                   />
                 </div>
               </div>
             </div>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-[11px] text-[#A79E9C]">
               🔒 Your password secures your verified account credentials, profile data, and access permissions.
             </p>
           </div>
 
-          {/* Institutional / Academic Dropdown Selection (Only for Student and Industry) */}
+          {/* Institutional / Academic Dropdown Selection */}
           {role === 'admin' ? (
-            <div className="p-5 rounded-2xl bg-purple-50 border border-purple-200 space-y-2">
-              <div className="flex items-center gap-2 text-xs font-bold text-purple-900 uppercase tracking-wider">
-                <ShieldCheck className="w-4 h-4 text-purple-600" />
+            <div className="p-5 rounded-2xl bg-[#102A38] border border-[#3D4D55] space-y-2">
+              <div className="flex items-center gap-2 text-xs font-bold text-[#B58863] uppercase tracking-wider">
+                <ShieldCheck className="w-4 h-4 text-[#B58863]" />
                 Super Admin Privilege Scope
               </div>
-              <p className="text-xs text-purple-950 font-medium leading-relaxed">
+              <p className="text-xs text-[#D3C3B9] font-medium leading-relaxed">
                 ⚡ As a <strong>Platform Super Admin</strong>, you will possess global authority to:
               </p>
-              <ul className="text-[11px] text-purple-900 space-y-1 list-disc list-inside">
+              <ul className="text-[11px] text-[#A79E9C] space-y-1 list-disc list-inside">
                 <li>Create and provision new institution accounts with unique Institution IDs.</li>
                 <li>Reset institution passwords and govern access policies.</li>
                 <li>Audit real-time system login events and verify data isolation.</li>
               </ul>
             </div>
           ) : (
-            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
-              <div className="flex items-center gap-2 text-xs font-bold text-slate-700 uppercase tracking-wider">
-                <School className="w-4 h-4 text-brand-600" />
-                {role === 'student' ? 'Engineering College & Department (Andhra Pradesh)' : role === 'college' ? 'Assigned Registered College & Department' : 'Institutional Details'}
+            <div className="p-5 rounded-2xl bg-[#102A38] border border-[#3D4D55] space-y-4">
+              <div className="flex items-center gap-2 text-xs font-bold text-[#D3C3B9] uppercase tracking-wider">
+                <School className="w-4 h-4 text-[#B58863]" />
+                {role === 'student' ? 'Engineering College & Department (Andhra Pradesh)' : role === 'college' ? 'Institution Identity & Campus Info' : 'Institutional Details'}
               </div>
 
               {/* Colleges Selection */}
-              {role === 'college' ? (
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <label className="text-xs font-bold text-slate-700">
-                      Select Your Registered College Institution
+              <APCollegeSelector
+                selectedDistrict={selectedDistrict}
+                onDistrictChange={setSelectedDistrict}
+                selectedCollege={selectedCollege}
+                selectedCollegeCode={selectedCollegeCode}
+                onCollegeSelect={(col) => {
+                  setSelectedCollege(col.name);
+                  setSelectedCollegeCode(col.code);
+                  if (col.district && col.district !== 'Other' && selectedDistrict === 'All Districts') {
+                    setSelectedDistrict(col.district);
+                  }
+                  if (role === 'college' && col.code) {
+                    setInstitutionIdInput(col.code);
+                  }
+                }}
+                customCollege={customCollege}
+                onCustomCollegeChange={setCustomCollege}
+                customCode={customCode}
+                onCustomCodeChange={(code) => {
+                  setCustomCode(code);
+                  if (role === 'college') setInstitutionIdInput(code);
+                }}
+                required={true}
+              />
+
+              {/* Institution Specific ID & Campus location */}
+              {role === 'college' && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                  <div>
+                    <label className="block text-xs font-bold text-[#D3C3B9] mb-1">
+                      Unique Institution ID <span className="text-[#B58863]">*</span>
                     </label>
-                    <span className="text-[10px] text-amber-700 font-bold bg-amber-100 px-2 py-0.5 rounded">Approved Colleges Only</span>
+                    <input
+                      type="text"
+                      placeholder="e.g. INST005 or AIT"
+                      value={institutionIdInput}
+                      onChange={(e) => setInstitutionIdInput(e.target.value.toUpperCase())}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#3D4D55] text-xs font-mono font-bold focus:ring-2 focus:ring-[#B58863] outline-none bg-[#161616] text-[#D3C3B9] placeholder:text-[#A79E9C] uppercase"
+                    />
+                    <p className="text-[10px] text-[#A79E9C] mt-1">Used for student data partitioning and analytics isolation</p>
                   </div>
 
-                  <select
-                    value={selectedCollege}
-                    onChange={(e) => setSelectedCollege(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-amber-300 text-xs focus:ring-2 focus:ring-brand-500 outline-none bg-white font-bold text-slate-900"
-                  >
-                    {(registeredCollegesList.length > 0 ? registeredCollegesList : [
-                      { name: 'Apex Institute of Technology' },
-                      { name: 'Indian Institute of Technology Bombay (IIT Bombay)' },
-                      { name: 'Anna University (CEG Campus, Chennai)' },
-                      { name: 'BITS Pilani (Pilani Campus)' }
-                    ]).map(col => (
-                      <option key={col.id || col.name} value={col.name}>
-                        🏛️ {col.name} {col.code ? `(${col.code})` : ''}
-                      </option>
-                    ))}
-                  </select>
+                  <div>
+                    <label className="block text-xs font-bold text-[#D3C3B9] mb-1">
+                      Campus Location / District
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Visakhapatnam, Andhra Pradesh"
+                      value={institutionLocationInput}
+                      onChange={(e) => setInstitutionLocationInput(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#3D4D55] text-xs focus:ring-2 focus:ring-[#B58863] outline-none bg-[#161616] text-[#D3C3B9] placeholder:text-[#A79E9C]"
+                    />
+                  </div>
                 </div>
-              ) : (
-                <APCollegeSelector
-                  selectedDistrict={selectedDistrict}
-                  onDistrictChange={setSelectedDistrict}
-                  selectedCollege={selectedCollege}
-                  selectedCollegeCode={selectedCollegeCode}
-                  onCollegeSelect={(col) => {
-                    setSelectedCollege(col.name);
-                    setSelectedCollegeCode(col.code);
-                    if (col.district && col.district !== 'Other' && selectedDistrict === 'All Districts') {
-                      setSelectedDistrict(col.district);
-                    }
-                  }}
-                  customCollege={customCollege}
-                  onCustomCollegeChange={setCustomCollege}
-                  customCode={customCode}
-                  onCustomCodeChange={setCustomCode}
-                  required={true}
-                />
               )}
 
-              {/* Engineering Departments Dropdown (Existing Branch Selection) */}
+              {/* Engineering Departments Dropdown */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  {role === 'college' ? 'Faculty Department' : 'Engineering Department / Branch'}
+                <label className="block text-xs font-bold text-[#D3C3B9] mb-1">
+                  {role === 'college' ? 'Primary Engineering Department / Faculty Domain' : 'Engineering Department / Branch'}
                 </label>
                 <select
                   value={department}
                   onChange={(e) => setDepartment(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-brand-500 outline-none bg-white font-medium text-slate-800"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#3D4D55] text-xs focus:ring-2 focus:ring-[#B58863] outline-none bg-[#161616] font-medium text-[#D3C3B9]"
                 >
                   {ALL_ENGINEERING_DEPARTMENTS.map(dept => (
-                    <option key={dept} value={dept}>{dept}</option>
+                    <option key={dept} value={dept} className="bg-[#102A38] text-[#D3C3B9]">{dept}</option>
                   ))}
                 </select>
               </div>
@@ -609,22 +622,22 @@ export const RegisterPage = ({ setActivePage }) => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
                   <div>
                     <div className="flex items-center justify-between mb-1">
-                      <label className="text-xs font-bold text-slate-700">Academic Year & Current Semester</label>
-                      <span className="text-[10px] text-brand-600 font-semibold">Semesters 1 to 8</span>
+                      <label className="text-xs font-bold text-[#D3C3B9]">Academic Year & Current Semester</label>
+                      <span className="text-[10px] text-[#B58863] font-semibold">Semesters 1 to 8</span>
                     </div>
                     <select
                       value={year}
                       onChange={(e) => setYear(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-brand-500 outline-none bg-white font-medium text-slate-800"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#3D4D55] text-xs focus:ring-2 focus:ring-[#B58863] outline-none bg-[#161616] font-medium text-[#D3C3B9]"
                     >
                       {ALL_ACADEMIC_YEARS_AND_SEMESTERS.map(yr => (
-                        <option key={yr} value={yr}>{yr}</option>
+                        <option key={yr} value={yr} className="bg-[#102A38] text-[#D3C3B9]">{yr}</option>
                       ))}
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">Current CGPA (e.g. 8.75)</label>
+                    <label className="block text-xs font-bold text-[#D3C3B9] mb-1">Current CGPA (e.g. 8.75)</label>
                     <input
                       type="number"
                       step="0.01"
@@ -633,7 +646,7 @@ export const RegisterPage = ({ setActivePage }) => {
                       placeholder="Enter your CGPA (e.g. 8.5)"
                       value={cgpa}
                       onChange={(e) => setCgpa(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-brand-500 outline-none bg-white font-medium text-slate-900 placeholder:text-slate-400"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#3D4D55] text-xs focus:ring-2 focus:ring-[#B58863] outline-none bg-[#161616] font-medium text-[#D3C3B9] placeholder:text-[#A79E9C]"
                       required
                     />
                   </div>
@@ -644,25 +657,25 @@ export const RegisterPage = ({ setActivePage }) => {
 
           {/* Student Specific: Target Career Role & Known Skills Setup */}
           {role === 'student' && (
-            <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200 shadow-xs space-y-6 animate-in fade-in duration-200">
+            <div className="p-6 rounded-3xl bg-[#102A38] border border-[#3D4D55] shadow-xs space-y-6 animate-in fade-in duration-200">
               
               {/* Section Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-200 gap-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#3D4D55] gap-2">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-brand-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-                    <Target className="w-4 h-4" />
+                  <div className="w-8 h-8 rounded-xl bg-[#B58863] text-[#102A38] flex items-center justify-center shrink-0 shadow-xs">
+                    <Target className="w-4 h-4 stroke-[2.5]" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-slate-900">
+                    <h3 className="text-sm font-bold text-[#D3C3B9]">
                       Target Career Role & Known Skills
                     </h3>
-                    <p className="text-[11px] text-slate-500">
+                    <p className="text-[11px] text-[#A79E9C]">
                       Personalize your career track and tell us which skills you already have
                     </p>
                   </div>
                 </div>
 
-                <div className="text-[11px] font-semibold text-brand-700 bg-brand-50 px-3 py-1 rounded-full border border-brand-200 flex items-center gap-1.5 self-start sm:self-auto">
+                <div className="text-[11px] font-semibold text-[#B58863] bg-[#3D4D55]/60 px-3 py-1 rounded-full border border-[#3D4D55] flex items-center gap-1.5 self-start sm:self-auto">
                   <span>Selected Branch:</span>
                   <strong className="truncate max-w-[180px]">{department.split('(')[0].trim()}</strong>
                 </div>
@@ -671,12 +684,12 @@ export const RegisterPage = ({ setActivePage }) => {
               {/* 1. TARGET INDUSTRY DOMAIN */}
               <div className="space-y-2.5">
                 <div className="flex items-center justify-between">
-                  <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">
-                    1. Target Industry Domain(s) <span className="text-rose-500">*</span>
+                  <label className="block text-xs font-bold text-[#D3C3B9] uppercase tracking-wider">
+                    1. Target Industry Domain(s) <span className="text-[#B58863]">*</span>
                   </label>
-                  <span className="text-[10px] text-slate-500 font-medium">Multiple selections allowed</span>
+                  <span className="text-[10px] text-[#A79E9C] font-medium">Multiple selections allowed</span>
                 </div>
-                <p className="text-[11px] text-slate-500">
+                <p className="text-[11px] text-[#A79E9C]">
                   Select the engineering and technology sectors you want to target for placements and internships:
                 </p>
 
@@ -690,11 +703,11 @@ export const RegisterPage = ({ setActivePage }) => {
                         onClick={() => toggleDomain(domain)}
                         className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1.5 ${
                           isSelected
-                            ? 'bg-brand-600 text-white border-brand-600 shadow-xs ring-1 ring-brand-400/40'
-                            : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100 hover:border-slate-300'
+                            ? 'bg-[#B58863] text-[#161616] border-[#B58863] shadow-xs font-bold'
+                            : 'bg-[#161616] text-[#D3C3B9] border-[#3D4D55] hover:bg-[#3D4D55]/50'
                         }`}
                       >
-                        {isSelected ? <Check className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5 text-slate-400" />}
+                        {isSelected ? <Check className="w-3.5 h-3.5 stroke-[2.5]" /> : <Plus className="w-3.5 h-3.5 text-[#A79E9C]" />}
                         <span>{domain}</span>
                       </button>
                     );
@@ -703,78 +716,78 @@ export const RegisterPage = ({ setActivePage }) => {
               </div>
 
               {/* 2. TARGET INDUSTRY ROLE */}
-              <div className="space-y-2 pt-2 border-t border-slate-200/80">
+              <div className="space-y-2 pt-2 border-t border-[#3D4D55]">
                 <div className="flex items-center justify-between">
-                  <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">
-                    2. Target Industry Role <span className="text-rose-500">*</span>
+                  <label className="block text-xs font-bold text-[#D3C3B9] uppercase tracking-wider">
+                    2. Target Industry Role <span className="text-[#B58863]">*</span>
                   </label>
-                  <span className="text-[10px] text-brand-700 font-bold bg-brand-50 px-2 py-0.5 rounded">
+                  <span className="text-[10px] text-[#B58863] font-bold bg-[#3D4D55]/60 px-2 py-0.5 rounded border border-[#3D4D55]">
                     {availableRoles.length} Roles for {department.split('(')[0].trim()}
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-500">
+                <p className="text-[11px] text-[#A79E9C]">
                   Choose your primary target role for benchmark evaluation and skill gap recommendations:
                 </p>
 
                 <select
                   value={targetRoleId}
                   onChange={(e) => handleSelectRole(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-brand-500 outline-none bg-white font-bold text-slate-900 shadow-2xs"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#3D4D55] text-xs focus:ring-2 focus:ring-[#B58863] outline-none bg-[#161616] font-bold text-[#D3C3B9] shadow-2xs"
                 >
                   {availableRoles.map((r) => (
-                    <option key={r.id} value={r.id}>
+                    <option key={r.id} value={r.id} className="bg-[#102A38] text-[#D3C3B9]">
                       🎯 {r.title} ({r.category})
                     </option>
                   ))}
                 </select>
 
-                <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between text-xs">
-                  <span className="text-slate-600">
-                    Active Target: <strong className="text-slate-900">{targetRoleTitle}</strong>
+                <div className="p-3 bg-[#161616] rounded-xl border border-[#3D4D55] flex items-center justify-between text-xs">
+                  <span className="text-[#A79E9C]">
+                    Active Target: <strong className="text-[#D3C3B9]">{targetRoleTitle}</strong>
                   </span>
-                  <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-bold border border-emerald-200">
+                  <span className="text-[10px] text-[#B58863] bg-[#3D4D55]/60 px-2 py-0.5 rounded font-bold border border-[#3D4D55]">
                     Industry Benchmark Connected
                   </span>
                 </div>
               </div>
 
               {/* 3. KNOWN SKILLS */}
-              <div className="space-y-3 pt-2 border-t border-slate-200/80">
+              <div className="space-y-3 pt-2 border-t border-[#3D4D55]">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                  <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">
-                    3. Known Skills <span className="text-rose-500">*</span>
+                  <label className="block text-xs font-bold text-[#D3C3B9] uppercase tracking-wider">
+                    3. Known Skills <span className="text-[#B58863]">*</span>
                   </label>
                   <div className="flex items-center gap-2">
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                       selectedSkills.length > 0 
-                        ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' 
-                        : 'bg-rose-50 text-rose-700 border border-rose-200'
+                        ? 'bg-[#B58863] text-[#161616]' 
+                        : 'bg-[#3D4D55] text-[#A79E9C] border border-[#3D4D55]'
                     }`}>
                       {selectedSkills.length} Selected
                     </span>
                   </div>
                 </div>
 
-                <p className="text-[11px] text-slate-500">
+                <p className="text-[11px] text-[#A79E9C]">
                   Select the technical and engineering skills you <strong>already possess</strong>. Only explicitly chosen skills will be marked as known.
                 </p>
 
                 {/* Skill Search & View All Controls */}
                 <div className="flex flex-col sm:flex-row items-center gap-2">
                   <div className="relative flex-1 w-full">
-                    <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3" />
+                    <Search className="w-3.5 h-3.5 text-[#A79E9C] absolute left-3 top-3" />
                     <input
                       type="text"
                       placeholder="Search skills (e.g. Python, Verilog, AutoCAD, DSA, SQL, PLC)..."
                       value={skillSearchQuery}
                       onChange={(e) => setSkillSearchQuery(e.target.value)}
-                      className="w-full pl-9 pr-8 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-brand-500 outline-none bg-white font-medium text-slate-900 placeholder:text-slate-400"
+                      className="w-full pl-9 pr-8 py-2 rounded-xl border border-[#3D4D55] text-xs focus:ring-2 focus:ring-[#B58863] outline-none bg-[#161616] font-medium text-[#D3C3B9] placeholder:text-[#A79E9C]"
                     />
                     {skillSearchQuery && (
                       <button
                         type="button"
                         onClick={() => setSkillSearchQuery('')}
-                        className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600"
+                        className="absolute right-2.5 top-2.5 text-[#A79E9C] hover:text-[#D3C3B9]"
                       >
                         <X className="w-3.5 h-3.5" />
                       </button>
@@ -789,8 +802,8 @@ export const RegisterPage = ({ setActivePage }) => {
                     }}
                     className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all whitespace-nowrap flex items-center gap-1.5 w-full sm:w-auto justify-center ${
                       showAllSkills
-                        ? 'bg-slate-900 text-white border-slate-900'
-                        : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
+                        ? 'bg-[#B58863] text-[#161616] border-[#B58863]'
+                        : 'bg-[#161616] text-[#D3C3B9] border-[#3D4D55] hover:bg-[#3D4D55]/50'
                     }`}
                   >
                     <Layers className="w-3.5 h-3.5" />
@@ -798,7 +811,7 @@ export const RegisterPage = ({ setActivePage }) => {
                   </button>
                 </div>
 
-                <div className="flex items-center justify-between text-[11px] text-slate-500 px-1">
+                <div className="flex items-center justify-between text-[11px] text-[#A79E9C] px-1">
                   <span>
                     {skillSearchQuery.trim()
                       ? `Found ${displayedSkills.length} skill(s) matching "${skillSearchQuery}"`
@@ -810,7 +823,7 @@ export const RegisterPage = ({ setActivePage }) => {
                     <button
                       type="button"
                       onClick={() => setShowAllSkills(true)}
-                      className="text-brand-600 hover:underline font-semibold"
+                      className="text-[#B58863] hover:underline font-semibold"
                     >
                       Browse cross-disciplinary skills &rarr;
                     </button>
@@ -818,7 +831,7 @@ export const RegisterPage = ({ setActivePage }) => {
                 </div>
 
                 {/* Skill Toggle Chips Grid */}
-                <div className="flex flex-wrap gap-1.5 max-h-48 overflow-y-auto p-3 bg-white rounded-2xl border border-slate-200 shadow-inner">
+                <div className="flex flex-wrap gap-1.5 max-h-48 overflow-y-auto p-3 bg-[#161616] rounded-2xl border border-[#3D4D55] shadow-inner">
                   {displayedSkills.map((skill) => {
                     const isSelected = selectedSkills.includes(skill);
                     return (
@@ -828,18 +841,18 @@ export const RegisterPage = ({ setActivePage }) => {
                         onClick={() => toggleSkill(skill)}
                         className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition-all flex items-center gap-1.5 ${
                           isSelected
-                            ? 'bg-brand-600 text-white border-brand-600 shadow-xs'
-                            : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100 hover:border-slate-300'
+                            ? 'bg-[#B58863] text-[#161616] border-[#B58863] font-bold shadow-xs'
+                            : 'bg-[#102A38] text-[#D3C3B9] border-[#3D4D55] hover:bg-[#3D4D55]/50'
                         }`}
                       >
-                        {isSelected ? <Check className="w-3 h-3" /> : <Plus className="w-3 h-3 text-slate-400" />}
+                        {isSelected ? <Check className="w-3 h-3 stroke-[2.5]" /> : <Plus className="w-3 h-3 text-[#A79E9C]" />}
                         {skill}
                       </button>
                     );
                   })}
 
                   {displayedSkills.length === 0 && (
-                    <div className="text-center py-6 w-full text-slate-400 text-xs">
+                    <div className="text-center py-6 w-full text-[#A79E9C] text-xs">
                       No matching skill found. Add it as a custom skill below!
                     </div>
                   )}
@@ -847,22 +860,22 @@ export const RegisterPage = ({ setActivePage }) => {
 
                 {/* Selected Skills Review Strip */}
                 {selectedSkills.length > 0 && (
-                  <div className="p-3 bg-emerald-50/50 rounded-xl border border-emerald-100 space-y-1.5">
-                    <span className="text-[11px] font-bold text-emerald-900 block">
+                  <div className="p-3 bg-[#161616] rounded-xl border border-[#3D4D55] space-y-1.5">
+                    <span className="text-[11px] font-bold text-[#B58863] block">
                       Your Selected Known Skills ({selectedSkills.length}):
                     </span>
                     <div className="flex flex-wrap gap-1.5">
                       {selectedSkills.map((skill) => (
                         <span
                           key={skill}
-                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white border border-emerald-200 text-emerald-800 text-[11px] font-semibold"
+                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#3D4D55] border border-[#3D4D55] text-[#D3C3B9] text-[11px] font-semibold"
                         >
-                          <Check className="w-3 h-3 text-emerald-600" />
+                          <Check className="w-3 h-3 text-[#B58863]" />
                           {skill}
                           <button
                             type="button"
                             onClick={() => toggleSkill(skill)}
-                            className="text-slate-400 hover:text-rose-600 ml-0.5"
+                            className="text-[#A79E9C] hover:text-[#B58863] ml-0.5"
                             title="Remove"
                           >
                             <X className="w-3 h-3" />
@@ -886,15 +899,15 @@ export const RegisterPage = ({ setActivePage }) => {
                         handleAddCustomSkill(e);
                       }
                     }}
-                    className="flex-1 px-3 py-1.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-brand-500 outline-none bg-white font-medium text-slate-900 placeholder:text-slate-400"
+                    className="flex-1 px-3 py-1.5 rounded-xl border border-[#3D4D55] text-xs focus:ring-2 focus:ring-[#B58863] outline-none bg-[#161616] font-medium text-[#D3C3B9] placeholder:text-[#A79E9C]"
                   />
                   <button
                     type="button"
                     onClick={handleAddCustomSkill}
                     disabled={!customSkillInput.trim()}
-                    className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 disabled:opacity-40 text-white font-semibold text-xs transition-colors flex items-center gap-1"
+                    className="px-3 py-1.5 rounded-xl bg-[#3D4D55] hover:bg-[#3D4D55]/80 disabled:opacity-40 text-[#D3C3B9] font-semibold text-xs transition-colors flex items-center gap-1 border border-[#3D4D55]"
                   >
-                    <Plus className="w-3.5 h-3.5" /> Add
+                    <Plus className="w-3.5 h-3.5 text-[#B58863]" /> Add
                   </button>
                 </div>
 
@@ -907,24 +920,26 @@ export const RegisterPage = ({ setActivePage }) => {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-md shadow-brand-500/20 transition-all flex items-center justify-center gap-2"
+            className="w-full py-3.5 rounded-xl bg-[#B58863] hover:bg-[#996f4c] text-[#161616] font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2"
           >
             {submitting 
               ? 'Registering Account...' 
               : role === 'admin'
                 ? 'Register Platform Super Admin Account'
-                : role === 'company'
-                  ? 'Register Industry Account & Launch'
-                  : 'Create Secure Account & Launch'}
-            <ArrowRight className="w-4 h-4" />
+                : role === 'college'
+                  ? 'Register Institution & Access Dashboard'
+                  : role === 'company'
+                    ? 'Register Industry Account & Launch'
+                    : 'Create Secure Account & Launch'}
+            <ArrowRight className="w-4 h-4 stroke-[2.5]" />
           </button>
 
         </form>
 
         <div className="text-center pt-2">
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-[#A79E9C]">
             Already registered?{' '}
-            <button onClick={() => setActivePage('login')} className="text-brand-600 font-bold hover:underline">
+            <button onClick={() => setActivePage('login')} className="text-[#B58863] font-bold hover:underline">
               Sign In with Password
             </button>
           </p>
@@ -934,3 +949,4 @@ export const RegisterPage = ({ setActivePage }) => {
     </div>
   );
 };
+

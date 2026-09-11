@@ -1,6 +1,34 @@
 {
   "users": [
     {
+      "id": "usr_1789107647100",
+      "name": "State Higher Education Secretary",
+      "email": "secretary.he.1789107647100@ap.gov.in",
+      "password": "GovAdmin#2026",
+      "passwordHash": "69aca124697555f83e258e6598646c7e94a35f9a26337171e28f3c742d6950c7",
+      "role": "admin",
+      "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80",
+      "title": "Platform Super Admin",
+      "badge": "Platform Admin",
+      "createdAt": "2026-09-11T06:20:47.100Z"
+    },
+    {
+      "id": "usr_1789107647087",
+      "name": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "email": "dean.vnr.1789107647086@vnrvjiet.ac.in",
+      "password": "VNRCollege#2026",
+      "passwordHash": "f60fb96908e50bfaf3f2fdb1e390fc8e7545cedabeaceb28aeae244e19861b05",
+      "role": "college",
+      "avatar": "https://images.unsplash.com/photo-1562774053-701939374585?w=150&auto=format&fit=crop&q=80",
+      "institutionId": "INST086",
+      "collegeId": "col_inst005_1789067294965",
+      "collegeName": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "title": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "status": "Active",
+      "badge": "Institution (INST086)",
+      "createdAt": "2026-09-11T06:20:47.087Z"
+    },
+    {
       "id": "usr_student_1",
       "name": "Rahul Sharma",
       "email": "rahul.sharma@apex.edu",
@@ -161,6 +189,22 @@
       "avatar": "https://images.unsplash.com/photo-1562774053-701939374585?w=150&auto=format&fit=crop&q=80",
       "badge": "Institution (INST5812)",
       "createdAt": "2026-09-10T19:31:35.813Z"
+    },
+    {
+      "id": "usr_inst095",
+      "name": "G. Pulla Reddy Engineering College (Autonomous)",
+      "email": "principal.1789107647094@gprec.ac.in",
+      "password": "GPRECInst#2026",
+      "passwordHash": "fbe269b0739875f7d328a619b22d476a5424f774b3af7b9db9eb410f728a1e74",
+      "role": "college",
+      "institutionId": "INST095",
+      "collegeId": "col_inst095_1789107647094",
+      "collegeName": "G. Pulla Reddy Engineering College (Autonomous)",
+      "title": "G. Pulla Reddy Engineering College (Autonomous)",
+      "status": "Active",
+      "avatar": "https://images.unsplash.com/photo-1562774053-701939374585?w=150&auto=format&fit=crop&q=80",
+      "badge": "Institution (INST095)",
+      "createdAt": "2026-09-11T06:20:47.094Z"
     }
   ],
   "colleges": [
@@ -289,14 +333,14 @@
     },
     {
       "id": "col_inst005_1789067294965",
-      "institutionId": "INST005",
+      "institutionId": "INST086",
       "name": "VNR Vignana Jyothi Institute of Engineering & Technology",
       "code": "INST005",
-      "email": "vnr.institution@gmail.com",
-      "passwordPlain": "VNRInst#2026",
-      "passwordHash": "90ec62fd6c5012686140d4daec6429141c821fc0c8017315f45d9b50d81240f3",
-      "sharedPasswordPlain": "VNRInst#2026",
-      "facultyPasswordHash": "90ec62fd6c5012686140d4daec6429141c821fc0c8017315f45d9b50d81240f3",
+      "email": "dean.vnr.1789107647086@vnrvjiet.ac.in",
+      "passwordPlain": "VNRCollege#2026",
+      "passwordHash": "f60fb96908e50bfaf3f2fdb1e390fc8e7545cedabeaceb28aeae244e19861b05",
+      "sharedPasswordPlain": "VNRCollege#2026",
+      "facultyPasswordHash": "f60fb96908e50bfaf3f2fdb1e390fc8e7545cedabeaceb28aeae244e19861b05",
       "location": "Hyderabad, Telangana",
       "type": "Registered Technical Institution",
       "departments": [
@@ -402,6 +446,35 @@
         "medianPackage": "₹7.5 LPA"
       },
       "createdAt": "2026-09-10T19:31:35.813Z"
+    },
+    {
+      "id": "col_inst095_1789107647094",
+      "institutionId": "INST095",
+      "name": "G. Pulla Reddy Engineering College (Autonomous)",
+      "code": "INST095",
+      "email": "principal.1789107647094@gprec.ac.in",
+      "passwordPlain": "GPRECInst#2026",
+      "passwordHash": "fbe269b0739875f7d328a619b22d476a5424f774b3af7b9db9eb410f728a1e74",
+      "sharedPasswordPlain": "GPRECInst#2026",
+      "facultyPasswordHash": "fbe269b0739875f7d328a619b22d476a5424f774b3af7b9db9eb410f728a1e74",
+      "location": "Kurnool, Andhra Pradesh",
+      "type": "Registered Technical Institution",
+      "departments": [
+        "Computer Science & Engineering (CSE)",
+        "Information Technology (IT)",
+        "Artificial Intelligence & Data Science (AI & DS)",
+        "Electronics & Communication Engineering (ECE)"
+      ],
+      "partnerRecruiters": [
+        "TechNova Solutions",
+        "CloudScale Inc"
+      ],
+      "placementStats": {
+        "avgPlacementPct": 82,
+        "highestPackage": "₹30.0 LPA",
+        "medianPackage": "₹7.5 LPA"
+      },
+      "createdAt": "2026-09-11T06:20:47.094Z"
     }
   ],
   "companies": [
@@ -2184,6 +2257,61 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": "log_1789107647100_28ra",
+      "timestamp": "2026-09-11T06:20:47.100Z",
+      "action": "SUPER_ADMIN_REGISTERED",
+      "actorType": "Platform Admin",
+      "actorName": "State Higher Education Secretary",
+      "actorEmail": "secretary.he.1789107647100@ap.gov.in",
+      "collegeName": "SkillBridge Platform",
+      "details": "New Super Admin \"State Higher Education Secretary\" registered successfully.",
+      "status": "Success"
+    },
+    {
+      "id": "log_1789107647097_u4eh",
+      "timestamp": "2026-09-11T06:20:47.097Z",
+      "action": "INSTITUTION_LOGIN_SUCCESS",
+      "actorType": "Institution",
+      "actorName": "G. Pulla Reddy Engineering College (Autonomous)",
+      "actorEmail": "principal.1789107647094@gprec.ac.in",
+      "collegeName": "G. Pulla Reddy Engineering College (Autonomous)",
+      "details": "Authenticated successfully with Institution ID: INST095.",
+      "status": "Success"
+    },
+    {
+      "id": "log_1789107647096_kxsq",
+      "timestamp": "2026-09-11T06:20:47.096Z",
+      "action": "INSTITUTION_ACCOUNT_CREATED",
+      "actorType": "Platform Admin",
+      "actorName": "Super Admin",
+      "actorEmail": "admin@skillbridge.gov.in",
+      "collegeName": "G. Pulla Reddy Engineering College (Autonomous)",
+      "details": "Super Admin created new Institution account: ID INST095, Email principal.1789107647094@gprec.ac.in.",
+      "status": "Success"
+    },
+    {
+      "id": "log_1789107647091_ctwm",
+      "timestamp": "2026-09-11T06:20:47.091Z",
+      "action": "INSTITUTION_LOGIN_SUCCESS",
+      "actorType": "Institution",
+      "actorName": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "actorEmail": "dean.vnr.1789107647086@vnrvjiet.ac.in",
+      "collegeName": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "details": "Authenticated successfully with Institution ID: INST086.",
+      "status": "Success"
+    },
+    {
+      "id": "log_1789107647087_nw2i",
+      "timestamp": "2026-09-11T06:20:47.087Z",
+      "action": "INSTITUTION_REGISTERED",
+      "actorType": "Institution",
+      "actorName": "Dr. K. Venkatesh (Dean)",
+      "actorEmail": "dean.vnr.1789107647086@vnrvjiet.ac.in",
+      "collegeName": "VNR Vignana Jyothi Institute of Engineering & Technology",
+      "details": "Institution \"VNR Vignana Jyothi Institute of Engineering & Technology\" (INST086) registered successfully.",
+      "status": "Success"
+    },
     {
       "id": "log_1789094534927_flnk",
       "timestamp": "2026-09-11T02:42:14.927Z",

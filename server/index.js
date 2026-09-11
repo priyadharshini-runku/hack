@@ -77,19 +77,21 @@ app.post('/api/auth/institution/login', (req, res) => {
   res.json(result);
 });
 
-// Self-registration for institutions is disabled per requirements
+// Institution registration endpoint
 app.post('/api/auth/institution/register', (req, res) => {
-  return res.status(403).json({
-    success: false,
-    error: 'Institutions cannot self-register. Institution accounts can only be created by the Platform Administrator.'
-  });
+  const result = store.registerUser({ ...req.body, role: 'college' });
+  if (result.error) {
+    return res.status(400).json({ success: false, error: result.error });
+  }
+  res.status(201).json(result);
 });
 
 app.post('/api/auth/faculty/register', (req, res) => {
-  return res.status(403).json({
-    success: false,
-    error: 'Self-registration for institutions is disabled. Institution accounts must be created by the Platform Administrator.'
-  });
+  const result = store.registerFaculty(req.body);
+  if (result.error) {
+    return res.status(400).json({ success: false, error: result.error });
+  }
+  res.status(201).json(result);
 });
 
 app.post('/api/auth/faculty/login', (req, res) => {
@@ -424,6 +426,14 @@ app.get('/api/feedback/student/:studentId', (req, res) => {
 // ==================== COLLEGE & WORKSHOPS ====================
 app.get('/api/colleges', (req, res) => {
   res.json(store.getColleges());
+});
+
+app.post('/api/colleges', (req, res) => {
+  const result = store.createCollege(req.body);
+  if (result.error) {
+    return res.status(400).json({ success: false, error: result.error });
+  }
+  res.status(201).json(result);
 });
 
 app.get('/api/colleges/:id', (req, res) => {

@@ -39,50 +39,50 @@ export function getSkillStrength(percentage) {
   if (percentage >= 90) {
     return {
       level: 'Excellent',
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50',
-      borderColor: 'border-purple-300',
-      badgeBg: 'bg-purple-600',
+      color: 'text-[#B58863]',
+      bgColor: 'bg-[#102A38]',
+      borderColor: 'border-[#B58863]',
+      badgeBg: 'bg-[#B58863] text-[#161616]',
       description: 'Exceptional mastery of concepts, debugging, application, and implementation.',
       tierIndex: 4
     };
   } else if (percentage >= 75) {
     return {
       level: 'Strong',
-      color: 'text-emerald-600',
-      bgColor: 'bg-emerald-50',
-      borderColor: 'border-emerald-300',
-      badgeBg: 'bg-emerald-600',
+      color: 'text-[#D3C3B9]',
+      bgColor: 'bg-[#102A38]',
+      borderColor: 'border-[#3D4D55]',
+      badgeBg: 'bg-[#3D4D55] text-[#D3C3B9]',
       description: 'Solid practical grasp of core techniques with high accuracy and consistency.',
       tierIndex: 3
     };
   } else if (percentage >= 60) {
     return {
       level: 'Intermediate',
-      color: 'text-sky-600',
-      bgColor: 'bg-sky-50',
-      borderColor: 'border-sky-300',
-      badgeBg: 'bg-sky-600',
+      color: 'text-[#D3C3B9]',
+      bgColor: 'bg-[#102A38]',
+      borderColor: 'border-[#3D4D55]',
+      badgeBg: 'bg-[#3D4D55] text-[#D3C3B9]',
       description: 'Good theoretical foundation; continue sharpening advanced problem-solving.',
       tierIndex: 2
     };
   } else if (percentage >= 40) {
     return {
       level: 'Developing',
-      color: 'text-amber-600',
-      bgColor: 'bg-amber-50',
-      borderColor: 'border-amber-300',
-      badgeBg: 'bg-amber-600',
+      color: 'text-[#A79E9C]',
+      bgColor: 'bg-[#102A38]',
+      borderColor: 'border-[#3D4D55]',
+      badgeBg: 'bg-[#161616] text-[#A79E9C] border border-[#3D4D55]',
       description: 'Basic conceptual understanding; needs dedicated practice on edge cases and code outputs.',
       tierIndex: 1
     };
   } else {
     return {
       level: 'Beginner',
-      color: 'text-rose-600',
-      bgColor: 'bg-rose-50',
-      borderColor: 'border-rose-300',
-      badgeBg: 'bg-rose-600',
+      color: 'text-[#A79E9C]',
+      bgColor: 'bg-[#102A38]',
+      borderColor: 'border-[#3D4D55]',
+      badgeBg: 'bg-[#161616] text-[#A79E9C] border border-[#3D4D55]',
       description: 'Initial learning phase; review fundamentals, study learning path resources, and re-test.',
       tierIndex: 0
     };
@@ -100,7 +100,7 @@ function FormattedQuestionText({ text }) {
                   (text.includes('\n') && (text.includes(';') || text.includes('{') || text.includes('def ') || text.includes('SELECT') || text.includes('int ')));
 
   if (!hasCode) {
-    return <p className="text-slate-900 text-base sm:text-lg font-medium leading-relaxed">{text}</p>;
+    return <p className="text-[#D3C3B9] text-base sm:text-lg font-medium leading-relaxed">{text}</p>;
   }
 
   // If text has ``` code fences
@@ -111,13 +111,13 @@ function FormattedQuestionText({ text }) {
         {parts.map((part, i) => {
           if (i % 2 === 1) {
             return (
-              <pre key={i} className="p-4 bg-slate-900 text-emerald-400 rounded-xl font-mono text-xs sm:text-sm overflow-x-auto border border-slate-800 shadow-inner">
+              <pre key={i} className="p-4 bg-[#102A38] text-[#D3C3B9] rounded-xl font-mono text-xs sm:text-sm overflow-x-auto border border-[#3D4D55] shadow-inner">
                 <code>{part.trim()}</code>
               </pre>
             );
           }
           return part.trim() ? (
-            <p key={i} className="text-slate-900 text-base sm:text-lg font-medium leading-relaxed">
+            <p key={i} className="text-[#D3C3B9] text-base sm:text-lg font-medium leading-relaxed">
               {part.trim()}
             </p>
           ) : null;
@@ -133,9 +133,9 @@ function FormattedQuestionText({ text }) {
 
   return (
     <div className="space-y-3">
-      <p className="text-slate-900 text-base sm:text-lg font-medium leading-relaxed">{promptLine}</p>
+      <p className="text-[#D3C3B9] text-base sm:text-lg font-medium leading-relaxed">{promptLine}</p>
       {codeLines.trim() && (
-        <pre className="p-4 bg-slate-900 text-emerald-300 rounded-xl font-mono text-xs sm:text-sm overflow-x-auto border border-slate-800 shadow-inner leading-relaxed">
+        <pre className="p-4 bg-[#102A38] text-[#D3C3B9] rounded-xl font-mono text-xs sm:text-sm overflow-x-auto border border-[#3D4D55] shadow-inner leading-relaxed">
           <code>{codeLines.trim()}</code>
         </pre>
       )}
@@ -387,18 +387,18 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
       <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-300 pb-16">
         
         {/* Top Header Card */}
-        <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-slate-800 relative overflow-hidden">
-          <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="bg-[#161616] rounded-3xl p-6 sm:p-8 text-[#D3C3B9] shadow-xl border border-[#3D4D55] relative overflow-hidden">
+          <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-64 h-64 bg-[#B58863]/5 rounded-full blur-3xl pointer-events-none"></div>
 
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[#3D4D55]">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#102A38] text-[#B58863] border border-[#3D4D55]">
                   {course.category}
                 </span>
-                <span className="text-xs text-slate-400">Official Assessment Completed</span>
+                <span className="text-xs text-[#A79E9C]">Official Assessment Completed</span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold font-display">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#D3C3B9]">
                 {course.name} Skill Assessment Results
               </h1>
             </div>
@@ -409,32 +409,32 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
                 disabled={isSyncing || isSynced}
                 className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-1.5 transition-all shadow-md ${
                   isSynced
-                    ? 'bg-emerald-600 text-white cursor-default'
-                    : 'bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 shadow-amber-500/20 active:scale-95'
+                    ? 'bg-[#3D4D55] text-[#D3C3B9] cursor-default border border-[#3D4D55]'
+                    : 'bg-[#B58863] hover:bg-[#996f4c] text-[#161616] active:scale-95'
                 }`}
               >
                 {isSynced ? (
                   <>
-                    <CheckCircle2 className="w-4 h-4 text-white" />
+                    <CheckCircle2 className="w-4 h-4 text-[#B58863]" />
                     Badge Synced to Profile
                   </>
                 ) : (
                   <>
-                    <ShieldCheck className="w-4 h-4 text-slate-950" />
+                    <ShieldCheck className="w-4 h-4 text-[#161616]" />
                     {isSyncing ? 'Syncing...' : 'Sync Badge to Profile'}
                   </>
                 )}
               </button>
               <button
                 onClick={initializeTest}
-                className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-all border border-white/10"
+                className="px-4 py-2.5 rounded-xl bg-[#102A38] hover:bg-[#3D4D55] text-[#D3C3B9] text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-all border border-[#3D4D55]"
               >
-                <RotateCcw className="w-4 h-4" />
+                <RotateCcw className="w-4 h-4 text-[#B58863]" />
                 Retake
               </button>
               <button
                 onClick={onBackToCourse}
-                className="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all shadow-md shadow-indigo-900/40"
+                className="px-4 py-2.5 rounded-xl bg-[#B58863] hover:bg-[#996f4c] text-[#161616] text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all shadow-md"
               >
                 <BookOpen className="w-4 h-4" />
                 Return to Course
@@ -446,18 +446,18 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
           <div className="pt-6 grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
             
             {/* Overall Score Badge */}
-            <div className="bg-white/5 rounded-2xl p-5 border border-white/10 flex items-center gap-5">
+            <div className="bg-[#102A38] rounded-2xl p-5 border border-[#3D4D55] flex items-center gap-5">
               <div className="relative w-20 h-20 shrink-0 flex items-center justify-center">
                 <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
                   <path
-                    className="text-slate-800"
+                    className="text-[#161616]"
                     strokeWidth="3.5"
                     stroke="currentColor"
                     fill="none"
                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                   />
                   <path
-                    className={stats.percentage >= 60 ? "text-emerald-400" : "text-amber-400"}
+                    className="text-[#B58863]"
                     strokeDasharray={`${stats.percentage}, 100`}
                     strokeWidth="3.5"
                     strokeLinecap="round"
@@ -467,35 +467,35 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
                   />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-xl font-black text-white">{stats.percentage}%</span>
+                  <span className="text-xl font-black text-[#D3C3B9]">{stats.percentage}%</span>
                 </div>
               </div>
 
               <div>
-                <p className="text-xs font-medium text-slate-400">Total Score</p>
-                <p className="text-2xl font-black text-white">
-                  {stats.score} <span className="text-sm font-normal text-slate-400">/ 30</span>
+                <p className="text-xs font-medium text-[#A79E9C]">Total Score</p>
+                <p className="text-2xl font-black text-[#D3C3B9]">
+                  {stats.score} <span className="text-sm font-normal text-[#A79E9C]">/ 30</span>
                 </p>
-                <p className="text-xs text-slate-300 mt-0.5 flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5 text-slate-400" />
+                <p className="text-xs text-[#A79E9C] mt-0.5 flex items-center gap-1">
+                  <Clock className="w-3.5 h-3.5 text-[#B58863]" />
                   Time: {formatTime(stats.timeTakenSeconds)} / 30:00
                 </p>
               </div>
             </div>
 
             {/* Skill Strength Tier Highlight */}
-            <div className="lg:col-span-2 bg-gradient-to-r from-indigo-900/60 to-purple-900/50 rounded-2xl p-5 border border-indigo-500/30 space-y-3">
+            <div className="lg:col-span-2 bg-[#102A38] rounded-2xl p-5 border border-[#3D4D55] space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-indigo-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-amber-400" />
+                <span className="text-xs font-semibold text-[#D3C3B9] uppercase tracking-wider flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-[#B58863]" />
                   Skill Strength Rating
                 </span>
-                <span className={`px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider text-white ${stats.skillStrength.badgeBg} shadow-sm`}>
+                <span className={`px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider ${stats.skillStrength.badgeBg} shadow-sm`}>
                   {stats.skillStrength.level}
                 </span>
               </div>
 
-              <p className="text-sm text-slate-200">
+              <p className="text-sm text-[#A79E9C]">
                 {stats.skillStrength.description}
               </p>
 
@@ -503,24 +503,24 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
               <div className="pt-2">
                 <div className="grid grid-cols-5 gap-1.5 text-center text-[10px] font-bold">
                   {[
-                    { label: 'Beginner', range: '0–39%', color: 'bg-rose-500' },
-                    { label: 'Developing', range: '40–59%', color: 'bg-amber-500' },
-                    { label: 'Intermediate', range: '60–74%', color: 'bg-sky-500' },
-                    { label: 'Strong', range: '75–89%', color: 'bg-emerald-500' },
-                    { label: 'Excellent', range: '90–100%', color: 'bg-purple-500' }
+                    { label: 'Beginner', range: '0–39%' },
+                    { label: 'Developing', range: '40–59%' },
+                    { label: 'Intermediate', range: '60–74%' },
+                    { label: 'Strong', range: '75–89%' },
+                    { label: 'Excellent', range: '90–100%' }
                   ].map((tier, idx) => {
                     const isEarned = stats.skillStrength.tierIndex === idx;
                     return (
                       <div key={tier.label} className="space-y-1">
                         <div
                           className={`h-2 rounded-full transition-all ${
-                            isEarned ? `${tier.color} ring-2 ring-white shadow-md scale-y-125` : 'bg-white/20'
+                            isEarned ? 'bg-[#B58863] ring-2 ring-[#D3C3B9] shadow-md scale-y-125' : 'bg-[#3D4D55]'
                           }`}
                         />
-                        <span className={`block truncate ${isEarned ? 'text-white font-black' : 'text-slate-400'}`}>
+                        <span className={`block truncate ${isEarned ? 'text-[#D3C3B9] font-black' : 'text-[#A79E9C]'}`}>
                           {tier.label}
                         </span>
-                        <span className="text-[9px] text-slate-400 block">{tier.range}</span>
+                        <span className="text-[9px] text-[#A79E9C] block">{tier.range}</span>
                       </div>
                     );
                   })}
@@ -533,43 +533,43 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
 
         {/* 4 Performance Metric Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
+          <div className="bg-[#161616] rounded-2xl p-4 border border-[#3D4D55] shadow-sm flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-[#102A38] text-[#B58863] flex items-center justify-center shrink-0 border border-[#3D4D55]">
               <CheckCircle2 className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs font-semibold text-slate-500">Correct</p>
-              <p className="text-xl font-bold text-slate-900">{stats.correctCount} <span className="text-xs font-normal text-slate-400">/ 30</span></p>
+              <p className="text-xs font-semibold text-[#A79E9C]">Correct</p>
+              <p className="text-xl font-bold text-[#D3C3B9]">{stats.correctCount} <span className="text-xs font-normal text-[#A79E9C]">/ 30</span></p>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 border border-rose-100">
+          <div className="bg-[#161616] rounded-2xl p-4 border border-[#3D4D55] shadow-sm flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-[#102A38] text-[#D3C3B9] flex items-center justify-center shrink-0 border border-[#3D4D55]">
               <XCircle className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs font-semibold text-slate-500">Incorrect</p>
-              <p className="text-xl font-bold text-slate-900">{stats.incorrectCount} <span className="text-xs font-normal text-slate-400">/ 30</span></p>
+              <p className="text-xs font-semibold text-[#A79E9C]">Incorrect</p>
+              <p className="text-xl font-bold text-[#D3C3B9]">{stats.incorrectCount} <span className="text-xs font-normal text-[#A79E9C]">/ 30</span></p>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center shrink-0 border border-slate-200">
+          <div className="bg-[#161616] rounded-2xl p-4 border border-[#3D4D55] shadow-sm flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-[#102A38] text-[#A79E9C] flex items-center justify-center shrink-0 border border-[#3D4D55]">
               <HelpCircle className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs font-semibold text-slate-500">Unanswered</p>
-              <p className="text-xl font-bold text-slate-900">{stats.unansweredCount} <span className="text-xs font-normal text-slate-400">/ 30</span></p>
+              <p className="text-xs font-semibold text-[#A79E9C]">Unanswered</p>
+              <p className="text-xl font-bold text-[#D3C3B9]">{stats.unansweredCount} <span className="text-xs font-normal text-[#A79E9C]">/ 30</span></p>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 border border-indigo-100">
+          <div className="bg-[#161616] rounded-2xl p-4 border border-[#3D4D55] shadow-sm flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-[#102A38] text-[#B58863] flex items-center justify-center shrink-0 border border-[#3D4D55]">
               <Clock className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs font-semibold text-slate-500">Time Taken</p>
-              <p className="text-xl font-bold text-slate-900">{formatTime(stats.timeTakenSeconds)}</p>
+              <p className="text-xs font-semibold text-[#A79E9C]">Time Taken</p>
+              <p className="text-xl font-bold text-[#D3C3B9]">{formatTime(stats.timeTakenSeconds)}</p>
             </div>
           </div>
         </div>
@@ -578,13 +578,13 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           
           {/* Topic Breakdown Card */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-indigo-600" />
+          <div className="bg-[#161616] rounded-2xl p-6 border border-[#3D4D55] shadow-sm space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[#3D4D55]">
+              <h3 className="text-base font-bold text-[#D3C3B9] flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-[#B58863]" />
                 Topic-Wise Performance Breakdown
               </h3>
-              <span className="text-xs text-slate-500 font-medium">
+              <span className="text-xs text-[#A79E9C] font-medium">
                 {Object.keys(stats.topicStats).length} Topics Assessed
               </span>
             </div>
@@ -592,20 +592,17 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
             <div className="space-y-4 pt-1">
               {Object.entries(stats.topicStats).map(([topic, data]) => {
                 const topicPct = Math.round((data.correct / data.total) * 100);
-                const isPass = topicPct >= 70;
                 return (
                   <div key={topic} className="space-y-1.5">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-semibold text-slate-800">{topic}</span>
-                      <span className="font-bold text-slate-600">
+                      <span className="font-semibold text-[#D3C3B9]">{topic}</span>
+                      <span className="font-bold text-[#A79E9C]">
                         {data.correct}/{data.total} ({topicPct}%)
                       </span>
                     </div>
-                    <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                    <div className="w-full bg-[#102A38] rounded-full h-2.5 overflow-hidden border border-[#3D4D55]">
                       <div
-                        className={`h-full rounded-full transition-all duration-500 ${
-                          isPass ? 'bg-emerald-500' : topicPct >= 40 ? 'bg-amber-500' : 'bg-rose-500'
-                        }`}
+                        className="h-full rounded-full transition-all duration-500 bg-[#B58863]"
                         style={{ width: `${topicPct}%` }}
                       />
                     </div>
@@ -616,44 +613,44 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
           </div>
 
           {/* Topics that Need Improvement Card */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
+          <div className="bg-[#161616] rounded-2xl p-6 border border-[#3D4D55] shadow-sm space-y-4 flex flex-col justify-between">
             <div className="space-y-3">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-amber-500" />
+              <div className="flex items-center justify-between pb-3 border-b border-[#3D4D55]">
+                <h3 className="text-base font-bold text-[#D3C3B9] flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5 text-[#B58863]" />
                   Targeted Improvement Areas
                 </h3>
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#102A38] text-[#B58863] border border-[#3D4D55]">
                   {weakTopics.length > 0 ? `${weakTopics.length} Focus Area(s)` : 'All Clear ✓'}
                 </span>
               </div>
 
               {weakTopics.length === 0 ? (
-                <div className="p-6 bg-emerald-50 border border-emerald-200 rounded-2xl text-center space-y-2">
-                  <Sparkles className="w-8 h-8 text-emerald-600 mx-auto" />
-                  <p className="text-sm font-bold text-emerald-900">Outstanding Well-Rounded Mastery!</p>
-                  <p className="text-xs text-emerald-700">
+                <div className="p-6 bg-[#102A38] border border-[#3D4D55] rounded-2xl text-center space-y-2">
+                  <Sparkles className="w-8 h-8 text-[#B58863] mx-auto" />
+                  <p className="text-sm font-bold text-[#D3C3B9]">Outstanding Well-Rounded Mastery!</p>
+                  <p className="text-xs text-[#A79E9C]">
                     You scored 70% or higher across all tested syllabus topics. You are well prepared for technical interviews in {course.name}.
                   </p>
                 </div>
               ) : (
                 <div className="space-y-3">
-                  <p className="text-xs text-slate-600 leading-relaxed">
+                  <p className="text-xs text-[#A79E9C] leading-relaxed">
                     Based on your results, spend extra revision time on these sub-topics before technical interviews:
                   </p>
 
                   <div className="space-y-2.5">
                     {weakTopics.map((wt) => (
-                      <div key={wt.topic} className="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-start gap-3">
-                        <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                      <div key={wt.topic} className="p-3 bg-[#102A38] border border-[#3D4D55] rounded-xl flex items-start gap-3">
+                        <AlertTriangle className="w-4 h-4 text-[#B58863] shrink-0 mt-0.5" />
                         <div className="text-xs space-y-0.5">
                           <div className="flex items-center gap-2">
-                            <span className="font-bold text-slate-900">{wt.topic}</span>
-                            <span className="text-[10px] font-semibold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded">
+                            <span className="font-bold text-[#D3C3B9]">{wt.topic}</span>
+                            <span className="text-[10px] font-semibold text-[#B58863] bg-[#161616] px-1.5 py-0.5 rounded border border-[#3D4D55]">
                               {wt.accuracy}% accuracy ({wt.correct}/{wt.total})
                             </span>
                           </div>
-                          <p className="text-slate-500">
+                          <p className="text-[#A79E9C]">
                             Re-read the intermediate documentation or watch targeted video lessons in the course learning hub.
                           </p>
                         </div>
@@ -664,11 +661,11 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
               )}
             </div>
 
-            <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-              <span className="text-xs text-slate-500">Want to revise before retaking?</span>
+            <div className="pt-4 border-t border-[#3D4D55] flex items-center justify-between">
+              <span className="text-xs text-[#A79E9C]">Want to revise before retaking?</span>
               <button
                 onClick={onBackToCourse}
-                className="text-xs font-bold text-indigo-600 hover:text-indigo-700 hover:underline flex items-center gap-1"
+                className="text-xs font-bold text-[#B58863] hover:underline flex items-center gap-1"
               >
                 Open Free Course Resources <ArrowRight className="w-3.5 h-3.5" />
               </button>
@@ -678,21 +675,21 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
         </div>
 
         {/* Detailed Solution Review */}
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+        <div className="bg-[#161616] rounded-3xl p-6 sm:p-8 border border-[#3D4D55] shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#3D4D55]">
             <div>
-              <h3 className="text-xl font-bold text-slate-900">
+              <h3 className="text-xl font-bold text-[#D3C3B9]">
                 Detailed Solutions & Question Explanations
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#A79E9C]">
                 Review all 30 questions, your chosen responses, and in-depth engineering explanations.
               </p>
             </div>
 
             {/* Filter Pills */}
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
-              <span className="text-xs font-medium text-slate-400 mr-1 flex items-center gap-1">
-                <Filter className="w-3.5 h-3.5" /> Filter:
+              <span className="text-xs font-medium text-[#A79E9C] mr-1 flex items-center gap-1">
+                <Filter className="w-3.5 h-3.5 text-[#B58863]" /> Filter:
               </span>
               {[
                 { id: 'all', label: `All (30)` },
@@ -703,10 +700,10 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
                 <button
                   key={pill.id}
                   onClick={() => setReviewFilter(pill.id)}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors border ${
                     reviewFilter === pill.id
-                      ? 'bg-slate-900 text-white'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      ? 'bg-[#B58863] text-[#161616] border-[#B58863]'
+                      : 'bg-[#102A38] text-[#D3C3B9] border-[#3D4D55] hover:bg-[#3D4D55]'
                   }`}
                 >
                   {pill.label}
@@ -718,7 +715,7 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
           {/* Solution Cards */}
           <div className="space-y-6">
             {filteredQuestionReview.length === 0 ? (
-              <div className="text-center py-12 text-slate-400 text-sm">
+              <div className="text-center py-12 text-[#A79E9C] text-sm">
                 No questions found under this filter.
               </div>
             ) : (
@@ -729,39 +726,39 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
                 return (
                   <div
                     key={q.id || q.questionIdx}
-                    className={`rounded-2xl border p-5 sm:p-6 transition-all ${
+                    className={`rounded-2xl border p-5 sm:p-6 transition-all bg-[#102A38] ${
                       isCorrect
-                        ? 'border-emerald-200 bg-emerald-50/10'
+                        ? 'border-[#3D4D55]'
                         : isAnswered
-                        ? 'border-rose-200 bg-rose-50/10'
-                        : 'border-slate-200 bg-slate-50/30'
+                        ? 'border-[#3D4D55]'
+                        : 'border-[#3D4D55]'
                     }`}
                   >
                     {/* Header */}
-                    <div className="flex items-center justify-between gap-2 pb-3 mb-4 border-b border-slate-100">
+                    <div className="flex items-center justify-between gap-2 pb-3 mb-4 border-b border-[#3D4D55]">
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-xs px-2.5 py-1 rounded-md bg-slate-100 text-slate-800">
+                        <span className="font-bold text-xs px-2.5 py-1 rounded-md bg-[#161616] text-[#B58863] border border-[#3D4D55]">
                           Q{q.questionIdx + 1}
                         </span>
-                        <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                        <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#161616] text-[#D3C3B9] border border-[#3D4D55]">
                           {q.topic}
                         </span>
-                        <span className="text-[11px] font-medium text-slate-500">
+                        <span className="text-[11px] font-medium text-[#A79E9C]">
                           {q.difficulty}
                         </span>
                       </div>
 
                       <div>
                         {isCorrect ? (
-                          <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+                          <span className="inline-flex items-center gap-1 text-xs font-bold text-[#161616] bg-[#B58863] px-2.5 py-0.5 rounded-full">
                             <Check className="w-3.5 h-3.5" /> Correct (+1)
                           </span>
                         ) : isAnswered ? (
-                          <span className="inline-flex items-center gap-1 text-xs font-bold text-rose-700 bg-rose-100 px-2.5 py-0.5 rounded-full">
+                          <span className="inline-flex items-center gap-1 text-xs font-bold text-[#D3C3B9] bg-[#3D4D55] px-2.5 py-0.5 rounded-full border border-[#A79E9C]/40">
                             <X className="w-3.5 h-3.5" /> Incorrect
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-xs font-medium text-slate-600 bg-slate-200 px-2.5 py-0.5 rounded-full">
+                          <span className="inline-flex items-center gap-1 text-xs font-medium text-[#A79E9C] bg-[#161616] px-2.5 py-0.5 rounded-full border border-[#3D4D55]">
                             Skipped / Unanswered
                           </span>
                         )}
@@ -779,20 +776,20 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
                         const isStudentChoice = q.chosen === optIdx;
                         const isTheCorrectOption = q.correctAnswer === optIdx;
 
-                        let cardStyle = 'border-slate-200 bg-white text-slate-700';
+                        let cardStyle = 'border-[#3D4D55] bg-[#161616] text-[#A79E9C]';
                         let badge = null;
 
                         if (isTheCorrectOption) {
-                          cardStyle = 'border-emerald-500 bg-emerald-50/80 text-emerald-900 font-semibold ring-1 ring-emerald-400';
+                          cardStyle = 'border-[#B58863] bg-[#161616] text-[#D3C3B9] font-semibold ring-1 ring-[#B58863]/50';
                           badge = (
-                            <span className="text-[11px] font-bold text-emerald-700 bg-emerald-200/80 px-2 py-0.5 rounded-full shrink-0 flex items-center gap-1">
+                            <span className="text-[11px] font-bold text-[#161616] bg-[#B58863] px-2 py-0.5 rounded-full shrink-0 flex items-center gap-1">
                               <Check className="w-3 h-3" /> Correct Answer
                             </span>
                           );
                         } else if (isStudentChoice && !isCorrect) {
-                          cardStyle = 'border-rose-400 bg-rose-50 text-rose-900 font-medium ring-1 ring-rose-300';
+                          cardStyle = 'border-[#3D4D55] bg-[#161616] text-[#D3C3B9] font-medium';
                           badge = (
-                            <span className="text-[11px] font-bold text-rose-700 bg-rose-200/80 px-2 py-0.5 rounded-full shrink-0 flex items-center gap-1">
+                            <span className="text-[11px] font-bold text-[#D3C3B9] bg-[#3D4D55] px-2 py-0.5 rounded-full shrink-0 flex items-center gap-1">
                               <X className="w-3 h-3" /> Your Answer
                             </span>
                           );
@@ -807,10 +804,10 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
                               <span
                                 className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${
                                   isTheCorrectOption
-                                    ? 'bg-emerald-600 text-white'
+                                    ? 'bg-[#B58863] text-[#161616]'
                                     : isStudentChoice
-                                    ? 'bg-rose-600 text-white'
-                                    : 'bg-slate-100 text-slate-600'
+                                    ? 'bg-[#3D4D55] text-[#D3C3B9]'
+                                    : 'bg-[#102A38] text-[#A79E9C] border border-[#3D4D55]'
                                 }`}
                               >
                                 {String.fromCharCode(65 + optIdx)}
@@ -825,11 +822,11 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
 
                     {/* Explanation Box */}
                     {q.explanation && (
-                      <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-700 space-y-1">
-                        <div className="font-bold text-slate-900 flex items-center gap-1.5 text-xs text-indigo-700">
-                          <Zap className="w-3.5 h-3.5 text-amber-500" /> Explanation & Solution Key:
+                      <div className="p-4 rounded-xl bg-[#161616] border border-[#3D4D55] text-xs sm:text-sm text-[#D3C3B9] space-y-1">
+                        <div className="font-bold text-[#B58863] flex items-center gap-1.5 text-xs">
+                          <Zap className="w-3.5 h-3.5 text-[#B58863]" /> Explanation & Solution Key:
                         </div>
-                        <p className="leading-relaxed pl-5 text-slate-600">
+                        <p className="leading-relaxed pl-5 text-[#A79E9C]">
                           {q.explanation}
                         </p>
                       </div>
@@ -842,8 +839,8 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
           </div>
 
           {/* Bottom Action Footer */}
-          <div className="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-xs text-slate-500">
+          <div className="pt-6 border-t border-[#3D4D55] flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="text-xs text-[#A79E9C]">
               Finished reviewing? Retake to earn a higher skill strength or explore other courses.
             </div>
             <div className="flex items-center gap-3 flex-wrap">
@@ -852,29 +849,29 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
                 disabled={isSyncing || isSynced}
                 className={`px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-1.5 transition-all shadow-md ${
                   isSynced
-                    ? 'bg-emerald-600 text-white cursor-default'
-                    : 'bg-amber-400 hover:bg-amber-300 text-slate-950 shadow-amber-400/20 active:scale-95'
+                    ? 'bg-[#3D4D55] text-[#D3C3B9] cursor-default border border-[#3D4D55]'
+                    : 'bg-[#B58863] hover:bg-[#996f4c] text-[#161616] active:scale-95'
                 }`}
               >
                 {isSynced ? (
                   <>
-                    <CheckCircle2 className="w-4 h-4" /> Badge Synced
+                    <CheckCircle2 className="w-4 h-4 text-[#B58863]" /> Badge Synced
                   </>
                 ) : (
                   <>
-                    <ShieldCheck className="w-4 h-4" /> Sync Badge to Profile
+                    <ShieldCheck className="w-4 h-4 text-[#161616]" /> Sync Badge to Profile
                   </>
                 )}
               </button>
               <button
                 onClick={initializeTest}
-                className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm flex items-center gap-1.5 transition-all shadow-sm"
+                className="px-5 py-2.5 rounded-xl bg-[#102A38] hover:bg-[#3D4D55] text-[#D3C3B9] font-bold text-xs sm:text-sm flex items-center gap-1.5 transition-all border border-[#3D4D55]"
               >
-                <RotateCcw className="w-4 h-4" /> Retake Assessment
+                <RotateCcw className="w-4 h-4 text-[#B58863]" /> Retake Assessment
               </button>
               <button
                 onClick={onBackToCourse}
-                className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm flex items-center gap-1.5 transition-all shadow-md shadow-indigo-600/20"
+                className="px-5 py-2.5 rounded-xl bg-[#B58863] hover:bg-[#996f4c] text-[#161616] font-bold text-xs sm:text-sm flex items-center gap-1.5 transition-all shadow-md"
               >
                 <BookOpen className="w-4 h-4" /> Back to Course Resources
               </button>
@@ -897,27 +894,27 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
     <div className="max-w-7xl mx-auto space-y-6 animate-in fade-in duration-300 pb-16">
       
       {/* Top Test Navigation Bar */}
-      <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 sticky top-16 z-30">
+      <div className="bg-[#161616] rounded-2xl p-4 sm:p-5 border border-[#3D4D55] shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 sticky top-16 z-30">
         
         {/* Left: Course & Question Counter */}
         <div className="flex items-center gap-3 w-full sm:w-auto">
           <button
             onClick={() => setShowSubmitModal(true)}
-            className="p-2 rounded-xl text-slate-500 hover:bg-slate-100 transition-colors"
+            className="p-2 rounded-xl text-[#A79E9C] hover:bg-[#102A38] transition-colors"
             title="Exit / Submit Test"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-5 h-5 text-[#B58863]" />
           </button>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-base sm:text-lg font-bold text-slate-900">{course.name}</h2>
-              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-indigo-50 text-indigo-700">
+              <h2 className="text-base sm:text-lg font-bold text-[#D3C3B9]">{course.name}</h2>
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#102A38] text-[#B58863] border border-[#3D4D55]">
                 Assessment
               </span>
             </div>
-            <p className="text-xs text-slate-500 font-medium">
-              Question <span className="font-bold text-slate-900">{currentIndex + 1}</span> of {questions.length} ·{' '}
-              <span className="text-emerald-600 font-semibold">{stats.answeredCount} answered</span>
+            <p className="text-xs text-[#A79E9C] font-medium">
+              Question <span className="font-bold text-[#D3C3B9]">{currentIndex + 1}</span> of {questions.length} ·{' '}
+              <span className="text-[#B58863] font-semibold">{stats.answeredCount} answered</span>
             </p>
           </div>
         </div>
@@ -929,20 +926,20 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
           <div
             className={`flex items-center gap-2 px-4 py-2 rounded-xl font-mono font-bold text-sm sm:text-base border transition-all ${
               isTimeCritical
-                ? 'bg-rose-50 text-rose-600 border-rose-300 animate-pulse'
+                ? 'bg-[#102A38] text-[#B58863] border-[#B58863] animate-pulse'
                 : isTimeLow
-                ? 'bg-amber-50 text-amber-700 border-amber-300'
-                : 'bg-slate-50 text-slate-700 border-slate-200'
+                ? 'bg-[#102A38] text-[#B58863] border-[#3D4D55]'
+                : 'bg-[#102A38] text-[#D3C3B9] border-[#3D4D55]'
             }`}
           >
-            <Clock className={`w-4 h-4 ${isTimeCritical ? 'text-rose-600' : isTimeLow ? 'text-amber-500' : 'text-slate-500'}`} />
+            <Clock className={`w-4 h-4 ${isTimeCritical ? 'text-[#B58863]' : isTimeLow ? 'text-[#B58863]' : 'text-[#A79E9C]'}`} />
             <span>{formatTime(timeRemaining)}</span>
           </div>
 
           {/* Submit Test Button */}
           <button
             onClick={() => setShowSubmitModal(true)}
-            className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm flex items-center gap-1.5 transition-all shadow-md shadow-emerald-600/20"
+            className="px-5 py-2.5 rounded-xl bg-[#B58863] hover:bg-[#996f4c] text-[#161616] font-bold text-xs sm:text-sm flex items-center gap-1.5 transition-all shadow-md"
           >
             <CheckCircle2 className="w-4 h-4" />
             Submit Assessment
@@ -956,32 +953,32 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
         
         {/* Question Area (8 cols on desktop) */}
         <div className="lg:col-span-8 space-y-6">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+          <div className="bg-[#161616] rounded-3xl p-6 sm:p-8 border border-[#3D4D55] shadow-sm space-y-6">
             
             {/* Question Header: Tag, Difficulty, Mark for Review */}
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100 gap-2">
+            <div className="flex items-center justify-between pb-4 border-b border-[#3D4D55] gap-2">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 font-bold text-xs border border-indigo-100">
+                <span className="px-2.5 py-1 rounded-lg bg-[#102A38] text-[#B58863] font-bold text-xs border border-[#3D4D55]">
                   Question {currentIndex + 1}
                 </span>
-                <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold">
+                <span className="px-2.5 py-0.5 rounded-full bg-[#102A38] text-[#D3C3B9] text-xs font-semibold border border-[#3D4D55]">
                   {currentQ.topic}
                 </span>
-                <span className="text-xs text-slate-500 font-medium">
-                  Difficulty: <strong className="text-slate-700">{currentQ.difficulty}</strong>
+                <span className="text-xs text-[#A79E9C] font-medium">
+                  Difficulty: <strong className="text-[#D3C3B9]">{currentQ.difficulty}</strong>
                 </span>
               </div>
 
               <button
                 onClick={handleToggleReview}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
                   isCurrentMarked
-                    ? 'bg-amber-100 text-amber-800 border border-amber-300 ring-2 ring-amber-200'
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+                    ? 'bg-[#B58863] text-[#161616] border-[#B58863]'
+                    : 'bg-[#102A38] hover:bg-[#3D4D55] text-[#D3C3B9] border-[#3D4D55]'
                 }`}
                 title="Mark this question to review before final submission"
               >
-                <Flag className={`w-3.5 h-3.5 ${isCurrentMarked ? 'fill-amber-600 text-amber-600' : ''}`} />
+                <Flag className={`w-3.5 h-3.5 ${isCurrentMarked ? 'fill-[#161616] text-[#161616]' : 'text-[#A79E9C]'}`} />
                 {isCurrentMarked ? 'Marked for Review' : 'Mark for Review'}
               </button>
             </div>
@@ -1001,15 +998,15 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
                     onClick={() => handleSelectOption(idx)}
                     className={`p-4 rounded-2xl border text-sm sm:text-base cursor-pointer transition-all flex items-center gap-4 ${
                       isSelected
-                        ? 'border-indigo-600 bg-indigo-50/60 ring-2 ring-indigo-500/30 text-indigo-950 font-medium shadow-xs'
-                        : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50/80 text-slate-800'
+                        ? 'border-[#B58863] bg-[#102A38] ring-2 ring-[#B58863]/30 text-[#D3C3B9] font-medium shadow-xs'
+                        : 'border-[#3D4D55] hover:border-[#A79E9C] hover:bg-[#102A38]/50 text-[#A79E9C] hover:text-[#D3C3B9]'
                     }`}
                   >
                     <div
                       className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs shrink-0 transition-colors ${
                         isSelected
-                          ? 'bg-indigo-600 text-white'
-                          : 'bg-slate-100 text-slate-600 border border-slate-200'
+                          ? 'bg-[#B58863] text-[#161616]'
+                          : 'bg-[#3D4D55] text-[#D3C3B9] border border-[#3D4D55]'
                       }`}
                     >
                       {String.fromCharCode(65 + idx)}
@@ -1021,12 +1018,12 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
             </div>
 
             {/* Bottom Controls Bar */}
-            <div className="pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+            <div className="pt-6 border-t border-[#3D4D55] flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setCurrentIndex((prev) => Math.max(0, prev - 1))}
                   disabled={currentIndex === 0}
-                  className="px-4 py-2 rounded-xl border border-slate-300 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-transparent text-slate-700 text-xs sm:text-sm font-semibold flex items-center gap-1 transition-all"
+                  className="px-4 py-2 rounded-xl border border-[#3D4D55] hover:bg-[#102A38] disabled:opacity-40 text-[#D3C3B9] text-xs sm:text-sm font-semibold flex items-center gap-1 transition-all"
                 >
                   <ArrowLeft className="w-4 h-4" /> Previous
                 </button>
@@ -1034,7 +1031,7 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
                 {isCurrentAnswered && (
                   <button
                     onClick={handleClearAnswer}
-                    className="px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors"
+                    className="px-3 py-2 rounded-xl text-xs font-semibold text-[#A79E9C] hover:text-[#B58863] transition-colors"
                   >
                     Clear Response
                   </button>
@@ -1045,14 +1042,14 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
                 {currentIndex < questions.length - 1 ? (
                   <button
                     onClick={() => setCurrentIndex((prev) => Math.min(questions.length - 1, prev + 1))}
-                    className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all shadow-sm"
+                    className="px-5 py-2.5 rounded-xl bg-[#B58863] hover:bg-[#996f4c] text-[#161616] text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all shadow-sm"
                   >
                     Next Question <ArrowRight className="w-4 h-4" />
                   </button>
                 ) : (
                   <button
                     onClick={() => setShowSubmitModal(true)}
-                    className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all shadow-md shadow-emerald-600/20"
+                    className="px-5 py-2.5 rounded-xl bg-[#B58863] hover:bg-[#996f4c] text-[#161616] text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all shadow-md"
                   >
                     Review & Submit <CheckCircle2 className="w-4 h-4" />
                   </button>
@@ -1065,32 +1062,32 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
 
         {/* Question Palette Sidebar (4 cols on desktop) */}
         <div className="lg:col-span-4 space-y-4">
-          <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm space-y-5">
+          <div className="bg-[#161616] rounded-3xl p-5 border border-[#3D4D55] shadow-sm space-y-5">
             
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
-                <Layers className="w-4 h-4 text-indigo-600" />
+            <div className="flex items-center justify-between pb-3 border-b border-[#3D4D55]">
+              <h3 className="text-sm font-bold text-[#D3C3B9] flex items-center gap-1.5">
+                <Layers className="w-4 h-4 text-[#B58863]" />
                 Question Palette (1–30)
               </h3>
-              <span className="text-xs text-slate-400 font-medium">30 Mins</span>
+              <span className="text-xs text-[#A79E9C] font-medium">30 Mins</span>
             </div>
 
             {/* Status Legend */}
-            <div className="grid grid-cols-2 gap-2 text-[11px] font-medium text-slate-600 pb-2">
+            <div className="grid grid-cols-2 gap-2 text-[11px] font-medium text-[#A79E9C] pb-2">
               <div className="flex items-center gap-2">
-                <div className="w-3.5 h-3.5 rounded bg-emerald-500 shrink-0" />
+                <div className="w-3.5 h-3.5 rounded bg-[#B58863] shrink-0" />
                 <span>Answered ({stats.answeredCount})</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-3.5 h-3.5 rounded bg-slate-100 border border-slate-300 shrink-0" />
+                <div className="w-3.5 h-3.5 rounded bg-[#102A38] border border-[#3D4D55] shrink-0" />
                 <span>Not Answered ({stats.unansweredCount})</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-3.5 h-3.5 rounded bg-amber-400 shrink-0" />
+                <div className="w-3.5 h-3.5 rounded bg-[#3D4D55] border border-[#A79E9C] shrink-0" />
                 <span>Review ({stats.reviewCount})</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-3.5 h-3.5 rounded bg-indigo-600 shrink-0" />
+                <div className="w-3.5 h-3.5 rounded bg-[#D3C3B9] shrink-0" />
                 <span>Current</span>
               </div>
             </div>
@@ -1102,14 +1099,14 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
                 const isMarked = !!markedForReview[idx];
                 const isCurrent = currentIndex === idx;
 
-                let btnStyle = 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200';
+                let btnStyle = 'bg-[#102A38] text-[#A79E9C] hover:bg-[#3D4D55] hover:text-[#D3C3B9] border border-[#3D4D55]';
 
                 if (isCurrent) {
-                  btnStyle = 'bg-indigo-600 text-white font-bold ring-2 ring-indigo-400 shadow-sm';
+                  btnStyle = 'bg-[#B58863] text-[#161616] font-bold ring-2 ring-[#D3C3B9] shadow-sm';
                 } else if (isMarked) {
-                  btnStyle = 'bg-amber-400 text-amber-950 font-bold border border-amber-500';
+                  btnStyle = 'bg-[#3D4D55] text-[#D3C3B9] font-bold border border-[#A79E9C]';
                 } else if (isAnswered) {
-                  btnStyle = 'bg-emerald-500 text-white font-semibold';
+                  btnStyle = 'bg-[#B58863]/80 text-[#161616] font-bold border border-[#B58863]';
                 }
 
                 return (
@@ -1121,7 +1118,7 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
                   >
                     {idx + 1}
                     {isMarked && !isCurrent && (
-                      <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-600 ring-1 ring-white" />
+                      <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#B58863] ring-1 ring-[#161616]" />
                     )}
                   </button>
                 );
@@ -1129,14 +1126,14 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
             </div>
 
             {/* Assessment Progress Summary */}
-            <div className="pt-4 border-t border-slate-100 space-y-2">
-              <div className="flex items-center justify-between text-xs font-semibold text-slate-600">
+            <div className="pt-4 border-t border-[#3D4D55] space-y-2">
+              <div className="flex items-center justify-between text-xs font-semibold text-[#A79E9C]">
                 <span>Completion</span>
-                <span>{Math.round((stats.answeredCount / 30) * 100)}%</span>
+                <span className="text-[#D3C3B9]">{Math.round((stats.answeredCount / 30) * 100)}%</span>
               </div>
-              <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+              <div className="w-full bg-[#102A38] rounded-full h-2 overflow-hidden border border-[#3D4D55]">
                 <div
-                  className="bg-emerald-500 h-full rounded-full transition-all duration-300"
+                  className="bg-[#B58863] h-full rounded-full transition-all duration-300"
                   style={{ width: `${(stats.answeredCount / 30) * 100}%` }}
                 />
               </div>
@@ -1145,9 +1142,9 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
             {/* Bottom Final Submit CTA in Palette */}
             <button
               onClick={() => setShowSubmitModal(true)}
-              className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+              className="w-full py-2.5 rounded-xl bg-[#B58863] hover:bg-[#996f4c] text-[#161616] font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-sm"
             >
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <CheckCircle2 className="w-4 h-4 text-[#161616]" />
               Finish & Submit Test
             </button>
 
@@ -1158,40 +1155,40 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
 
       {/* Confirmation Modal before Submit */}
       {showSubmitModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-slate-100 space-y-5 animate-in zoom-in-95 duration-200">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto">
+        <div className="fixed inset-0 z-50 bg-[#161616]/80 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-[#161616] rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-[#3D4D55] space-y-5 animate-in zoom-in-95 duration-200">
+            <div className="w-12 h-12 rounded-2xl bg-[#102A38] text-[#B58863] border border-[#3D4D55] flex items-center justify-center mx-auto">
               <ShieldCheck className="w-6 h-6" />
             </div>
 
             <div className="text-center space-y-1">
-              <h3 className="text-xl font-extrabold text-slate-900">Ready to Submit Assessment?</h3>
-              <p className="text-xs text-slate-500">
+              <h3 className="text-xl font-extrabold text-[#D3C3B9]">Ready to Submit Assessment?</h3>
+              <p className="text-xs text-[#A79E9C]">
                 Your answers will be evaluated to determine your official skill strength level for {course.name}.
               </p>
             </div>
 
             {/* Status Overview in Modal */}
-            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 grid grid-cols-3 gap-2 text-center text-xs">
+            <div className="bg-[#102A38] rounded-2xl p-4 border border-[#3D4D55] grid grid-cols-3 gap-2 text-center text-xs">
               <div>
-                <p className="font-bold text-emerald-600 text-lg">{stats.answeredCount}</p>
-                <p className="text-slate-500 text-[11px]">Answered</p>
+                <p className="font-bold text-[#B58863] text-lg">{stats.answeredCount}</p>
+                <p className="text-[#A79E9C] text-[11px]">Answered</p>
               </div>
               <div>
-                <p className="font-bold text-rose-500 text-lg">{stats.unansweredCount}</p>
-                <p className="text-slate-500 text-[11px]">Unanswered</p>
+                <p className="font-bold text-[#D3C3B9] text-lg">{stats.unansweredCount}</p>
+                <p className="text-[#A79E9C] text-[11px]">Unanswered</p>
               </div>
               <div>
-                <p className="font-bold text-amber-500 text-lg">{stats.reviewCount}</p>
-                <p className="text-slate-500 text-[11px]">Marked Review</p>
+                <p className="font-bold text-[#A79E9C] text-lg">{stats.reviewCount}</p>
+                <p className="text-[#A79E9C] text-[11px]">Marked Review</p>
               </div>
             </div>
 
             {stats.unansweredCount > 0 && (
-              <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800 flex items-start gap-2">
-                <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+              <div className="p-3 bg-[#102A38] border border-[#3D4D55] rounded-xl text-xs text-[#D3C3B9] flex items-start gap-2">
+                <AlertTriangle className="w-4 h-4 text-[#B58863] shrink-0 mt-0.5" />
                 <span>
-                  You still have <strong>{stats.unansweredCount} unanswered questions</strong>. You can return to answer them before time expires.
+                  You still have <strong className="text-[#B58863]">{stats.unansweredCount} unanswered questions</strong>. You can return to answer them before time expires.
                 </span>
               </div>
             )}
@@ -1199,13 +1196,13 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
             <div className="flex items-center gap-3 pt-2">
               <button
                 onClick={() => setShowSubmitModal(false)}
-                className="flex-1 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm transition-colors"
+                className="flex-1 py-2.5 rounded-xl border border-[#3D4D55] hover:bg-[#102A38] text-[#D3C3B9] font-bold text-xs sm:text-sm transition-colors"
               >
                 Continue Test
               </button>
               <button
                 onClick={handleConfirmSubmit}
-                className="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm transition-all shadow-md shadow-emerald-600/20"
+                className="flex-1 py-2.5 rounded-xl bg-[#B58863] hover:bg-[#996f4c] text-[#161616] font-bold text-xs sm:text-sm transition-all shadow-md"
               >
                 Submit Now
               </button>

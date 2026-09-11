@@ -901,8 +901,71 @@ class DataStore {
     );
   }
 
-  registerFaculty() {
-    return { error: 'Self-registration for institutions is disabled. Institution accounts can only be created by the Platform Administrator.' };
+  registerFaculty(formData) {
+    if (!formData.email || !formData.name) {
+      return { error: 'Faculty name and official email are required.' };
+    }
+    if (!formData.collegeName && !formData.collegeId) {
+      return { error: 'Institution / College name is required.' };
+    }
+
+    const cleanEmail = formData.email.trim().toLowerCase();
+    const existingFaculty = (this.data.faculty || []).find(f => f.email && f.email.toLowerCase() === cleanEmail);
+    if (existingFaculty) {
+      return { error: `Faculty account with email "${cleanEmail}" is already registered.` };
+    }
+
+    const targetCollege = this.getCollegeById(formData.collegeId || formData.collegeName) || (this.data.colleges || [])[0];
+    const newFacultyId = `fac_${Date.now()}`;
+    const cleanEmpId = (formData.facultyId || `FAC-${Date.now().toString().slice(-4)}`).toUpperCase();
+
+    const facultyEntry = {
+      id: newFacultyId,
+      name: formData.name.trim(),
+      email: cleanEmail,
+      facultyId: cleanEmpId,
+      collegeId: targetCollege?.id || 'col_apex',
+      collegeName: targetCollege?.name || formData.collegeName || 'Apex Institute of Technology',
+      department: formData.department || 'Computer Science & Engineering (CSE)',
+      phone: formData.phone || '+91 98765 00000',
+      status: 'Active',
+      createdAt: new Date().toISOString(),
+      lastLoginAt: new Date().toISOString()
+    };
+
+    if (!this.data.faculty) this.data.faculty = [];
+    this.data.faculty.push(facultyEntry);
+
+    // Create user record for faculty login
+    const newUser = {
+      id: `usr_${newFacultyId}`,
+      name: formData.name.trim(),
+      email: cleanEmail,
+      role: 'college',
+      facultyId: cleanEmpId,
+      collegeId: targetCollege?.id || 'col_apex',
+      collegeName: targetCollege?.name || formData.collegeName,
+      department: formData.department,
+      title: targetCollege?.name || formData.collegeName,
+      status: 'Active',
+      avatar: formData.avatar || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80',
+      badge: 'Institution Faculty',
+      createdAt: new Date().toISOString()
+    };
+    this.data.users.push(newUser);
+    this.save();
+
+    this.logAudit(
+      'FACULTY_REGISTERED',
+      'College Faculty',
+      formData.name,
+      cleanEmail,
+      targetCollege?.name,
+      `Registered faculty member ${formData.name} under ${targetCollege?.name}.`,
+      'Success'
+    );
+
+    return { success: true, faculty: facultyEntry, user: newUser };
   }
 
   authenticateInstitution(email, password) {
@@ -1297,15 +1360,156 @@ class DataStore {
 
     const userId = `usr_${Date.now()}`;
     const role = formData.role || 'student';
-    const collegeName = formData.collegeName || 'Apex Institute of Technology';
-    const collegeId = formData.collegeId || (role === 'college' ? `col_${Date.now()}` : 'col_apex');
+    const cleanName = formData.name.trim();
+    const collegeName = formData.collegeName || formData.institutionName || 'Apex Institute of Technology';
     const avatar = formData.avatar || (role === 'student' 
       ? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80' 
-      : 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80');
+      : role === 'college'
+        ? 'https://images.unsplash.com/photo-1562774053-701939374585?w=150&auto=format&fit=crop&q=80'
+        : 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80');
 
+    // ==================== INSTITUTION REGISTRATION ====================
+    if (role === 'college') {
+      const cleanInstId = (
+        formData.institutionId || 
+        formData.collegeCode || 
+        `INST${(this.data.colleges.length + 1).toString().padStart(3, '0')}`
+      ).toUpperCase().trim();
+
+      const colId = formData.collegeId || `col_${cleanInstId.toLowerCase()}_${Date.now()}`;
+      const pwdHash = hashPassword(formData.password);
+
+      // Check if college already exists
+      let collegeRecord = (this.data.colleges || []).find(c => 
+        (c.institutionId && c.institutionId.toUpperCase() === cleanInstId) ||
+        (c.id && c.id.toLowerCase() === colId.toLowerCase()) ||
+        (c.name && c.name.toLowerCase() === collegeName.toLowerCase())
+      );
+
+      if (!collegeRecord) {
+        collegeRecord = {
+          id: colId,
+          institutionId: cleanInstId,
+          name: collegeName,
+          code: cleanInstId,
+          email: cleanEmail,
+          location: formData.location || formData.district || 'Andhra Pradesh, India',
+          type: formData.type || 'Registered Technical Institution',
+          departments: formData.departments || [
+            'Computer Science & Engineering (CSE)',
+            'Information Technology (IT)',
+            'Electronics & Communication Engineering (ECE)',
+            'Artificial Intelligence & Data Science (AI & DS)'
+          ],
+          passwordPlain: formData.password,
+          passwordHash: pwdHash,
+          sharedPasswordPlain: formData.password,
+          facultyPasswordHash: pwdHash,
+          partnerRecruiters: ['TechNova Solutions', 'CloudScale Inc', 'FinTech Dynamics'],
+          placementStats: { avgPlacementPct: 85.0, highestPackage: '₹32.0 LPA', medianPackage: '₹8.0 LPA' },
+          createdAt: new Date().toISOString()
+        };
+        if (!this.data.colleges) this.data.colleges = [];
+        this.data.colleges.push(collegeRecord);
+      } else {
+        collegeRecord.institutionId = cleanInstId;
+        collegeRecord.email = cleanEmail;
+        collegeRecord.passwordPlain = formData.password;
+        collegeRecord.passwordHash = pwdHash;
+        collegeRecord.sharedPasswordPlain = formData.password;
+        collegeRecord.facultyPasswordHash = pwdHash;
+        if (formData.location) collegeRecord.location = formData.location;
+      }
+
+      const newUser = {
+        id: userId,
+        name: collegeName,
+        email: cleanEmail,
+        password: formData.password,
+        passwordHash: pwdHash,
+        role: 'college',
+        avatar: avatar,
+        institutionId: cleanInstId,
+        collegeId: collegeRecord.id,
+        collegeName: collegeName,
+        title: collegeName,
+        status: 'Active',
+        badge: `Institution (${cleanInstId})`,
+        createdAt: new Date().toISOString()
+      };
+
+      this.data.users.unshift(newUser);
+
+      const institutionProfile = {
+        id: collegeRecord.id,
+        institutionId: cleanInstId,
+        name: collegeName,
+        code: cleanInstId,
+        email: cleanEmail,
+        location: collegeRecord.location,
+        departments: collegeRecord.departments,
+        deanName: cleanName,
+        deanEmail: cleanEmail
+      };
+
+      this.logAudit(
+        'INSTITUTION_REGISTERED',
+        'Institution',
+        cleanName,
+        cleanEmail,
+        collegeName,
+        `Institution "${collegeName}" (${cleanInstId}) registered successfully.`,
+        'Success'
+      );
+
+      this.save();
+      return { success: true, user: newUser, profile: institutionProfile, college: collegeRecord };
+    }
+
+    // ==================== SUPER ADMIN REGISTRATION ====================
+    if (role === 'admin') {
+      const newUser = {
+        id: userId,
+        name: cleanName,
+        email: cleanEmail,
+        password: formData.password,
+        passwordHash: hashPassword(formData.password),
+        role: 'admin',
+        avatar: avatar,
+        title: 'Platform Super Admin',
+        badge: 'Platform Admin',
+        createdAt: new Date().toISOString()
+      };
+
+      this.data.users.unshift(newUser);
+
+      const adminProfile = {
+        id: userId,
+        name: cleanName,
+        email: cleanEmail,
+        role: 'admin',
+        title: 'Platform Super Admin'
+      };
+
+      this.logAudit(
+        'SUPER_ADMIN_REGISTERED',
+        'Platform Admin',
+        cleanName,
+        cleanEmail,
+        'SkillBridge Platform',
+        `New Super Admin "${cleanName}" registered successfully.`,
+        'Success'
+      );
+
+      this.save();
+      return { success: true, user: newUser, profile: adminProfile };
+    }
+
+    // ==================== STUDENT REGISTRATION ====================
+    const collegeId = formData.collegeId || 'col_apex';
     const newUser = {
       id: userId,
-      name: formData.name.trim(),
+      name: cleanName,
       email: cleanEmail,
       password: formData.password,
       role: role,
@@ -1314,7 +1518,7 @@ class DataStore {
       collegeName: collegeName,
       collegeCode: formData.collegeCode || '',
       district: formData.district || '',
-      title: role === 'college' ? collegeName : (formData.title || `${formData.department || 'CS'} Student`),
+      title: role === 'company' ? (formData.title || 'Industry Representative') : (formData.title || `${formData.department || 'CS'} Student`),
       createdAt: new Date().toISOString()
     };
     this.data.users.unshift(newUser);
@@ -1350,7 +1554,7 @@ class DataStore {
 
       profile = {
         id: userId,
-        name: formData.name.trim(),
+        name: cleanName,
         email: cleanEmail,
         phone: formData.phone || '+91 98765 00000',
         avatar: avatar,

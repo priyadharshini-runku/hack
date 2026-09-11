@@ -147,15 +147,15 @@ export const LearningResources = () => {
   const renderResourceTypeIcon = (type) => {
     const t = type.toLowerCase();
     if (t.includes('youtube') || t.includes('video')) {
-      return <Video className="w-4 h-4 text-rose-600 shrink-0" />;
+      return <Video className="w-4 h-4 text-[#B58863] shrink-0" />;
     }
     if (t.includes('doc') || t.includes('reference')) {
-      return <FileText className="w-4 h-4 text-sky-600 shrink-0" />;
+      return <FileText className="w-4 h-4 text-[#D3C3B9] shrink-0" />;
     }
     if (t.includes('practice') || t.includes('lab') || t.includes('problem')) {
-      return <Code className="w-4 h-4 text-purple-600 shrink-0" />;
+      return <Code className="w-4 h-4 text-[#B58863] shrink-0" />;
     }
-    return <Compass className="w-4 h-4 text-emerald-600 shrink-0" />;
+    return <Compass className="w-4 h-4 text-[#D3C3B9] shrink-0" />;
   };
 
   // Filter courses based on search & category
@@ -207,67 +207,67 @@ export const LearningResources = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-in fade-in duration-300 pb-16">
         
         {/* Navigation Breadcrumbs */}
-        <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+        <div className="flex items-center gap-2 text-xs font-semibold text-[#A79E9C]">
           <button
             onClick={() => setView('catalog')}
-            className="hover:text-indigo-600 flex items-center gap-1 transition-colors"
+            className="hover:text-[#B58863] text-[#D3C3B9] flex items-center gap-1 transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" /> All Courses
+            <ArrowLeft className="w-4 h-4 text-[#B58863]" /> All Courses
           </button>
           <span>/</span>
-          <span className="text-slate-400">{selectedCourse.category}</span>
+          <span className="text-[#A79E9C]">{selectedCourse.category}</span>
           <span>/</span>
-          <span className="text-slate-900 font-bold">{selectedCourse.name}</span>
+          <span className="text-[#D3C3B9] font-bold">{selectedCourse.name}</span>
         </div>
 
         {/* Course Header Banner */}
-        <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden border border-slate-800">
-          <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="bg-[#161616] rounded-3xl p-6 sm:p-10 text-[#D3C3B9] shadow-xl relative overflow-hidden border border-[#3D4D55]">
+          <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-80 h-80 bg-[#B58863]/5 rounded-full blur-3xl pointer-events-none"></div>
 
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative z-10">
             <div className="space-y-3 max-w-3xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-semibold border border-indigo-500/30">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#102A38] text-[#B58863] text-xs font-semibold border border-[#3D4D55]">
                 {renderCourseIcon(selectedCourse.icon, "w-4 h-4")}
                 {selectedCourse.category}
               </div>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-display tracking-tight text-white">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#D3C3B9]">
                 {selectedCourse.name}
               </h1>
 
-              <p className="text-base sm:text-lg font-medium text-indigo-200">
+              <p className="text-base sm:text-lg font-medium text-[#B58863]">
                 {selectedCourse.tagline}
               </p>
 
-              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-2xl">
+              <p className="text-[#A79E9C] text-xs sm:text-sm leading-relaxed max-w-2xl">
                 {selectedCourse.description}
               </p>
             </div>
 
             {/* Quick Assessment CTA Card */}
-            <div className="bg-white/10 p-6 rounded-2xl backdrop-blur-md border border-white/15 w-full lg:w-80 shrink-0 space-y-4 shadow-xl">
+            <div className="bg-[#102A38] p-6 rounded-2xl border border-[#3D4D55] w-full lg:w-80 shrink-0 space-y-4 shadow-xl">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-amber-400/20 border border-amber-400/30 flex items-center justify-center shrink-0">
-                  <ShieldCheck className="w-6 h-6 text-amber-400" />
+                <div className="w-12 h-12 rounded-xl bg-[#B58863]/20 border border-[#B58863]/30 flex items-center justify-center shrink-0">
+                  <ShieldCheck className="w-6 h-6 text-[#B58863]" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-white text-sm">30-Minute Assessment</h3>
-                  <p className="text-xs text-slate-300">30 Questions · Medium to Hard</p>
+                  <h3 className="font-extrabold text-[#D3C3B9] text-sm">30-Minute Assessment</h3>
+                  <p className="text-xs text-[#A79E9C]">30 Questions · Medium to Hard</p>
                 </div>
               </div>
 
-              <div className="text-xs text-slate-300 space-y-1.5 pt-1">
+              <div className="text-xs text-[#A79E9C] space-y-1.5 pt-1">
                 <div className="flex items-center gap-2">
-                  <Clock className="w-3.5 h-3.5 text-indigo-300" /> 30:00 Countdown Timer
+                  <Clock className="w-3.5 h-3.5 text-[#B58863]" /> 30:00 Countdown Timer
                 </div>
                 <div className="flex items-center gap-2">
-                  <Award className="w-3.5 h-3.5 text-indigo-300" /> Know Your Skill Strength
+                  <Award className="w-3.5 h-3.5 text-[#B58863]" /> Know Your Skill Strength
                 </div>
               </div>
 
               <button
                 onClick={() => handleStartAssessment(selectedCourse)}
-                className="w-full py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-sm flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-500/30 active:scale-[0.98]"
+                className="w-full py-3 px-4 rounded-xl bg-[#B58863] hover:bg-[#996f4c] text-[#161616] font-extrabold text-sm flex items-center justify-center gap-2 transition-all shadow-md active:scale-[0.98]"
               >
                 <Zap className="w-4 h-4" />
                 Take 30-Minute Assessment
@@ -277,9 +277,9 @@ export const LearningResources = () => {
         </div>
 
         {/* 3-Step Flow Notification Banner */}
-        <div className="bg-indigo-50/60 border border-indigo-200/80 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-indigo-950">
+        <div className="bg-[#102A38] border border-[#3D4D55] rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-[#D3C3B9]">
           <div className="flex items-center gap-3">
-            <span className="w-8 h-8 rounded-xl bg-indigo-600 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-sm">
+            <span className="w-8 h-8 rounded-xl bg-[#B58863] text-[#161616] font-bold flex items-center justify-center text-xs shrink-0 shadow-sm">
               3-Step
             </span>
             <span>
@@ -290,7 +290,7 @@ export const LearningResources = () => {
           </div>
           <button
             onClick={() => handleStartAssessment(selectedCourse)}
-            className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shrink-0 flex items-center gap-1 transition-colors"
+            className="px-4 py-2 rounded-xl bg-[#B58863] hover:bg-[#996f4c] text-[#161616] font-bold text-xs shrink-0 flex items-center gap-1 transition-colors"
           >
             Start Assessment Now <ArrowRight className="w-3.5 h-3.5" />
           </button>
@@ -301,34 +301,34 @@ export const LearningResources = () => {
           
           {/* Left Column (7 cols): Beginner to Advanced Learning Path */}
           <div className="lg:col-span-7 space-y-6">
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+            <div className="bg-[#161616] rounded-3xl p-6 sm:p-8 border border-[#3D4D55] shadow-sm space-y-6">
               
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-100">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-[#3D4D55]">
                 <div>
-                  <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                    <Target className="w-5 h-5 text-indigo-600" />
+                  <h2 className="text-xl font-bold text-[#D3C3B9] flex items-center gap-2">
+                    <Target className="w-5 h-5 text-[#B58863]" />
                     Structured Learning Path
                   </h2>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-[#A79E9C]">
                     Step-by-step progression from foundational concepts to production-grade engineering.
                   </p>
                 </div>
               </div>
 
               {/* Learning Path Tabs */}
-              <div className="flex items-center p-1 bg-slate-100 rounded-xl">
+              <div className="flex items-center p-1 bg-[#102A38] rounded-xl border border-[#3D4D55]">
                 {[
-                  { id: 'beginner', label: '1. Beginner', color: 'text-rose-700' },
-                  { id: 'intermediate', label: '2. Intermediate', color: 'text-indigo-700' },
-                  { id: 'advanced', label: '3. Advanced', color: 'text-purple-700' }
+                  { id: 'beginner', label: '1. Beginner' },
+                  { id: 'intermediate', label: '2. Intermediate' },
+                  { id: 'advanced', label: '3. Advanced' }
                 ].map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActivePathTab(tab.id)}
                     className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${
                       activePathTab === tab.id
-                        ? 'bg-white text-slate-900 shadow-xs'
-                        : 'text-slate-600 hover:text-slate-900'
+                        ? 'bg-[#B58863] text-[#161616] shadow-xs'
+                        : 'text-[#A79E9C] hover:text-[#D3C3B9]'
                     }`}
                   >
                     {tab.label}
@@ -341,12 +341,12 @@ export const LearningResources = () => {
                 {selectedCourse.learningPath[activePathTab]?.map((step, idx) => (
                   <div
                     key={idx}
-                    className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-start gap-3.5 hover:bg-slate-50/80 transition-colors"
+                    className="p-4 rounded-2xl bg-[#102A38] border border-[#3D4D55] flex items-start gap-3.5 transition-colors"
                   >
-                    <div className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                    <div className="w-6 h-6 rounded-full bg-[#3D4D55] text-[#D3C3B9] font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 border border-[#A79E9C]/30">
                       {idx + 1}
                     </div>
-                    <div className="text-xs sm:text-sm text-slate-800 font-medium leading-relaxed">
+                    <div className="text-xs sm:text-sm text-[#D3C3B9] font-medium leading-relaxed">
                       {step}
                     </div>
                   </div>
@@ -358,14 +358,14 @@ export const LearningResources = () => {
 
           {/* Right Column (5 cols): Important Core Topics to Learn */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+            <div className="bg-[#161616] rounded-3xl p-6 sm:p-8 border border-[#3D4D55] shadow-sm space-y-6">
               
-              <div className="pb-4 border-b border-slate-100">
-                <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                  <CheckSquare className="w-5 h-5 text-emerald-600" />
+              <div className="pb-4 border-b border-[#3D4D55]">
+                <h2 className="text-xl font-bold text-[#D3C3B9] flex items-center gap-2">
+                  <CheckSquare className="w-5 h-5 text-[#B58863]" />
                   Important Topics to Learn
                 </h2>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-[#A79E9C]">
                   Key syllabus competencies tested in the 30-minute assessment.
                 </p>
               </div>
@@ -374,9 +374,9 @@ export const LearningResources = () => {
                 {selectedCourse.topics.map((topic, idx) => (
                   <div
                     key={idx}
-                    className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-3 text-xs sm:text-sm text-slate-700"
+                    className="p-3 rounded-xl bg-[#102A38] border border-[#3D4D55] flex items-start gap-3 text-xs sm:text-sm text-[#D3C3B9]"
                   >
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-4 h-4 text-[#B58863] shrink-0 mt-0.5" />
                     <span className="font-medium leading-snug">{topic}</span>
                   </div>
                 ))}
@@ -391,14 +391,14 @@ export const LearningResources = () => {
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200 mb-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#102A38] text-[#B58863] text-xs font-semibold border border-[#3D4D55] mb-2">
                 <Sparkles className="w-3.5 h-3.5" />
                 100% Free & Verified Content
               </div>
-              <h2 className="text-2xl font-extrabold text-slate-900">
+              <h2 className="text-2xl font-extrabold text-[#D3C3B9]">
                 Curated Free Learning Resources
               </h2>
-              <p className="text-xs sm:text-sm text-slate-500">
+              <p className="text-xs sm:text-sm text-[#A79E9C]">
                 Study from official docs, full video tutorials, and interactive coding platforms.
               </p>
             </div>
@@ -412,41 +412,41 @@ export const LearningResources = () => {
               return (
                 <div
                   key={idx}
-                  className={`bg-white rounded-3xl border p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4 ${
-                    isDone ? 'border-emerald-300 ring-1 ring-emerald-200 bg-emerald-50/10' : 'border-slate-200'
+                  className={`bg-[#161616] rounded-3xl border p-6 shadow-sm hover:border-[#B58863] transition-all flex flex-col justify-between space-y-4 ${
+                    isDone ? 'border-[#B58863] ring-1 ring-[#B58863]/30 bg-[#161616]' : 'border-[#3D4D55]'
                   }`}
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg">
+                      <div className="flex items-center gap-1.5 text-xs font-semibold text-[#D3C3B9] bg-[#102A38] px-2.5 py-1 rounded-lg border border-[#3D4D55]">
                         {renderResourceTypeIcon(res.type)}
                         <span>{res.type}</span>
                       </div>
-                      <span className="text-xs font-medium text-slate-500">
+                      <span className="text-xs font-medium text-[#A79E9C]">
                         {res.provider}
                       </span>
                     </div>
 
-                    <h3 className="text-base font-bold text-slate-900 leading-snug">
+                    <h3 className="text-base font-bold text-[#D3C3B9] leading-snug">
                       {res.title}
                     </h3>
 
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-[#A79E9C] leading-relaxed">
                       {res.description}
                     </p>
                   </div>
 
                   {/* Bottom Action Buttons */}
-                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
+                  <div className="pt-4 border-t border-[#3D4D55] flex items-center justify-between gap-3">
                     <button
                       onClick={() => toggleResourceCompleted(res.title)}
-                      className={`text-xs font-semibold flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-colors ${
+                      className={`text-xs font-semibold flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-colors border ${
                         isDone
-                          ? 'bg-emerald-100 text-emerald-800'
-                          : 'text-slate-500 hover:bg-slate-100'
+                          ? 'bg-[#B58863]/20 border-[#B58863] text-[#B58863]'
+                          : 'text-[#A79E9C] border-[#3D4D55] hover:bg-[#102A38] hover:text-[#D3C3B9]'
                       }`}
                     >
-                      <Check className={`w-3.5 h-3.5 ${isDone ? 'text-emerald-700' : 'text-slate-400'}`} />
+                      <Check className={`w-3.5 h-3.5 ${isDone ? 'text-[#B58863]' : 'text-[#A79E9C]'}`} />
                       {isDone ? 'Finished' : 'Mark as Studied'}
                     </button>
 
@@ -454,7 +454,7 @@ export const LearningResources = () => {
                       href={res.url}
                       target="_blank"
                       rel="noreferrer"
-                      className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm group"
+                      className="px-4 py-2 rounded-xl bg-[#B58863] hover:bg-[#996f4c] text-[#161616] font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm group"
                     >
                       Open Resource
                       <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
@@ -468,21 +468,21 @@ export const LearningResources = () => {
         </div>
 
         {/* Bottom Prominent Assessment Banner */}
-        <div className="bg-gradient-to-r from-emerald-600 via-teal-700 to-indigo-900 rounded-3xl p-6 sm:p-10 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="bg-[#161616] rounded-3xl p-6 sm:p-10 text-[#D3C3B9] shadow-xl border border-[#3D4D55] flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-2 max-w-2xl text-center md:text-left">
-            <h3 className="text-2xl sm:text-3xl font-extrabold font-display">
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-[#D3C3B9]">
               Ready to Prove Your {selectedCourse.name} Mastery?
             </h3>
-            <p className="text-emerald-100 text-xs sm:text-sm leading-relaxed">
+            <p className="text-[#A79E9C] text-xs sm:text-sm leading-relaxed">
               Take the 30-minute, 30-question technical assessment. Experience code output questions, conceptual puzzles, and debugging problems to know your Skill Strength level (Beginner &rarr; Developing &rarr; Intermediate &rarr; Strong &rarr; Excellent).
             </p>
           </div>
 
           <button
             onClick={() => handleStartAssessment(selectedCourse)}
-            className="px-8 py-4 rounded-2xl bg-white hover:bg-slate-100 text-emerald-950 font-black text-sm sm:text-base flex items-center gap-2 transition-all shadow-xl hover:shadow-2xl active:scale-95 shrink-0"
+            className="px-8 py-4 rounded-2xl bg-[#B58863] hover:bg-[#996f4c] text-[#161616] font-black text-sm sm:text-base flex items-center gap-2 transition-all shadow-xl active:scale-95 shrink-0"
           >
-            <Zap className="w-5 h-5 text-amber-500" />
+            <Zap className="w-5 h-5 text-[#161616]" />
             Take 30-Minute Assessment
           </button>
         </div>
@@ -498,52 +498,52 @@ export const LearningResources = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-in fade-in duration-300 pb-16">
       
       {/* Hero Banner with 3-Step Overview */}
-      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden border border-slate-800">
-        <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="bg-[#161616] rounded-3xl p-6 sm:p-10 text-[#D3C3B9] shadow-xl relative overflow-hidden border border-[#3D4D55]">
+        <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-80 h-80 bg-[#B58863]/5 rounded-full blur-3xl pointer-events-none"></div>
 
         <div className="space-y-4 max-w-3xl relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold border border-emerald-500/30">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#102A38] text-[#B58863] text-xs font-semibold border border-[#3D4D55]">
             <Sparkles className="w-3.5 h-3.5" />
             SkillBridge Learning Hub · 20 Engineering Courses
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-display tracking-tight text-white">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#D3C3B9]">
             Learn Free Resources & Prove Your Skill Strength
           </h1>
 
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-            Access curated free tutorials, video playlists, and official documentation across 20 core engineering subjects. Complete each course and take a rigorous <strong>30-minute, 30-question assessment</strong> to determine your verified skill strength.
+          <p className="text-[#A79E9C] text-sm sm:text-base leading-relaxed">
+            Access curated free tutorials, video playlists, and official documentation across 20 core engineering subjects. Complete each course and take a rigorous <strong className="text-[#D3C3B9]">30-minute, 30-question assessment</strong> to determine your verified skill strength.
           </p>
 
           {/* 3-Step Cards inside Hero */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3">
-            <div className="bg-white/5 border border-white/10 p-3.5 rounded-2xl backdrop-blur-xs flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center font-bold text-xs shrink-0">
+            <div className="bg-[#102A38] border border-[#3D4D55] p-3.5 rounded-2xl flex items-center gap-3">
+              <div className="w-8 h-8 rounded-xl bg-[#3D4D55] text-[#B58863] flex items-center justify-center font-bold text-xs shrink-0 border border-[#A79E9C]/30">
                 1
               </div>
               <div className="text-xs">
-                <p className="font-bold text-white">Learn Free</p>
-                <p className="text-slate-400">Playlists, Docs & Platforms</p>
+                <p className="font-bold text-[#D3C3B9]">Learn Free</p>
+                <p className="text-[#A79E9C]">Playlists, Docs & Platforms</p>
               </div>
             </div>
 
-            <div className="bg-white/5 border border-white/10 p-3.5 rounded-2xl backdrop-blur-xs flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-xs shrink-0">
+            <div className="bg-[#102A38] border border-[#3D4D55] p-3.5 rounded-2xl flex items-center gap-3">
+              <div className="w-8 h-8 rounded-xl bg-[#3D4D55] text-[#B58863] flex items-center justify-center font-bold text-xs shrink-0 border border-[#A79E9C]/30">
                 2
               </div>
               <div className="text-xs">
-                <p className="font-bold text-white">30-Min Test</p>
-                <p className="text-slate-400">30 Randomized Questions</p>
+                <p className="font-bold text-[#D3C3B9]">30-Min Test</p>
+                <p className="text-[#A79E9C]">30 Randomized Questions</p>
               </div>
             </div>
 
-            <div className="bg-white/5 border border-white/10 p-3.5 rounded-2xl backdrop-blur-xs flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold text-xs shrink-0">
+            <div className="bg-[#102A38] border border-[#3D4D55] p-3.5 rounded-2xl flex items-center gap-3">
+              <div className="w-8 h-8 rounded-xl bg-[#B58863] text-[#161616] flex items-center justify-center font-bold text-xs shrink-0">
                 3
               </div>
               <div className="text-xs">
-                <p className="font-bold text-white">Skill Strength</p>
-                <p className="text-slate-400">Beginner &rarr; Excellent Tier</p>
+                <p className="font-bold text-[#D3C3B9]">Skill Strength</p>
+                <p className="text-[#A79E9C]">Beginner &rarr; Excellent Tier</p>
               </div>
             </div>
           </div>
@@ -552,23 +552,23 @@ export const LearningResources = () => {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-white rounded-2xl p-4 sm:p-6 border border-slate-200 shadow-sm space-y-4">
+      <div className="bg-[#161616] rounded-2xl p-4 sm:p-6 border border-[#3D4D55] shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           
           {/* Search Input */}
           <div className="w-full sm:flex-1 relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+            <Search className="w-4 h-4 text-[#A79E9C] absolute left-3.5 top-3" />
             <input
               type="text"
               placeholder="Search courses (e.g. C, Python, SQL, DSA, VLSI, Networks, AI)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white text-slate-900 placeholder:text-slate-400 font-medium"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#3D4D55] text-sm focus:ring-2 focus:ring-[#B58863] outline-none bg-[#102A38] text-[#D3C3B9] placeholder:text-[#A79E9C] font-medium"
             />
           </div>
 
           {/* Result Count */}
-          <span className="text-xs font-bold text-slate-500 whitespace-nowrap">
+          <span className="text-xs font-bold text-[#A79E9C] whitespace-nowrap">
             Showing {filteredCourses.length} of {LEARNING_COURSES.length} Courses
           </span>
 
@@ -576,17 +576,17 @@ export const LearningResources = () => {
 
         {/* Category Filter Pills */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1">
-          <span className="text-xs font-bold text-slate-400 whitespace-nowrap flex items-center gap-1">
-            <Filter className="w-3.5 h-3.5" /> Category:
+          <span className="text-xs font-bold text-[#A79E9C] whitespace-nowrap flex items-center gap-1">
+            <Filter className="w-3.5 h-3.5 text-[#B58863]" /> Category:
           </span>
           {COURSE_CATEGORIES.map((category) => (
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all border ${
                 selectedCategory === category
-                  ? 'bg-indigo-600 text-white shadow-xs'
-                  : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                  ? 'bg-[#B58863] text-[#161616] border-[#B58863] shadow-xs'
+                  : 'bg-[#102A38] text-[#D3C3B9] border-[#3D4D55] hover:bg-[#3D4D55]'
               }`}
             >
               {category}
@@ -597,19 +597,19 @@ export const LearningResources = () => {
 
       {/* Industry Benchmark Gap Recommendations Banner */}
       {missingCourseIds.size > 0 && (
-        <div className="p-5 rounded-2xl bg-amber-50 border border-amber-200/90 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="p-5 rounded-2xl bg-[#161616] border border-[#3D4D55] shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-start gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-700 flex items-center justify-center shrink-0 border border-amber-300">
-              <Target className="w-5 h-5 text-amber-700" />
+            <div className="w-10 h-10 rounded-xl bg-[#102A38] text-[#B58863] flex items-center justify-center shrink-0 border border-[#3D4D55]">
+              <Target className="w-5 h-5 text-[#B58863]" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <h3 className="text-sm font-bold text-[#D3C3B9] flex items-center gap-2">
                 Industry Target Benchmark Recommendations ({missingCourseIds.size} Courses)
-                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-200 text-amber-900">
+                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-[#B58863]/20 text-[#B58863] border border-[#B58863]/30">
                   {gapAnalysis?.targetRole?.title || 'Target Role'}
                 </span>
               </h3>
-              <p className="text-xs text-slate-600 mt-0.5">
+              <p className="text-xs text-[#A79E9C] mt-0.5">
                 These courses directly address the skill gaps identified in your profile for your target Industry role. Complete them and take the 30-min test to become placement ready!
               </p>
             </div>
@@ -624,10 +624,10 @@ export const LearningResources = () => {
           return (
             <div
               key={course.id}
-              className={`bg-white rounded-3xl border p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-5 group ${
+              className={`bg-[#161616] rounded-3xl border p-6 shadow-sm hover:border-[#B58863] transition-all flex flex-col justify-between space-y-5 group ${
                 isIndustryGap 
-                  ? 'border-amber-300 ring-2 ring-amber-400/30 bg-amber-50/10 hover:border-amber-400' 
-                  : 'border-slate-200 hover:border-indigo-300'
+                  ? 'border-[#B58863] ring-1 ring-[#B58863]/30 bg-[#161616]' 
+                  : 'border-[#3D4D55]'
               }`}
             >
               <div className="space-y-3.5">
@@ -635,17 +635,17 @@ export const LearningResources = () => {
                 {/* Header: Icon & Category */}
                 <div className="flex items-center justify-between">
                   <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border group-hover:scale-105 transition-transform ${
-                    isIndustryGap ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-indigo-50 text-indigo-600 border-indigo-100'
+                    isIndustryGap ? 'bg-[#102A38] text-[#B58863] border-[#B58863]/40' : 'bg-[#102A38] text-[#B58863] border-[#3D4D55]'
                   }`}>
                     {renderCourseIcon(course.icon, "w-6 h-6")}
                   </div>
                   <div className="flex items-center gap-1.5">
                     {isIndustryGap && (
-                      <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#B58863]/20 text-[#B58863] border border-[#B58863]/30">
                         ⚡ Role Gap
                       </span>
                     )}
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#102A38] text-[#A79E9C] border border-[#3D4D55]">
                       {course.category}
                     </span>
                   </div>
@@ -653,16 +653,16 @@ export const LearningResources = () => {
 
               {/* Course Title & Tagline */}
               <div>
-                <h2 className="text-lg font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                <h2 className="text-lg font-bold text-[#D3C3B9] group-hover:text-[#B58863] transition-colors">
                   {course.name}
                 </h2>
-                <p className="text-xs font-semibold text-indigo-700 mt-0.5 line-clamp-1">
+                <p className="text-xs font-semibold text-[#B58863] mt-0.5 line-clamp-1">
                   {course.tagline}
                 </p>
               </div>
 
               {/* Description */}
-              <p className="text-xs text-slate-600 leading-relaxed line-clamp-2">
+              <p className="text-xs text-[#A79E9C] leading-relaxed line-clamp-2">
                 {course.description}
               </p>
 
@@ -671,13 +671,13 @@ export const LearningResources = () => {
                 {course.topics.slice(0, 3).map((topic, i) => (
                   <span
                     key={i}
-                    className="text-[10px] font-medium bg-slate-50 text-slate-600 px-2 py-0.5 rounded-md border border-slate-100"
+                    className="text-[10px] font-medium bg-[#102A38] text-[#A79E9C] px-2 py-0.5 rounded-md border border-[#3D4D55]"
                   >
                     {topic}
                   </span>
                 ))}
                 {course.topics.length > 3 && (
-                  <span className="text-[10px] font-medium bg-slate-50 text-slate-400 px-1.5 py-0.5 rounded-md">
+                  <span className="text-[10px] font-medium bg-[#102A38] text-[#A79E9C] px-1.5 py-0.5 rounded-md border border-[#3D4D55]">
                     +{course.topics.length - 3} more
                   </span>
                 )}
@@ -686,14 +686,14 @@ export const LearningResources = () => {
             </div>
 
             {/* Bottom Meta & Actions */}
-            <div className="pt-4 border-t border-slate-100 space-y-3">
-              <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+            <div className="pt-4 border-t border-[#3D4D55] space-y-3">
+              <div className="flex items-center justify-between text-xs text-[#A79E9C] font-medium">
                 <span className="flex items-center gap-1">
-                  <BookOpen className="w-3.5 h-3.5 text-slate-400" />
+                  <BookOpen className="w-3.5 h-3.5 text-[#B58863]" />
                   {course.resources.length} Free Resources
                 </span>
-                <span className="flex items-center gap-1 text-emerald-600 font-semibold">
-                  <Clock className="w-3.5 h-3.5" />
+                <span className="flex items-center gap-1 text-[#D3C3B9] font-semibold">
+                  <Clock className="w-3.5 h-3.5 text-[#B58863]" />
                   30m Assessment
                 </span>
               </div>
@@ -701,16 +701,16 @@ export const LearningResources = () => {
               <div className="grid grid-cols-2 gap-2">
                 <button
                   onClick={() => handleOpenCourse(course)}
-                  className="py-2.5 px-3 rounded-xl border border-slate-300 hover:border-slate-400 hover:bg-slate-50 text-slate-800 font-bold text-xs flex items-center justify-center gap-1 transition-all"
+                  className="py-2.5 px-3 rounded-xl border border-[#3D4D55] hover:bg-[#102A38] text-[#D3C3B9] font-bold text-xs flex items-center justify-center gap-1 transition-all"
                 >
                   Explore Course
                 </button>
 
                 <button
                   onClick={() => handleStartAssessment(course)}
-                  className="py-2.5 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center justify-center gap-1 transition-all shadow-sm shadow-indigo-600/20"
+                  className="py-2.5 px-3 rounded-xl bg-[#B58863] hover:bg-[#996f4c] text-[#161616] font-bold text-xs flex items-center justify-center gap-1 transition-all shadow-sm"
                 >
-                  <Zap className="w-3.5 h-3.5 text-amber-300" />
+                  <Zap className="w-3.5 h-3.5 text-[#161616]" />
                   Take 30m Test
                 </button>
               </div>
@@ -722,15 +722,15 @@ export const LearningResources = () => {
       </div>
 
       {filteredCourses.length === 0 && (
-        <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 space-y-3">
-          <BookOpen className="w-10 h-10 text-slate-300 mx-auto" />
-          <h3 className="text-base font-bold text-slate-900">No courses match your search</h3>
-          <p className="text-xs text-slate-500">
+        <div className="bg-[#161616] rounded-3xl p-12 text-center border border-[#3D4D55] space-y-3">
+          <BookOpen className="w-10 h-10 text-[#A79E9C] mx-auto" />
+          <h3 className="text-base font-bold text-[#D3C3B9]">No courses match your search</h3>
+          <p className="text-xs text-[#A79E9C]">
             Try adjusting your search terms or selecting 'All' categories.
           </p>
           <button
             onClick={() => { setSearchQuery(''); setSelectedCategory('All'); }}
-            className="text-xs font-bold text-indigo-600 hover:underline pt-2"
+            className="text-xs font-bold text-[#B58863] hover:underline pt-2"
           >
             Reset Filters
           </button>

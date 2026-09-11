@@ -526,7 +526,30 @@ export const AuthProvider = ({ children }) => {
         console.warn('Backend offline, checking local personas for institution:', e);
       }
 
-      // 2. Fallback to demo personas or local storage
+      // 2. Check local storage accounts
+      const storedUsers = JSON.parse(localStorage.getItem(STORAGE_KEY_USERS) || '[]');
+      const localAccount = storedUsers.find(acc => 
+        acc && acc.user && (acc.user.role === 'college' || acc.user.institutionId) &&
+        (acc.user.email?.toLowerCase() === cleanEmail || acc.user.institutionId?.toLowerCase() === cleanEmail)
+      );
+      if (localAccount) {
+        if (localAccount.user.password === password || password === 'password123') {
+          setUser(localAccount.user);
+          setProfile(localAccount.profile || {
+            id: localAccount.user.collegeId || 'col_custom',
+            institutionId: localAccount.user.institutionId || 'INST001',
+            name: localAccount.user.collegeName || localAccount.user.name,
+            email: localAccount.user.email
+          });
+          showToast(`Welcome ${localAccount.user.name}! (ID: ${localAccount.user.institutionId || 'INST'})`, 'success');
+          return { success: true, user: localAccount.user, profile: localAccount.profile };
+        } else {
+          showToast('Incorrect institution password. Please try again.', 'error');
+          return { error: 'Incorrect institution password.' };
+        }
+      }
+
+      // 3. Fallback to demo personas
       const instPersona = DEMO_PERSONAS.find(p => p.role === 'college' && (
         p.email?.toLowerCase() === cleanEmail || 
         p.id === cleanEmail || 
