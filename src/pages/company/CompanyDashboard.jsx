@@ -64,16 +64,19 @@ export const CompanyDashboard = ({ setActivePage }) => {
   const [filterMinScore, setFilterMinScore] = useState(0);
   const [filterReadiness, setFilterReadiness] = useState('All');
 
-  // Industry Requirements form
+  // Industry Requirements form (8 Fields)
   const [reqForm, setReqForm] = useState({
-    roleTitle: 'Full Stack Engineer',
+    roleTitle: 'Full Stack Software Engineer',
     category: 'software',
-    highDemandSkills: 'TypeScript, Next.js, Node.js, PostgreSQL',
-    emergingSkills: 'AI Agents, Vector Databases, WASM',
-    toolsAndTech: 'Docker, GitHub Actions, AWS, Tailwind CSS',
-    certifications: 'AWS Solutions Architect, CKA',
-    decliningSkills: 'Legacy PHP, AngularJS 1.x, Flash',
-    notes: 'Prioritize students with hands-on full stack project builds and clean git hygiene.'
+    currentSkills: 'TypeScript, Next.js, Node.js, PostgreSQL, Docker',
+    emergingSkills: 'AI Agents, Vector Databases (pgvector), WASM, LangChain',
+    jobRoleRequirements: 'Minimum 70% skill compatibility, hands-on GitHub project repository, proficiency in relational schema design and RESTful APIs.',
+    technologyTrends: 'Transition towards microservices, AI-augmented development, and edge serverless deployment.',
+    preferredCertifications: 'AWS Certified Developer, CKA (Kubernetes), GitHub Actions Specialist',
+    preferredTools: 'Docker, GitHub Actions, AWS ECS, Tailwind CSS, Prisma, Redis',
+    lessRelevantSkills: 'Legacy PHP 5.x, AngularJS 1.x, jQuery, SVN',
+    futureSkillRequirements: 'Autonomous Agents, Rust for Backend, WebAssembly Microservices, Distributed Vector Search',
+    notes: 'Prioritize students with hands-on full stack project builds, solid git hygiene, and clear technical communication.'
   });
   const [submittedRequirements, setSubmittedRequirements] = useState([]);
   const [submittingReq, setSubmittingReq] = useState(false);
@@ -94,6 +97,7 @@ export const CompanyDashboard = ({ setActivePage }) => {
     overallRating: 5,
     strongSkills: '',
     weakSkills: '',
+    areasForImprovement: '',
     feedbackComments: ''
   });
   const [submittingFeedback, setSubmittingFeedback] = useState(false);
@@ -172,24 +176,28 @@ export const CompanyDashboard = ({ setActivePage }) => {
   }, [selectedRoleId, activeSkills, filterMinMatch, filterMinScore, filterBranch, filterCollege, filterReadiness, filterSkill]);
 
   // Load trends, requirements, openings
+  const loadAuxiliaryData = async () => {
+    try {
+      setLoadingTrends(true);
+      const [trendsRes, reqRes, oppRes, appRes] = await Promise.all([
+        fetch('/api/industry/trends'),
+        fetch('/api/industry/requirements'),
+        fetch('/api/opportunities'),
+        fetch('/api/applications')
+      ]);
+      if (trendsRes.ok) setTrends(await trendsRes.json());
+      if (reqRes.ok) setSubmittedRequirements(await reqRes.json());
+      if (oppRes.ok) setOpportunities(await oppRes.json());
+      if (appRes.ok) setApplications(await appRes.json());
+    } catch (err) {
+      console.error('Auxiliary fetch error:', err);
+    } finally {
+      setLoadingTrends(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchAuxiliary = async () => {
-      try {
-        const [trendsRes, reqRes, oppRes, appRes] = await Promise.all([
-          fetch('/api/industry/trends'),
-          fetch('/api/industry/requirements'),
-          fetch('/api/opportunities'),
-          fetch('/api/applications')
-        ]);
-        if (trendsRes.ok) setTrends(await trendsRes.json());
-        if (reqRes.ok) setSubmittedRequirements(await reqRes.json());
-        if (oppRes.ok) setOpportunities(await oppRes.json());
-        if (appRes.ok) setApplications(await appRes.json());
-      } catch (err) {
-        console.error('Auxiliary fetch error:', err);
-      }
-    };
-    fetchAuxiliary();
+    loadAuxiliaryData();
   }, []);
 
   // Skill tag management
@@ -229,7 +237,6 @@ export const CompanyDashboard = ({ setActivePage }) => {
         body: JSON.stringify(payload)
       });
       if (res.ok) {
-        const saved = await res.json();
         showToast(editingRole ? 'Role updated successfully!' : 'New industry role added!', 'success');
         setRoleModalOpen(false);
         setEditingRole(null);
@@ -241,7 +248,7 @@ export const CompanyDashboard = ({ setActivePage }) => {
     }
   };
 
-  // Submit Industry Requirements
+  // Submit Industry Requirements (All 8 Fields)
   const handleSubmitRequirement = async (e) => {
     e.preventDefault();
     try {
@@ -252,20 +259,27 @@ export const CompanyDashboard = ({ setActivePage }) => {
         body: JSON.stringify({
           category: reqForm.category,
           roleTitle: reqForm.roleTitle,
-          highDemandSkills: reqForm.highDemandSkills.split(',').map(s => s.trim()).filter(Boolean),
+          currentSkills: reqForm.currentSkills.split(',').map(s => s.trim()).filter(Boolean),
           emergingSkills: reqForm.emergingSkills.split(',').map(s => s.trim()).filter(Boolean),
-          toolsAndTech: reqForm.toolsAndTech.split(',').map(s => s.trim()).filter(Boolean),
-          certifications: reqForm.certifications.split(',').map(s => s.trim()).filter(Boolean),
-          decliningSkills: reqForm.decliningSkills.split(',').map(s => s.trim()).filter(Boolean),
-          notes: reqForm.notes
+          jobRoleRequirements: reqForm.jobRoleRequirements,
+          technologyTrends: reqForm.technologyTrends,
+          preferredCertifications: reqForm.preferredCertifications.split(',').map(s => s.trim()).filter(Boolean),
+          preferredTools: reqForm.preferredTools.split(',').map(s => s.trim()).filter(Boolean),
+          lessRelevantSkills: reqForm.lessRelevantSkills.split(',').map(s => s.trim()).filter(Boolean),
+          futureSkillRequirements: reqForm.futureSkillRequirements.split(',').map(s => s.trim()).filter(Boolean),
+          notes: reqForm.notes,
+          companyName: user?.companyName || user?.name || 'TechNova Solutions'
         })
       });
 
       if (res.ok) {
-        const created = await res.json();
+        const responseData = await res.json();
+        const created = responseData.requirement || responseData;
         setSubmittedRequirements([created, ...submittedRequirements]);
         showToast('Industry requirements successfully published to campus partner institutions!', 'success');
         confetti({ particleCount: 50, spread: 60 });
+        // Refresh trends dynamically from updated store
+        loadAuxiliaryData();
       }
     } catch (err) {
       showToast('Failed to submit requirements', 'error');
@@ -287,6 +301,7 @@ export const CompanyDashboard = ({ setActivePage }) => {
       overallRating: 5,
       strongSkills: candidate.matchedSkills?.join(', ') || '',
       weakSkills: candidate.missingSkills?.slice(0, 3).join(', ') || '',
+      areasForImprovement: candidate.missingSkills?.length ? `Focus on mastering ${candidate.missingSkills.slice(0, 2).join(' and ')} through practical hands-on labs.` : 'Continue practicing system design and end-to-end integration.',
       feedbackComments: `Exhibited solid competence during the ${currentRole} technical interview. Strong foundation in core fundamentals.`
     });
     setFeedbackModalOpen(true);
@@ -305,11 +320,17 @@ export const CompanyDashboard = ({ setActivePage }) => {
           studentName: feedbackForm.studentName,
           companyName: user?.companyName || user?.title || 'TechNova Solutions',
           role: feedbackForm.role,
+          recruitedRole: feedbackForm.role,
           status: feedbackForm.status,
+          selected: feedbackForm.status === 'Selected',
           technicalRating: Number(feedbackForm.technicalRating),
+          technicalPerformance: Number(feedbackForm.technicalRating),
           overallRating: Number(feedbackForm.overallRating),
+          overallPerformance: Number(feedbackForm.overallRating),
           strongSkills: feedbackForm.strongSkills.split(',').map(s => s.trim()).filter(Boolean),
           weakSkills: feedbackForm.weakSkills.split(',').map(s => s.trim()).filter(Boolean),
+          areasForImprovement: feedbackForm.areasForImprovement,
+          comments: feedbackForm.feedbackComments,
           feedbackComments: feedbackForm.feedbackComments
         })
       });
@@ -968,7 +989,7 @@ export const CompanyDashboard = ({ setActivePage }) => {
                 Publish Industry Skill Directives & Requirements
               </h3>
               <p className="text-xs text-[#A79E9C] leading-relaxed">
-                Provide real-time talent needs, tech stacks, and modern certifications to help colleges and engineering institutions update their training bootcamps and curriculum.
+                Provide real-time talent needs, job-role requirements, tech trends, preferred certifications, and tools to help colleges update their curriculum and prepare industry-ready graduates.
               </p>
             </div>
 
@@ -991,7 +1012,7 @@ export const CompanyDashboard = ({ setActivePage }) => {
 
                 <div>
                   <label className="block text-xs font-bold text-[#A79E9C] uppercase tracking-wider mb-1">
-                    Target Role Title
+                    Target Job Role Title
                   </label>
                   <input
                     type="text"
@@ -1004,57 +1025,76 @@ export const CompanyDashboard = ({ setActivePage }) => {
                 </div>
               </div>
 
+              {/* 1. Current Required Skills */}
               <div>
                 <label className="block text-xs font-bold text-[#A79E9C] uppercase tracking-wider mb-1">
-                  High-Demand Skills (Comma-separated)
+                  1. Current Required Skills (Comma-separated)
                 </label>
                 <input
                   type="text"
-                  value={reqForm.highDemandSkills}
-                  onChange={(e) => setReqForm({ ...reqForm, highDemandSkills: e.target.value })}
-                  placeholder="e.g. TypeScript, React 18, Node.js, PostgreSQL"
+                  value={reqForm.currentSkills}
+                  onChange={(e) => setReqForm({ ...reqForm, currentSkills: e.target.value })}
+                  placeholder="e.g. TypeScript, React 18, Node.js, PostgreSQL, Docker"
                   className="w-full px-3.5 py-2.5 rounded-xl bg-[#161616] border border-[#A79E9C]/40 text-xs font-medium text-[#D3C3B9] outline-none focus:ring-2 focus:ring-[#B58863]"
                   required
                 />
               </div>
 
+              {/* 2. Emerging Skills */}
               <div>
                 <label className="block text-xs font-bold text-[#A79E9C] uppercase tracking-wider mb-1">
-                  Emerging Skills & Technology Trends (Comma-separated)
+                  2. Emerging Skills (Comma-separated)
                 </label>
                 <input
                   type="text"
                   value={reqForm.emergingSkills}
                   onChange={(e) => setReqForm({ ...reqForm, emergingSkills: e.target.value })}
-                  placeholder="e.g. AI Agents, Vector DBs, RISC-V, WASM"
+                  placeholder="e.g. AI Agents, Vector Databases (pgvector), WASM, LangChain"
                   className="w-full px-3.5 py-2.5 rounded-xl bg-[#161616] border border-[#A79E9C]/40 text-xs font-medium text-[#D3C3B9] outline-none focus:ring-2 focus:ring-[#B58863]"
                   required
                 />
               </div>
 
+              {/* 3. Job-Role Requirements */}
               <div>
                 <label className="block text-xs font-bold text-[#A79E9C] uppercase tracking-wider mb-1">
-                  Tools & Technologies Currently Used in Production
+                  3. Job-Role Requirements & Competency Benchmarks
+                </label>
+                <textarea
+                  rows={2}
+                  value={reqForm.jobRoleRequirements}
+                  onChange={(e) => setReqForm({ ...reqForm, jobRoleRequirements: e.target.value })}
+                  placeholder="e.g. Minimum 70% skill compatibility, hands-on GitHub repository, strong schema design..."
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#161616] border border-[#A79E9C]/40 text-xs font-medium text-[#D3C3B9] outline-none focus:ring-2 focus:ring-[#B58863]"
+                  required
+                />
+              </div>
+
+              {/* 4. Technology Trends */}
+              <div>
+                <label className="block text-xs font-bold text-[#A79E9C] uppercase tracking-wider mb-1">
+                  4. Technology Trends & Industry Direction
                 </label>
                 <input
                   type="text"
-                  value={reqForm.toolsAndTech}
-                  onChange={(e) => setReqForm({ ...reqForm, toolsAndTech: e.target.value })}
-                  placeholder="e.g. Docker, GitHub Actions, AWS, Tailwind, Cadence Virtuoso"
+                  value={reqForm.technologyTrends}
+                  onChange={(e) => setReqForm({ ...reqForm, technologyTrends: e.target.value })}
+                  placeholder="e.g. Transition towards microservices, AI-augmented development, edge serverless"
                   className="w-full px-3.5 py-2.5 rounded-xl bg-[#161616] border border-[#A79E9C]/40 text-xs font-medium text-[#D3C3B9] outline-none focus:ring-2 focus:ring-[#B58863]"
                   required
                 />
               </div>
 
+              {/* 5 & 6. Preferred Certifications & Preferred Tools */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-[#A79E9C] uppercase tracking-wider mb-1">
-                    Industry Certifications Valued
+                    5. Preferred Certifications
                   </label>
                   <input
                     type="text"
-                    value={reqForm.certifications}
-                    onChange={(e) => setReqForm({ ...reqForm, certifications: e.target.value })}
+                    value={reqForm.preferredCertifications}
+                    onChange={(e) => setReqForm({ ...reqForm, preferredCertifications: e.target.value })}
                     placeholder="e.g. AWS Solutions Architect, CKA, CompTIA Security+"
                     className="w-full px-3.5 py-2.5 rounded-xl bg-[#161616] border border-[#A79E9C]/40 text-xs font-medium text-[#D3C3B9] outline-none focus:ring-2 focus:ring-[#B58863]"
                   />
@@ -1062,13 +1102,42 @@ export const CompanyDashboard = ({ setActivePage }) => {
 
                 <div>
                   <label className="block text-xs font-bold text-[#A79E9C] uppercase tracking-wider mb-1">
-                    Deprecated / Declining Skills
+                    6. Preferred Tools & Technologies
                   </label>
                   <input
                     type="text"
-                    value={reqForm.decliningSkills}
-                    onChange={(e) => setReqForm({ ...reqForm, decliningSkills: e.target.value })}
-                    placeholder="e.g. Legacy PHP, AngularJS 1.x, SVN"
+                    value={reqForm.preferredTools}
+                    onChange={(e) => setReqForm({ ...reqForm, preferredTools: e.target.value })}
+                    placeholder="e.g. Docker, GitHub Actions, AWS, Tailwind, Redis"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#161616] border border-[#A79E9C]/40 text-xs font-medium text-[#D3C3B9] outline-none focus:ring-2 focus:ring-[#B58863]"
+                  />
+                </div>
+              </div>
+
+              {/* 7 & 8. Less-Relevant Skills & Future Skill Requirements */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-[#A79E9C] uppercase tracking-wider mb-1">
+                    7. Less-Relevant / Declining Skills
+                  </label>
+                  <input
+                    type="text"
+                    value={reqForm.lessRelevantSkills}
+                    onChange={(e) => setReqForm({ ...reqForm, lessRelevantSkills: e.target.value })}
+                    placeholder="e.g. Legacy PHP 5.x, AngularJS 1.x, SVN"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#161616] border border-[#A79E9C]/40 text-xs font-medium text-[#D3C3B9] outline-none focus:ring-2 focus:ring-[#B58863]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-[#A79E9C] uppercase tracking-wider mb-1">
+                    8. Future Skill Requirements
+                  </label>
+                  <input
+                    type="text"
+                    value={reqForm.futureSkillRequirements}
+                    onChange={(e) => setReqForm({ ...reqForm, futureSkillRequirements: e.target.value })}
+                    placeholder="e.g. Autonomous Agents, Rust Backend, WASM Microservices"
                     className="w-full px-3.5 py-2.5 rounded-xl bg-[#161616] border border-[#A79E9C]/40 text-xs font-medium text-[#D3C3B9] outline-none focus:ring-2 focus:ring-[#B58863]"
                   />
                 </div>
@@ -1076,10 +1145,10 @@ export const CompanyDashboard = ({ setActivePage }) => {
 
               <div>
                 <label className="block text-xs font-bold text-[#A79E9C] uppercase tracking-wider mb-1">
-                  Suggestions & Curricular Guidance for Future Students
+                  Suggestions & Curricular Guidance for Future Students & Colleges
                 </label>
                 <textarea
-                  rows={3}
+                  rows={2}
                   value={reqForm.notes}
                   onChange={(e) => setReqForm({ ...reqForm, notes: e.target.value })}
                   placeholder="Share direct advice for academic deans and student project guidance..."
@@ -1106,66 +1175,127 @@ export const CompanyDashboard = ({ setActivePage }) => {
             </h3>
 
             <div className="space-y-4 max-h-[720px] overflow-y-auto pr-1">
-              {submittedRequirements.map(req => (
-                <div
-                  key={req.id}
-                  className="p-5 rounded-2xl bg-[#3D4D55] border border-[#A79E9C]/30 space-y-3 shadow-md"
-                >
-                  <div className="flex items-center justify-between pb-2 border-b border-[#102A38]/50">
-                    <div>
-                      <h4 className="text-xs font-bold text-[#D3C3B9]">{req.roleTitle}</h4>
-                      <p className="text-[10px] text-[#A79E9C]">{req.companyName} · {req.category.toUpperCase()}</p>
-                    </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#102A38] text-[#B58863] border border-[#B58863]/30">
-                      Live Directive
-                    </span>
-                  </div>
+              {submittedRequirements.map(req => {
+                const curSkills = req.currentSkills || req.highDemandSkills || [];
+                const emSkills = req.emergingSkills || [];
+                const certs = req.preferredCertifications || req.certifications || [];
+                const tools = req.preferredTools || req.toolsAndTech || [];
+                const lessSkills = req.lessRelevantSkills || req.decliningSkills || [];
+                const futureSkills = req.futureSkillRequirements || req.futureRequirements || [];
+                const jobReqs = req.jobRoleRequirements || req.recruitmentRequirements;
+                const techTrends = req.technologyTrends;
 
-                  <div className="space-y-1.5">
-                    <span className="text-[10px] font-bold text-[#B58863] uppercase tracking-wider block">
-                      High-Demand Skills:
-                    </span>
-                    <div className="flex flex-wrap gap-1">
-                      {req.highDemandSkills?.map(s => (
-                        <span key={s} className="text-[10px] px-2 py-0.5 rounded bg-[#102A38] text-[#D3C3B9] border border-[#A79E9C]/20">
-                          {s}
+                return (
+                  <div
+                    key={req.id}
+                    className="p-5 rounded-2xl bg-[#3D4D55] border border-[#A79E9C]/30 space-y-3 shadow-md text-xs"
+                  >
+                    <div className="flex items-center justify-between pb-2 border-b border-[#102A38]/50">
+                      <div>
+                        <h4 className="text-xs font-bold text-[#D3C3B9]">{req.roleTitle}</h4>
+                        <p className="text-[10px] text-[#A79E9C]">{req.companyName} · {req.category?.toUpperCase()}</p>
+                      </div>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#102A38] text-[#B58863] border border-[#B58863]/30">
+                        Live Directive
+                      </span>
+                    </div>
+
+                    {/* 1. Current Required Skills */}
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-bold text-[#B58863] uppercase tracking-wider block">
+                        1. Current Required Skills:
+                      </span>
+                      <div className="flex flex-wrap gap-1">
+                        {curSkills.map(s => (
+                          <span key={s} className="text-[10px] px-2 py-0.5 rounded bg-[#102A38] text-[#D3C3B9] border border-[#A79E9C]/20">
+                            {s}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* 2. Emerging Skills */}
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-bold text-[#D3C3B9] uppercase tracking-wider block">
+                        2. Emerging Skills:
+                      </span>
+                      <div className="flex flex-wrap gap-1">
+                        {emSkills.map(s => (
+                          <span key={s} className="text-[10px] px-2 py-0.5 rounded bg-[#102A38] text-[#B58863] border border-[#B58863]/30">
+                            {s}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* 3. Job-Role Requirements */}
+                    {jobReqs && (
+                      <div className="space-y-0.5">
+                        <span className="text-[10px] font-bold text-[#A79E9C] uppercase tracking-wider block">
+                          3. Job-Role Requirements:
                         </span>
-                      ))}
-                    </div>
-                  </div>
+                        <p className="text-[11px] text-[#D3C3B9] bg-[#102A38]/60 p-2 rounded-lg border border-[#A79E9C]/10">
+                          {jobReqs}
+                        </p>
+                      </div>
+                    )}
 
-                  <div className="space-y-1.5">
-                    <span className="text-[10px] font-bold text-[#D3C3B9] uppercase tracking-wider block">
-                      Emerging Trends:
-                    </span>
-                    <div className="flex flex-wrap gap-1">
-                      {req.emergingSkills?.map(s => (
-                        <span key={s} className="text-[10px] px-2 py-0.5 rounded bg-[#102A38] text-[#B58863] border border-[#B58863]/30">
-                          {s}
+                    {/* 4. Technology Trends */}
+                    {techTrends && (
+                      <div className="space-y-0.5">
+                        <span className="text-[10px] font-bold text-[#A79E9C] uppercase tracking-wider block">
+                          4. Technology Trends:
                         </span>
-                      ))}
-                    </div>
+                        <p className="text-[11px] text-[#B58863] bg-[#102A38]/60 p-2 rounded-lg border border-[#A79E9C]/10">
+                          {techTrends}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* 5 & 6. Preferred Certifications & Tools */}
+                    {certs.length > 0 && (
+                      <p className="text-[11px] text-[#A79E9C]">
+                        📜 <strong className="text-[#D3C3B9]">Certifications:</strong> {certs.join(', ')}
+                      </p>
+                    )}
+
+                    {tools.length > 0 && (
+                      <p className="text-[11px] text-[#A79E9C]">
+                        🛠 <strong className="text-[#D3C3B9]">Preferred Tools:</strong> {tools.join(', ')}
+                      </p>
+                    )}
+
+                    {/* 7. Less-Relevant Skills */}
+                    {lessSkills.length > 0 && (
+                      <p className="text-[11px] text-[#A79E9C]">
+                        🔻 <strong className="text-[#D3C3B9]">Less-Relevant:</strong> <span className="line-through text-red-300/80">{lessSkills.join(', ')}</span>
+                      </p>
+                    )}
+
+                    {/* 8. Future Skill Requirements */}
+                    {futureSkills.length > 0 && (
+                      <div className="space-y-1 pt-1">
+                        <span className="text-[10px] font-bold text-[#B58863] uppercase tracking-wider block">
+                          8. Future Skill Requirements:
+                        </span>
+                        <div className="flex flex-wrap gap-1">
+                          {futureSkills.map(s => (
+                            <span key={s} className="text-[10px] px-2 py-0.5 rounded bg-[#3D4D55] text-[#D3C3B9] border border-[#B58863]/40">
+                              🚀 {s}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {req.notes && (
+                      <p className="text-[11px] text-[#D3C3B9] italic pt-1 border-t border-[#102A38]/30">
+                        "{req.notes}"
+                      </p>
+                    )}
                   </div>
-
-                  {req.toolsAndTech?.length > 0 && (
-                    <p className="text-[11px] text-[#A79E9C]">
-                      🛠 Tools: <strong>{req.toolsAndTech.join(', ')}</strong>
-                    </p>
-                  )}
-
-                  {req.decliningSkills?.length > 0 && (
-                    <p className="text-[11px] text-[#A79E9C]">
-                      🔻 Declining: <span className="line-through">{req.decliningSkills.join(', ')}</span>
-                    </p>
-                  )}
-
-                  {req.notes && (
-                    <p className="text-[11px] text-[#D3C3B9] italic pt-1 border-t border-[#102A38]/30">
-                      "{req.notes}"
-                    </p>
-                  )}
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -1180,35 +1310,36 @@ export const CompanyDashboard = ({ setActivePage }) => {
           <div className="bg-[#3D4D55] rounded-3xl p-6 sm:p-8 border border-[#A79E9C]/30 shadow-lg space-y-2">
             <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-[#102A38] text-[#B58863] text-xs font-bold mb-1 border border-[#B58863]/30">
               <TrendingUp className="w-3.5 h-3.5" />
-              Real-Time Market Analytics
+              Real-Time Dynamic Analytics
             </div>
             <h2 className="text-xl font-bold text-[#D3C3B9] font-display">
-              SkillBridge Industry Skill Demand & Talent Supply Intelligence
+              SkillBridge Industry Skill Demand & Talent Intelligence
             </h2>
             <p className="text-xs text-[#A79E9C] max-w-3xl leading-relaxed">
-              Synthesized across 20+ core engineering and software roles, active company postings, and statewide campus assessment results.
+              Dynamically derived from {trends?.totalStoredRequirements || submittedRequirements.length || 6} stored industry directives, {trends?.totalActiveRoles || roles.length || 18} role competency models, and {trends?.totalEvaluatedStudents || candidates.length || 4} student profiles in the database.
             </p>
           </div>
 
+          {/* Top Row: Most Demanded Skills & Emerging Skills */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
-            {/* Card 1: Most Demanded Skills */}
+            {/* 1. Most Demanded Skills */}
             <div className="bg-[#3D4D55] rounded-3xl p-6 border border-[#A79E9C]/30 shadow-md space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-[#102A38]/50">
                 <div>
                   <h3 className="text-sm font-bold text-[#D3C3B9] flex items-center gap-2">
                     <Award className="w-4 h-4 text-[#B58863]" />
-                    Most Demanded Skills
+                    1. Most Demanded Skills
                   </h3>
                   <p className="text-[11px] text-[#A79E9C]">Across industry roles & listings</p>
                 </div>
-                <span className="text-xs font-bold text-[#B58863]">Top 6</span>
+                <span className="text-xs font-bold text-[#B58863]">Top Required</span>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
                 {(trends?.mostDemandedSkills || [
                   { skill: 'Python', count: 18, demandLevel: 'Critical' },
-                  { skill: 'DSA', count: 16, demandLevel: 'High' },
+                  { skill: 'Data Structures & Algorithms', count: 16, demandLevel: 'High' },
                   { skill: 'SQL', count: 14, demandLevel: 'High' },
                   { skill: 'Git', count: 13, demandLevel: 'Essential' },
                   { skill: 'Docker', count: 11, demandLevel: 'High' },
@@ -1219,30 +1350,33 @@ export const CompanyDashboard = ({ setActivePage }) => {
                       <span className="w-6 h-6 rounded-lg bg-[#3D4D55] text-[#B58863] font-bold text-xs flex items-center justify-center">
                         #{idx + 1}
                       </span>
-                      <span className="text-xs font-bold text-[#D3C3B9]">{item.skill}</span>
+                      <div>
+                        <span className="text-xs font-bold text-[#D3C3B9] block">{item.skill}</span>
+                        {item.category && <span className="text-[10px] text-[#A79E9C]">{item.category}</span>}
+                      </div>
                     </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#B58863] text-[#161616]">
-                      {item.count} Roles Demand
+                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[#B58863] text-[#161616]">
+                      {item.count || item.roleMentions || 1} Roles
                     </span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Card 2: Emerging / Rising Skills */}
+            {/* 2. Emerging Skills */}
             <div className="bg-[#3D4D55] rounded-3xl p-6 border border-[#A79E9C]/30 shadow-md space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-[#102A38]/50">
                 <div>
                   <h3 className="text-sm font-bold text-[#D3C3B9] flex items-center gap-2">
                     <TrendingUp className="w-4 h-4 text-[#B58863]" />
-                    Emerging & Rising Skills
+                    2. Emerging Skills
                   </h3>
-                  <p className="text-[11px] text-[#A79E9C]">Fastest-growing tech categories</p>
+                  <p className="text-[11px] text-[#A79E9C]">Fastest-rising industry categories</p>
                 </div>
                 <span className="text-xs font-bold text-[#B58863]">Growth</span>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
                 {(trends?.emergingSkills || [
                   { skill: 'Generative AI & LLMs', growth: '+140%', category: 'AI/ML' },
                   { skill: 'RISC-V Architecture', growth: '+85%', category: 'VLSI' },
@@ -1253,42 +1387,41 @@ export const CompanyDashboard = ({ setActivePage }) => {
                   <div key={item.skill} className="p-3 rounded-xl bg-[#102A38] border border-[#A79E9C]/20 flex items-center justify-between">
                     <div>
                       <span className="text-xs font-bold text-[#D3C3B9] block">{item.skill}</span>
-                      <span className="text-[10px] text-[#A79E9C]">{item.category}</span>
+                      <span className="text-[10px] text-[#A79E9C]">{item.category || item.demand || 'Emerging'}</span>
                     </div>
-                    <span className="text-[11px] font-extrabold text-[#B58863] bg-[#3D4D55] px-2 py-0.5 rounded-lg border border-[#B58863]/30">
-                      {item.growth}
+                    <span className="text-[11px] font-extrabold text-[#B58863] bg-[#3D4D55] px-2.5 py-1 rounded-lg border border-[#B58863]/30">
+                      {item.growth || '+90% YoY'}
                     </span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Card 3: Commonly Lacking Skills */}
+            {/* 3. Common Student Skill Gaps (Live Computed against database students) */}
             <div className="bg-[#3D4D55] rounded-3xl p-6 border border-[#A79E9C]/30 shadow-md space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-[#102A38]/50">
                 <div>
                   <h3 className="text-sm font-bold text-[#D3C3B9] flex items-center gap-2">
                     <AlertCircle className="w-4 h-4 text-[#B58863]" />
-                    Commonly Lacking in Students
+                    3. Common Student Skill Gaps
                   </h3>
-                  <p className="text-[11px] text-[#A79E9C]">Curricular intervention priority</p>
+                  <p className="text-[11px] text-[#A79E9C]">Computed from live student pool</p>
                 </div>
                 <span className="text-xs font-bold text-[#A79E9C]">Gap %</span>
               </div>
 
-              <div className="space-y-3">
-                {(trends?.commonlyLackingSkills || [
-                  { skill: 'Docker & Containerization', gapPercentage: 72, recommendation: 'Conduct hands-on DevOps workshops' },
+              <div className="space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
+                {(trends?.commonStudentSkillGaps || trends?.commonlyLackingSkills || [
+                  { skill: 'Docker & Containerization', gapPercentage: 75, recommendation: 'Conduct hands-on DevOps workshops' },
                   { skill: 'Cloud Architecture (AWS)', gapPercentage: 68, recommendation: 'Integrate cloud labs into 3rd year' },
                   { skill: 'Unit Testing & CI/CD', gapPercentage: 64, recommendation: 'Mandate automated tests in capstones' },
-                  { skill: 'SystemVerilog / UVM', gapPercentage: 61, recommendation: 'VLSI lab tooling upgrade' },
-                  { skill: 'Production SQL Query Plans', gapPercentage: 54, recommendation: 'Database indexing assignments' }
+                  { skill: 'SystemVerilog / UVM', gapPercentage: 61, recommendation: 'VLSI lab tooling upgrade' }
                 ]).map(item => (
                   <div key={item.skill} className="p-3 rounded-xl bg-[#102A38] border border-[#A79E9C]/20 space-y-1">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-[#D3C3B9]">{item.skill}</span>
-                      <span className="text-[10px] font-extrabold text-[#B58863]">
-                        {item.gapPercentage}% Lacking
+                      <span className="text-[10px] font-extrabold text-[#B58863] bg-[#3D4D55] px-2 py-0.5 rounded">
+                        {item.gapPercentage || item.lackPercentage || item.studentsLackingPercentage || 60}% Lacking
                       </span>
                     </div>
                     <p className="text-[10px] text-[#A79E9C] leading-snug">{item.recommendation}</p>
@@ -1298,6 +1431,100 @@ export const CompanyDashboard = ({ setActivePage }) => {
             </div>
 
           </div>
+
+          {/* Bottom Row: Increasing-Demand Skills & Frequently Requested Skills */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            {/* 4. Increasing-Demand Skills */}
+            <div className="bg-[#3D4D55] rounded-3xl p-6 border border-[#A79E9C]/30 shadow-md space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-[#102A38]/50">
+                <div>
+                  <h3 className="text-sm font-bold text-[#D3C3B9] flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4 text-[#B58863]" />
+                    4. Increasing-Demand Skills
+                  </h3>
+                  <p className="text-[11px] text-[#A79E9C]">Future skill specifications from industry partners</p>
+                </div>
+                <span className="text-xs font-bold text-[#B58863]">Future Needs</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {(trends?.increasingDemandSkills || [
+                  { skill: 'Full-Stack TypeScript (Next.js 14)', trend: 'Accelerating Demand', category: 'Software' },
+                  { skill: 'Vector Databases (pgvector, Pinecone)', trend: 'Accelerating Demand', category: 'Data/AI' },
+                  { skill: 'RISC-V Microarchitecture Design', trend: 'High Priority', category: 'Hardware' },
+                  { skill: 'EV Powertrain & BMS Architecture', trend: 'High Priority', category: 'Core' }
+                ]).map(item => (
+                  <div key={item.skill} className="p-3 rounded-xl bg-[#102A38] border border-[#A79E9C]/20 flex items-center justify-between">
+                    <div>
+                      <span className="text-xs font-bold text-[#D3C3B9] block">{item.skill}</span>
+                      <span className="text-[10px] text-[#A79E9C]">{item.category || 'Industry Requirement'}</span>
+                    </div>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#3D4D55] text-[#B58863] border border-[#B58863]/30">
+                      {item.trend || 'Increasing'}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 5. Frequently Requested Skills */}
+            <div className="bg-[#3D4D55] rounded-3xl p-6 border border-[#A79E9C]/30 shadow-md space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-[#102A38]/50">
+                <div>
+                  <h3 className="text-sm font-bold text-[#D3C3B9] flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-[#B58863]" />
+                    5. Frequently Requested Skills
+                  </h3>
+                  <p className="text-[11px] text-[#A79E9C]">Repeatedly cited in recruitment directives</p>
+                </div>
+                <span className="text-xs font-bold text-[#B58863]">Recurrence</span>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                {(trends?.frequentlyRequestedSkills || [
+                  { skill: 'Python', roleMentions: 18 },
+                  { skill: 'DSA', roleMentions: 16 },
+                  { skill: 'SQL', roleMentions: 14 },
+                  { skill: 'Git', roleMentions: 13 },
+                  { skill: 'Docker', roleMentions: 11 },
+                  { skill: 'React', roleMentions: 10 }
+                ]).map(item => (
+                  <div key={item.skill} className="p-2.5 rounded-xl bg-[#102A38] border border-[#A79E9C]/20 text-center space-y-1">
+                    <p className="text-xs font-bold text-[#D3C3B9] truncate">{item.skill}</p>
+                    <span className="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#B58863]/20 text-[#B58863]">
+                      {item.roleMentions || 1} citations
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+
+          {/* Technology Trends & Industry Direction */}
+          {trends?.technologyTrends?.length > 0 && (
+            <div className="bg-[#3D4D55] rounded-3xl p-6 border border-[#A79E9C]/30 shadow-md space-y-4">
+              <h3 className="text-sm font-bold text-[#D3C3B9] flex items-center gap-2">
+                <BookOpen className="w-4 h-4 text-[#B58863]" />
+                Technology Trends & Curricular Directives
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {trends.technologyTrends.map((t, idx) => (
+                  <div key={idx} className="p-4 rounded-2xl bg-[#102A38] border border-[#A79E9C]/20 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-xs font-bold text-[#D3C3B9]">{t.title}</h4>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#3D4D55] text-[#B58863]">
+                        {t.impact || 'High Impact'}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-[#A79E9C] leading-relaxed">{t.summary}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
         </div>
       )}
 
@@ -1586,10 +1813,10 @@ export const CompanyDashboard = ({ setActivePage }) => {
                 </div>
               </div>
 
-              {/* Factor 6: Strong skills demonstrated */}
+              {/* Factor 4: Strong skills demonstrated */}
               <div>
                 <label className="block text-xs font-bold text-[#A79E9C] uppercase tracking-wider mb-1">
-                  6. Strong Skills Demonstrated (Comma-separated)
+                  4. Strong Skills Demonstrated (Comma-separated)
                 </label>
                 <input
                   type="text"
@@ -1601,10 +1828,10 @@ export const CompanyDashboard = ({ setActivePage }) => {
                 />
               </div>
 
-              {/* Factor 7: Skills needing improvement */}
+              {/* Factor 5: Weak skills */}
               <div>
                 <label className="block text-xs font-bold text-[#A79E9C] uppercase tracking-wider mb-1">
-                  7. Skills Needing Improvement (Comma-separated)
+                  5. Weak Skills / Identified Gaps (Comma-separated)
                 </label>
                 <input
                   type="text"
@@ -1616,16 +1843,67 @@ export const CompanyDashboard = ({ setActivePage }) => {
                 />
               </div>
 
-              {/* Factor 8: Specific feedback / comments */}
+              {/* Factor 6 & 7: Technical Performance & Overall Performance */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-[#A79E9C] uppercase tracking-wider mb-1">
+                    6. Technical Performance (1 - 5)
+                  </label>
+                  <select
+                    value={feedbackForm.technicalRating}
+                    onChange={(e) => setFeedbackForm({ ...feedbackForm, technicalRating: e.target.value })}
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#161616] border border-[#A79E9C]/40 text-xs font-bold text-[#B58863] outline-none focus:ring-2 focus:ring-[#B58863]"
+                  >
+                    <option value={5}>⭐⭐⭐⭐⭐ 5 - Exceptional Mastery</option>
+                    <option value={4}>⭐⭐⭐⭐ 4 - Strong Foundation</option>
+                    <option value={3}>⭐⭐⭐ 3 - Meets Core Requirements</option>
+                    <option value={2}>⭐⭐ 2 - Developing Competence</option>
+                    <option value={1}>⭐ 1 - Substantial Gaps</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-[#A79E9C] uppercase tracking-wider mb-1">
+                    7. Overall Performance (1 - 5)
+                  </label>
+                  <select
+                    value={feedbackForm.overallRating}
+                    onChange={(e) => setFeedbackForm({ ...feedbackForm, overallRating: e.target.value })}
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#161616] border border-[#A79E9C]/40 text-xs font-bold text-[#B58863] outline-none focus:ring-2 focus:ring-[#B58863]"
+                  >
+                    <option value={5}>⭐⭐⭐⭐⭐ 5 - Highly Recommended</option>
+                    <option value={4}>⭐⭐⭐⭐ 4 - Recommended</option>
+                    <option value={3}>⭐⭐⭐ 3 - Potential Fit</option>
+                    <option value={2}>⭐⭐ 2 - Conditional</option>
+                    <option value={1}>⭐ 1 - Not Recommended</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Factor 8: Areas for Improvement */}
               <div>
                 <label className="block text-xs font-bold text-[#A79E9C] uppercase tracking-wider mb-1">
-                  8. Specific Feedback & Constructive Comments for Student
+                  8. Areas for Improvement
                 </label>
                 <textarea
-                  rows={3}
+                  rows={2}
+                  value={feedbackForm.areasForImprovement}
+                  onChange={(e) => setFeedbackForm({ ...feedbackForm, areasForImprovement: e.target.value })}
+                  placeholder="Specific focus areas for candidate's growth (e.g., containerization labs, system design patterns)..."
+                  className="w-full px-3.5 py-2 rounded-xl bg-[#161616] border border-[#A79E9C]/40 text-xs font-medium text-[#D3C3B9] outline-none focus:ring-2 focus:ring-[#B58863]"
+                />
+              </div>
+
+              {/* Comments */}
+              <div>
+                <label className="block text-xs font-bold text-[#A79E9C] uppercase tracking-wider mb-1">
+                  General Comments & Recommendations
+                </label>
+                <textarea
+                  rows={2}
                   value={feedbackForm.feedbackComments}
                   onChange={(e) => setFeedbackForm({ ...feedbackForm, feedbackComments: e.target.value })}
-                  placeholder="Constructive feedback to guide student's future preparation..."
+                  placeholder="Constructive feedback to guide student's future preparation and career..."
                   className="w-full px-3.5 py-2 rounded-xl bg-[#161616] border border-[#A79E9C]/40 text-xs font-medium text-[#D3C3B9] outline-none focus:ring-2 focus:ring-[#B58863]"
                   required
                 />

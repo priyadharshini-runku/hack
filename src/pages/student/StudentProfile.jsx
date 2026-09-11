@@ -517,9 +517,12 @@ export const StudentProfile = ({ setActivePage }) => {
                         <p className="text-[11px] text-slate-500 font-semibold">{fb.companyName}</p>
                       </div>
 
-                      <div className="text-right">
+                      <div className="text-right flex items-center gap-1.5">
                         <span className="text-xs font-extrabold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-lg border border-amber-200">
-                          {fb.technicalRating || 5}/5 ★ Tech
+                          {fb.technicalPerformance || fb.technicalRating || 5}/5 ★ Tech
+                        </span>
+                        <span className="text-xs font-extrabold text-slate-800 bg-slate-100 px-2 py-0.5 rounded-lg border border-slate-200">
+                          {fb.overallPerformance || fb.overallRating || 5}/5 ★ Overall
                         </span>
                       </div>
                     </div>
@@ -537,7 +540,7 @@ export const StudentProfile = ({ setActivePage }) => {
 
                     {fb.weakSkills?.length > 0 && (
                       <div className="space-y-1">
-                        <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider block">Constructive Improvement Areas:</span>
+                        <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider block">Identified Skill Gaps:</span>
                         <div className="flex flex-wrap gap-1">
                           {fb.weakSkills.map(s => (
                             <span key={s} className="text-[10px] px-2 py-0.5 rounded-md bg-white text-amber-800 border border-amber-200">
@@ -548,9 +551,18 @@ export const StudentProfile = ({ setActivePage }) => {
                       </div>
                     )}
 
-                    {fb.feedbackComments && (
+                    {fb.areasForImprovement && (
+                      <div className="space-y-0.5">
+                        <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider block">Areas for Improvement:</span>
+                        <p className="text-[11px] text-slate-700 bg-white/60 p-2 rounded-lg border border-amber-100">
+                          💡 {fb.areasForImprovement}
+                        </p>
+                      </div>
+                    )}
+
+                    {(fb.comments || fb.feedbackComments) && (
                       <p className="text-xs text-slate-700 italic bg-white/70 p-2.5 rounded-xl border border-amber-100 leading-relaxed">
-                        "{fb.feedbackComments}"
+                        "{fb.comments || fb.feedbackComments}"
                       </p>
                     )}
                   </div>
