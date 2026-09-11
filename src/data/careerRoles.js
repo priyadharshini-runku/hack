@@ -171,14 +171,449 @@ export const CURATED_LEARNING_RESOURCES = [
   }
 ];
 
-export function computeClientSkillGap(student, targetRoleId = 'role_swe') {
-  const role = CAREER_ROLES.find(r => 
-    r.id === targetRoleId || 
-    r.title?.toLowerCase() === targetRoleId?.toLowerCase() ||
-    r.title?.toLowerCase() === student?.targetRoleTitle?.toLowerCase() ||
-    r.id === student?.targetRoleId
-  ) || CAREER_ROLES[0];
-  
+export const SKILL_LEARNING_HUB_MAP = {
+  'python': {
+    courseId: 'python',
+    courseName: 'Python',
+    category: 'Programming Languages',
+    youtubeTitle: 'Python for Beginners – Full Course',
+    youtubeUrl: 'https://www.youtube.com/watch?v=rfscVS0vtbw',
+    duration: '4.5 Hours',
+    provider: 'freeCodeCamp (YouTube)',
+    docsUrl: 'https://docs.python.org/3/tutorial/',
+    practiceUrl: 'https://www.hackerrank.com/domains/python',
+    whyLearn: 'Primary industry language for backend services, automation, scripting, and data pipelines.'
+  },
+  'dsa': {
+    courseId: 'dsa',
+    courseName: 'Data Structures & Algorithms (DSA)',
+    category: 'Core Computer Science',
+    youtubeTitle: 'Data Structures and Algorithms in Java / Python',
+    youtubeUrl: 'https://www.youtube.com/watch?v=RBSGKlAnoiM',
+    duration: '14 Hours',
+    provider: 'freeCodeCamp (YouTube)',
+    docsUrl: 'https://www.geeksforgeeks.org/data-structures/',
+    practiceUrl: 'https://leetcode.com/problemset/all/',
+    whyLearn: 'Essential for technical interview screening rounds and algorithmic problem solving at tier-1 tech firms.'
+  },
+  'data structures & algorithms': {
+    courseId: 'dsa',
+    courseName: 'Data Structures & Algorithms (DSA)',
+    category: 'Core Computer Science',
+    youtubeTitle: 'Data Structures and Algorithms in Java / Python',
+    youtubeUrl: 'https://www.youtube.com/watch?v=RBSGKlAnoiM',
+    duration: '14 Hours',
+    provider: 'freeCodeCamp (YouTube)',
+    docsUrl: 'https://www.geeksforgeeks.org/data-structures/',
+    practiceUrl: 'https://leetcode.com/problemset/all/',
+    whyLearn: 'Core foundational competence for technical placement drives and high-efficiency code implementation.'
+  },
+  'data structures': {
+    courseId: 'dsa',
+    courseName: 'Data Structures & Algorithms (DSA)',
+    category: 'Core Computer Science',
+    youtubeTitle: 'Data Structures and Algorithms in Java / Python',
+    youtubeUrl: 'https://www.youtube.com/watch?v=RBSGKlAnoiM',
+    duration: '14 Hours',
+    provider: 'freeCodeCamp (YouTube)',
+    docsUrl: 'https://www.geeksforgeeks.org/data-structures/',
+    practiceUrl: 'https://leetcode.com/problemset/all/',
+    whyLearn: 'Fundamental memory organization techniques needed for all software engineering roles.'
+  },
+  'algorithms': {
+    courseId: 'dsa',
+    courseName: 'Data Structures & Algorithms (DSA)',
+    category: 'Core Computer Science',
+    youtubeTitle: 'Algorithms & Complexity Analysis Masterclass',
+    youtubeUrl: 'https://www.youtube.com/watch?v=RBSGKlAnoiM',
+    duration: '14 Hours',
+    provider: 'freeCodeCamp (YouTube)',
+    docsUrl: 'https://www.geeksforgeeks.org/fundamentals-of-algorithms/',
+    practiceUrl: 'https://leetcode.com/problemset/all/',
+    whyLearn: 'Crucial for passing coding rounds and optimizing computational complexity.'
+  },
+  'sql': {
+    courseId: 'sql',
+    courseName: 'SQL',
+    category: 'Core Computer Science',
+    youtubeTitle: 'SQL Tutorial - Full Database Course for Beginners',
+    youtubeUrl: 'https://www.youtube.com/watch?v=HXV3zeRR3h4',
+    duration: '4.5 Hours',
+    provider: 'freeCodeCamp (YouTube)',
+    docsUrl: 'https://www.postgresqltutorial.com/',
+    practiceUrl: 'https://www.hackerrank.com/domains/sql',
+    whyLearn: 'Crucial for querying enterprise databases, joins, aggregations, schema design, and transactional data.'
+  },
+  'sql & database design': {
+    courseId: 'sql',
+    courseName: 'SQL',
+    category: 'Core Computer Science',
+    youtubeTitle: 'SQL Database Architecture & Schema Design',
+    youtubeUrl: 'https://www.youtube.com/watch?v=HXV3zeRR3h4',
+    duration: '4.5 Hours',
+    provider: 'freeCodeCamp (YouTube)',
+    docsUrl: 'https://www.postgresqltutorial.com/',
+    practiceUrl: 'https://www.hackerrank.com/domains/sql',
+    whyLearn: 'Required for schema normalization, query optimization, indexing, and transactional integrity.'
+  },
+  'dbms': {
+    courseId: 'dbms',
+    courseName: 'DBMS',
+    category: 'Core Computer Science',
+    youtubeTitle: 'Database Management Systems Full Course',
+    youtubeUrl: 'https://www.youtube.com/watch?v=HXV3zeRR3h4',
+    duration: '5 Hours',
+    provider: 'freeCodeCamp (YouTube)',
+    docsUrl: 'https://www.geeksforgeeks.org/dbms/',
+    practiceUrl: 'https://leetcode.com/problemset/database/',
+    whyLearn: 'Deep understanding of ACID properties, indexing, concurrency control, and recovery.'
+  },
+  'git': {
+    courseId: 'git',
+    courseName: 'Git & GitHub',
+    category: 'Core Computer Science',
+    youtubeTitle: 'Git and GitHub for Beginners - Crash Course',
+    youtubeUrl: 'https://www.youtube.com/watch?v=RGOj5yHMFew',
+    duration: '1.5 Hours',
+    provider: 'freeCodeCamp (YouTube)',
+    docsUrl: 'https://git-scm.com/doc',
+    practiceUrl: 'https://learngitbranching.js.org/',
+    whyLearn: 'Universal industry standard for team collaboration, CI/CD branching strategies, and open-source workflows.'
+  },
+  'git & github': {
+    courseId: 'git',
+    courseName: 'Git & GitHub',
+    category: 'Core Computer Science',
+    youtubeTitle: 'Git and GitHub for Beginners - Crash Course',
+    youtubeUrl: 'https://www.youtube.com/watch?v=RGOj5yHMFew',
+    duration: '1.5 Hours',
+    provider: 'freeCodeCamp (YouTube)',
+    docsUrl: 'https://git-scm.com/doc',
+    practiceUrl: 'https://learngitbranching.js.org/',
+    whyLearn: 'Universal prerequisite for source code management and collaborative engineering.'
+  },
+  'git & version control': {
+    courseId: 'git',
+    courseName: 'Git & GitHub',
+    category: 'Core Computer Science',
+    youtubeTitle: 'Git and GitHub for Beginners - Crash Course',
+    youtubeUrl: 'https://www.youtube.com/watch?v=RGOj5yHMFew',
+    duration: '1.5 Hours',
+    provider: 'freeCodeCamp (YouTube)',
+    docsUrl: 'https://git-scm.com/doc',
+    practiceUrl: 'https://learngitbranching.js.org/',
+    whyLearn: 'Required for production PR reviews, merge conflict resolution, and version tracking.'
+  },
+  'react': {
+    courseId: 'react',
+    courseName: 'React & Modern Frontend',
+    category: 'Web Development',
+    youtubeTitle: 'React 18 Full Course – Build 4 Projects',
+    youtubeUrl: 'https://www.youtube.com/watch?v=bMknfKXIFA8',
+    duration: '12 Hours',
+    provider: 'freeCodeCamp (YouTube)',
+    docsUrl: 'https://react.dev/learn',
+    practiceUrl: 'https://react.dev/learn/describing-the-ui',
+    whyLearn: 'Industry standard for building dynamic, responsive, component-based user interfaces.'
+  },
+  'javascript': {
+    courseId: 'javascript',
+    courseName: 'JavaScript',
+    category: 'Web Development',
+    youtubeTitle: 'JavaScript Programming - Full Course',
+    youtubeUrl: 'https://www.youtube.com/watch?v=PkZNo7MFNFg',
+    duration: '3.5 Hours',
+    provider: 'freeCodeCamp (YouTube)',
+    docsUrl: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript',
+    practiceUrl: 'https://www.hackerrank.com/domains/javascript',
+    whyLearn: 'Core language of modern web applications, event-driven architectures, and Node.js.'
+  },
+  'typescript': {
+    courseId: 'javascript',
+    courseName: 'JavaScript / TypeScript',
+    category: 'Web Development',
+    youtubeTitle: 'TypeScript Full Course for Beginners',
+    youtubeUrl: 'https://www.youtube.com/watch?v=30LWjhZzg50',
+    duration: '3 Hours',
+    provider: 'freeCodeCamp (YouTube)',
+    docsUrl: 'https://www.typescriptlang.org/docs/',
+    practiceUrl: 'https://www.typescriptlang.org/play',
+    whyLearn: 'Brings type safety, interfaces, and maintainability to enterprise web codebases.'
+  },
+  'java': {
+    courseId: 'java',
+    courseName: 'Java',
+    category: 'Programming Languages',
+    youtubeTitle: 'Java Full Course for Beginners',
+    youtubeUrl: 'https://www.youtube.com/watch?v=xk4_1vDrzzo',
+    duration: '12 Hours',
+    provider: 'Bro Code (YouTube)',
+    docsUrl: 'https://docs.oracle.com/en/java/',
+    practiceUrl: 'https://www.hackerrank.com/domains/java',
+    whyLearn: 'Enterprise standard for multi-threaded backend microservices and high-throughput systems.'
+  },
+  'c': {
+    courseId: 'c',
+    courseName: 'C Programming',
+    category: 'Programming Languages',
+    youtubeTitle: 'C Programming Full Course for Beginners',
+    youtubeUrl: 'https://www.youtube.com/watch?v=KJgsSFOSQv0',
+    duration: '4 Hours',
+    provider: 'freeCodeCamp (Mike Dane)',
+    docsUrl: 'https://en.cppreference.com/w/c',
+    practiceUrl: 'https://www.hackerrank.com/domains/c',
+    whyLearn: 'Foundational procedural language for low-level memory control, pointers, and embedded systems.'
+  },
+  'cpp': {
+    courseId: 'cpp',
+    courseName: 'C++',
+    category: 'Programming Languages',
+    youtubeTitle: 'C++ Programming Course - Beginner to Advanced',
+    youtubeUrl: 'https://www.youtube.com/watch?v=vLnPwxZdW4Y',
+    duration: '10 Hours',
+    provider: 'freeCodeCamp (The Cherno)',
+    docsUrl: 'https://en.cppreference.com/w/cpp',
+    practiceUrl: 'https://leetcode.com/problemset/all/',
+    whyLearn: 'High-performance systems programming, STL containers, game engines, and competitive programming.'
+  },
+  'c++': {
+    courseId: 'cpp',
+    courseName: 'C++',
+    category: 'Programming Languages',
+    youtubeTitle: 'C++ Programming Course - Beginner to Advanced',
+    youtubeUrl: 'https://www.youtube.com/watch?v=vLnPwxZdW4Y',
+    duration: '10 Hours',
+    provider: 'freeCodeCamp (The Cherno)',
+    docsUrl: 'https://en.cppreference.com/w/cpp',
+    practiceUrl: 'https://leetcode.com/problemset/all/',
+    whyLearn: 'High-performance systems programming, STL containers, game engines, and competitive programming.'
+  },
+  'docker': {
+    courseId: 'cloud',
+    courseName: 'Cloud Computing (Docker & AWS)',
+    category: 'Cloud & Security',
+    youtubeTitle: 'Docker Tutorial for Beginners [Full Free Course]',
+    youtubeUrl: 'https://www.youtube.com/watch?v=3c-iBn73dDE',
+    duration: '3 Hours',
+    provider: 'TechWorld with Nana (YouTube)',
+    docsUrl: 'https://docs.docker.com/get-started/',
+    practiceUrl: 'https://labs.play-with-docker.com/',
+    whyLearn: 'Containerization, microservices packaging, and standardized production deployment environments.'
+  },
+  'docker & containerization': {
+    courseId: 'cloud',
+    courseName: 'Cloud Computing (Docker & AWS)',
+    category: 'Cloud & Security',
+    youtubeTitle: 'Docker & Containerization Masterclass',
+    youtubeUrl: 'https://www.youtube.com/watch?v=3c-iBn73dDE',
+    duration: '3 Hours',
+    provider: 'TechWorld with Nana (YouTube)',
+    docsUrl: 'https://docs.docker.com/',
+    practiceUrl: 'https://labs.play-with-docker.com/',
+    whyLearn: 'Essential DevOps skill demanded in modern cloud infrastructure.'
+  },
+  'aws': {
+    courseId: 'cloud',
+    courseName: 'Cloud Computing',
+    category: 'Cloud & Security',
+    youtubeTitle: 'AWS Certified Cloud Practitioner Training',
+    youtubeUrl: 'https://www.youtube.com/watch?v=k1RI5locZE4',
+    duration: '4 Hours',
+    provider: 'freeCodeCamp (YouTube)',
+    docsUrl: 'https://aws.amazon.com/getting-started/',
+    practiceUrl: 'https://aws.amazon.com/free/',
+    whyLearn: 'Leading cloud provider for scalable computing, storage, serverless, and IAM security.'
+  },
+  'cloud': {
+    courseId: 'cloud',
+    courseName: 'Cloud Computing',
+    category: 'Cloud & Security',
+    youtubeTitle: 'Cloud Computing Architecture & Infrastructure',
+    youtubeUrl: 'https://www.youtube.com/watch?v=k1RI5locZE4',
+    duration: '4 Hours',
+    provider: 'freeCodeCamp (YouTube)',
+    docsUrl: 'https://aws.amazon.com/what-is-cloud-computing/',
+    practiceUrl: 'https://aws.amazon.com/free/',
+    whyLearn: 'Modern infrastructure deployment, horizontal scaling, and cloud native services.'
+  },
+  'vlsi': {
+    courseId: 'vlsi',
+    courseName: 'VLSI Design',
+    category: 'Hardware & VLSI',
+    youtubeTitle: 'CMOS VLSI Design & Static Timing Analysis',
+    youtubeUrl: 'https://www.youtube.com/watch?v=N_8q6h2YpA4',
+    duration: '6 Hours',
+    provider: 'NPTEL (YouTube)',
+    docsUrl: 'https://nptel.ac.in/courses/117101105',
+    practiceUrl: 'https://www.eda.org/',
+    whyLearn: 'Silicon chip architecture, CMOS stick diagrams, and timing closure for semiconductor engineering.'
+  },
+  'verilog': {
+    courseId: 'verilog',
+    courseName: 'Verilog HDL',
+    category: 'Hardware & VLSI',
+    youtubeTitle: 'Verilog HDL RTL Design & Testbenches',
+    youtubeUrl: 'https://www.youtube.com/watch?v=PJGvPyx_N6Y',
+    duration: '4 Hours',
+    provider: 'NPTEL (YouTube)',
+    docsUrl: 'https://www.chipverify.com/verilog/verilog-tutorial',
+    practiceUrl: 'https://hdlbits.01xz.net/wiki/Main_Page',
+    whyLearn: 'Standard hardware description language for ASIC synthesis, FPGA programming, and digital logic.'
+  },
+  'machine learning': {
+    courseId: 'ml',
+    courseName: 'Machine Learning',
+    category: 'AI & Data Science',
+    youtubeTitle: 'Machine Learning for Everybody – Full Course',
+    youtubeUrl: 'https://www.youtube.com/watch?v=GwIo3gDZCVQ',
+    duration: '10 Hours',
+    provider: 'freeCodeCamp (YouTube)',
+    docsUrl: 'https://scikit-learn.org/stable/tutorial/',
+    practiceUrl: 'https://www.kaggle.com/learn',
+    whyLearn: 'Core statistical models, regression, classification, clustering, and predictive intelligence.'
+  },
+  'ai': {
+    courseId: 'ai',
+    courseName: 'Artificial Intelligence',
+    category: 'AI & Data Science',
+    youtubeTitle: 'Artificial Intelligence – MIT 6.034 Full Course',
+    youtubeUrl: 'https://www.youtube.com/watch?v=JMUxmLyrhSk',
+    duration: '6 Hours',
+    provider: 'MIT OpenCourseWare (YouTube)',
+    docsUrl: 'https://ocw.mit.edu/courses/6-034-artificial-intelligence-fall-2010/',
+    practiceUrl: 'https://www.kaggle.com/learn',
+    whyLearn: 'Search heuristics, constraint satisfaction, game theory, and modern autonomous reasoning.'
+  },
+  'networks': {
+    courseId: 'networks',
+    courseName: 'Computer Networks',
+    category: 'Core Computer Science',
+    youtubeTitle: 'Computer Networking Course - Network Engineering [Hands-On]',
+    youtubeUrl: 'https://www.youtube.com/watch?v=IPvYjXCsTg8',
+    duration: '9 Hours',
+    provider: 'freeCodeCamp (YouTube)',
+    docsUrl: 'https://www.geeksforgeeks.org/computer-network-tutorials/',
+    practiceUrl: 'https://www.wireshark.org/',
+    whyLearn: 'OSI 7-layer model, TCP/IP handshakes, routing, DNS, HTTP/3, and socket programming.'
+  },
+  'os': {
+    courseId: 'os',
+    courseName: 'Operating Systems',
+    category: 'Core Computer Science',
+    youtubeTitle: 'Operating Systems Full Course',
+    youtubeUrl: 'https://www.youtube.com/watch?v=26QPDBe-NB8',
+    duration: '8 Hours',
+    provider: 'NPTEL (YouTube)',
+    docsUrl: 'https://pages.cs.wisc.edu/~remzi/OSTEP/',
+    practiceUrl: 'https://www.geeksforgeeks.org/operating-systems/',
+    whyLearn: 'Processes, threads, CPU scheduling algorithms, virtual memory, paging, and deadlock resolution.'
+  },
+  'oop': {
+    courseId: 'oop',
+    courseName: 'Object-Oriented Programming (OOP)',
+    category: 'Core Computer Science',
+    youtubeTitle: 'Object-Oriented Programming (OOP) Principles',
+    youtubeUrl: 'https://www.youtube.com/watch?v=SiBw7os-_zI',
+    duration: '5 Hours',
+    provider: 'freeCodeCamp (YouTube)',
+    docsUrl: 'https://www.geeksforgeeks.org/object-oriented-programming-oops-concept-in-java/',
+    practiceUrl: 'https://leetcode.com/problemset/all/',
+    whyLearn: 'SOLID design principles, design patterns, encapsulation, polymorphism, and maintainable software architecture.'
+  },
+  'cybersecurity': {
+    courseId: 'cybersecurity',
+    courseName: 'Cybersecurity',
+    category: 'Cloud & Security',
+    youtubeTitle: 'Cybersecurity for Beginners - Full Course',
+    youtubeUrl: 'https://www.youtube.com/watch?v=U_P23dqUrNE',
+    duration: '6 Hours',
+    provider: 'freeCodeCamp (YouTube)',
+    docsUrl: 'https://owasp.org/www-project-top-ten/',
+    practiceUrl: 'https://overthewire.org/wargames/bandit/',
+    whyLearn: 'OWASP Top 10 vulnerabilities, cryptography, authentication, network defense, and zero-trust security.'
+  }
+};
+
+/**
+ * Resolves any skill string to its corresponding Learning Hub Course details,
+ * free YouTube video, documentation, and 30-min assessment ID.
+ */
+export function getLearningHubMappingForSkill(skillName = '') {
+  if (!skillName) return null;
+  const clean = skillName.toLowerCase().trim();
+
+  if (SKILL_LEARNING_HUB_MAP[clean]) {
+    return SKILL_LEARNING_HUB_MAP[clean];
+  }
+
+  for (const [key, mapping] of Object.entries(SKILL_LEARNING_HUB_MAP)) {
+    if (clean.includes(key) || key.includes(clean)) {
+      return mapping;
+    }
+  }
+
+  return {
+    courseId: 'dsa',
+    courseName: `${skillName} (Core Learning)`,
+    category: 'Core Computer Science',
+    youtubeTitle: `${skillName} Comprehensive Tutorial`,
+    youtubeUrl: 'https://www.youtube.com/results?search_query=' + encodeURIComponent(skillName + ' tutorial freecodecamp'),
+    duration: '4 Hours',
+    provider: 'freeCodeCamp / YouTube',
+    docsUrl: 'https://www.geeksforgeeks.org/' + encodeURIComponent(skillName.toLowerCase().replace(/\s+/g, '-')),
+    practiceUrl: 'https://leetcode.com/',
+    whyLearn: 'Critical industry competency required for employer placement evaluation.'
+  };
+}
+
+export function computeClientSkillGap(student, targetRoleId = 'role_swe', availableJobRoles = CAREER_ROLES) {
+  // If targetRoleId is an object (e.g. Industry Role or Requirement)
+  if (typeof targetRoleId === 'object' && targetRoleId !== null) {
+    var role = targetRoleId;
+  } else {
+    // Find role from provided roles or CAREER_ROLES
+    const rolePool = Array.isArray(availableJobRoles) && availableJobRoles.length > 0 ? availableJobRoles : CAREER_ROLES;
+    const targetStr = typeof targetRoleId === 'string' ? targetRoleId.toLowerCase() : '';
+    var role = rolePool.find(r => 
+      r.id === targetRoleId || 
+      (targetStr && r.title?.toLowerCase() === targetStr) ||
+      (student?.targetRoleTitle && r.title?.toLowerCase() === student.targetRoleTitle.toLowerCase()) ||
+      r.id === student?.targetRoleId
+    ) || CAREER_ROLES[0];
+  }
+
+  // Standardize required skills from either industryRequirements or requiredSkills or currentSkills
+  let reqs = [];
+  if (Array.isArray(role.industryRequirements) && role.industryRequirements.length > 0) {
+    reqs = role.industryRequirements;
+  } else if (Array.isArray(role.requiredSkills) && role.requiredSkills.length > 0) {
+    const defaultWeight = Math.round(100 / role.requiredSkills.length);
+    reqs = role.requiredSkills.map(s => {
+      const sName = typeof s === 'string' ? s : (s.name || s.skill);
+      return {
+        skill: sName,
+        level: 'Intermediate',
+        weight: defaultWeight,
+        category: 'Industry Requirement',
+        whyLearn: `Direct prerequisite competency published by industry for ${role.title || 'this position'}.`
+      };
+    });
+  } else if (Array.isArray(role.currentSkills) && role.currentSkills.length > 0) {
+    const defaultWeight = Math.round(100 / role.currentSkills.length);
+    reqs = role.currentSkills.map(s => {
+      const sName = typeof s === 'string' ? s : (s.name || s.skill);
+      return {
+        skill: sName,
+        level: 'Intermediate',
+        weight: defaultWeight,
+        category: 'Industry Requirement',
+        whyLearn: `Direct prerequisite competency published by industry for ${role.title || 'this position'}.`
+      };
+    });
+  } else {
+    reqs = CAREER_ROLES[0].industryRequirements;
+  }
+
   const studentSkills = Array.isArray(student?.skills) ? student.skills : [];
   const studentSkillMap = new Map();
   studentSkills.forEach(s => {
@@ -198,44 +633,49 @@ export function computeClientSkillGap(student, targetRoleId = 'role_swe') {
   let totalWeight = 0;
   let earnedWeight = 0;
 
-  role.industryRequirements.forEach(req => {
-    totalWeight += req.weight;
+  reqs.forEach(req => {
+    const weight = req.weight || Math.round(100 / (reqs.length || 1));
+    totalWeight += weight;
     
     // Check match by exact or substring
     let matched = studentSkillMap.get(req.skill.toLowerCase());
     if (!matched) {
       for (const [sName, sObj] of studentSkillMap.entries()) {
-        if (sName.includes(req.skill.toLowerCase()) || req.skill.toLowerCase().includes(sName)) {
+        if (sName.toLowerCase() === req.skill.toLowerCase() || sName.toLowerCase().includes(req.skill.toLowerCase()) || req.skill.toLowerCase().includes(sName.toLowerCase())) {
           matched = sObj;
           break;
         }
       }
     }
 
+    const hubMapping = getLearningHubMappingForSkill(req.skill);
+
     if (matched) {
       const studentScore = levelMultiplier[matched.level] || 0.85;
-      const requiredScore = levelMultiplier[req.level] || 0.85;
+      const requiredScore = levelMultiplier[req.level || 'Intermediate'] || 0.85;
       const ratio = Math.min(1.0, studentScore / requiredScore);
-      earnedWeight += req.weight * ratio;
+      earnedWeight += weight * ratio;
 
       skillsHave.push({
         skill: req.skill,
-        category: req.category,
+        category: req.category || hubMapping?.category || 'Technical',
         studentLevel: matched.level || 'Intermediate',
-        requiredLevel: req.level,
-        weight: req.weight,
+        requiredLevel: req.level || 'Intermediate',
+        weight: weight,
         verified: matched.verified || false,
-        rating: matched.rating || 4.0
+        rating: matched.rating || 4.0,
+        learningHub: hubMapping
       });
     } else {
-      const priority = req.weight >= 20 ? 'High' : req.weight >= 15 ? 'Medium' : 'Standard';
+      const priority = weight >= 25 ? 'High' : weight >= 15 ? 'Medium' : 'Standard';
       skillsNeed.push({
         skill: req.skill,
-        category: req.category,
-        requiredLevel: req.level,
-        weight: req.weight,
+        category: req.category || hubMapping?.category || 'Technical',
+        requiredLevel: req.level || 'Intermediate',
+        weight: weight,
         priority,
-        whyLearn: req.whyLearn || `Critical for ${role.title} evaluation (${req.weight}% role weight).`
+        whyLearn: req.whyLearn || `Critical for ${role.title || 'target role'} evaluation (${weight}% role weight).`,
+        learningHub: hubMapping
       });
     }
   });
@@ -244,8 +684,29 @@ export function computeClientSkillGap(student, targetRoleId = 'role_swe') {
   
   const missingNames = skillsNeed.map(s => s.skill).slice(0, 3).join(', ');
   const recommendationSummary = skillsNeed.length > 0
-    ? `You are currently ${matchPercentage}% matched with the ${role.title} industry benchmark. Master ${missingNames} to bridge your skill gap and maximize placement readiness.`
-    : `Outstanding! You meet 100% of the core industry requirements for ${role.title}. Continue practicing advanced mock technical assessments.`;
+    ? `You are currently ${matchPercentage}% matched with the ${role.title || 'target role'} industry benchmark. Master ${missingNames} to bridge your skill gap and maximize placement readiness.`
+    : `Outstanding! You meet 100% of the core industry requirements for ${role.title || 'target role'}. Continue practicing advanced mock technical assessments.`;
+
+  // Aggregate curated Learning Hub resources for missing skills
+  const recommendedLearningHubResources = skillsNeed.map(need => {
+    const hub = need.learningHub;
+    return {
+      id: `hub_res_${need.skill.toLowerCase().replace(/\s+/g, '_')}`,
+      skill: need.skill,
+      title: hub.youtubeTitle || `${need.skill} Full Course`,
+      platform: hub.provider || 'freeCodeCamp (YouTube)',
+      url: hub.youtubeUrl,
+      docsUrl: hub.docsUrl,
+      practiceUrl: hub.practiceUrl,
+      courseId: hub.courseId,
+      courseName: hub.courseName,
+      type: 'Video Course & Interactive Docs',
+      level: need.requiredLevel || 'All Levels',
+      estimatedHours: hub.duration || '4 Hours',
+      rating: 4.9,
+      description: hub.whyLearn || `Learn ${need.skill} from foundational principles to advanced application. Access free YouTube tutorials, documentation, and verified 30-min assessments in Learning Hub.`
+    };
+  });
 
   return {
     studentId: student?.id || 'usr_current',
@@ -254,6 +715,8 @@ export function computeClientSkillGap(student, targetRoleId = 'role_swe') {
     matchPercentage,
     skillsHave,
     skillsNeed,
-    recommendationSummary
+    recommendationSummary,
+    recommendedLearningHubResources
   };
 }
+

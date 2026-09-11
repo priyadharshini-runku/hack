@@ -293,20 +293,43 @@ export const StudentDashboard = ({ setActivePage }) => {
                   Skills You Need ({gapData?.skillsNeed?.length || 0})
                 </div>
                 <div className="space-y-2">
-                  {gapData?.skillsNeed?.map(s => (
-                    <div key={s.skill} className="p-2.5 rounded-lg bg-amber-50/50 border border-amber-100 flex items-center justify-between">
-                      <div>
-                        <span className="text-xs font-semibold text-slate-800">{s.skill}</span>
-                        <span className="text-[10px] text-amber-700 ml-2 font-medium">({s.priority} Priority)</span>
+                  {gapData?.skillsNeed?.map(s => {
+                    const lhCourseId = s.learningHub?.courseId;
+                    return (
+                      <div key={s.skill} className="p-2.5 rounded-lg bg-amber-50/50 border border-amber-100 flex items-center justify-between">
+                        <div>
+                          <span className="text-xs font-semibold text-slate-800">{s.skill}</span>
+                          <span className="text-[10px] text-amber-700 ml-2 font-medium">({s.priority} Priority)</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => {
+                              if (lhCourseId) {
+                                sessionStorage.setItem('skillbridge_active_course_id', lhCourseId);
+                                sessionStorage.removeItem('skillbridge_start_assessment');
+                              }
+                              setActivePage('learning-resources');
+                            }}
+                            className="text-[10px] font-bold text-brand-600 hover:text-brand-700 underline"
+                          >
+                            Learn Free
+                          </button>
+                          {lhCourseId && (
+                            <button
+                              onClick={() => {
+                                sessionStorage.setItem('skillbridge_active_course_id', lhCourseId);
+                                sessionStorage.setItem('skillbridge_start_assessment', 'true');
+                                setActivePage('learning-resources');
+                              }}
+                              className="text-[10px] font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200"
+                            >
+                              30m Test
+                            </button>
+                          )}
+                        </div>
                       </div>
-                      <button
-                        onClick={() => setActivePage('learning-resources')}
-                        className="text-[10px] font-bold text-brand-600 hover:text-brand-700 underline"
-                      >
-                        Learn Free
-                      </button>
-                    </div>
-                  ))}
+                    );
+                  })}
 
                   {(!gapData?.skillsNeed || gapData.skillsNeed.length === 0) && (
                     <p className="text-xs text-emerald-600 font-semibold p-3 text-center">All core requirements met!</p>
@@ -325,51 +348,66 @@ export const StudentDashboard = ({ setActivePage }) => {
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-brand-300 transition-all flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-rose-100 text-rose-700">
-                      YouTube Course
-                    </span>
-                    <span className="text-xs text-slate-400">14 Hours</span>
+              {((gapData?.recommendedLearningHubResources?.length > 0)
+                ? gapData.recommendedLearningHubResources.slice(0, 2)
+                : [
+                    {
+                      id: 'res_dsa',
+                      title: 'Data Structures & Algorithms in Java / Python',
+                      platform: 'YouTube (freeCodeCamp)',
+                      estimatedHours: '14 Hours',
+                      description: 'freeCodeCamp.org · Arrays, Trees, Graphs & Dynamic Programming',
+                      url: 'https://www.youtube.com/watch?v=RBSGKlAnoiM',
+                      courseId: 'dsa'
+                    },
+                    {
+                      id: 'res_react',
+                      title: 'React 18 Interactive Documentation & Sandboxes',
+                      platform: 'Official Docs',
+                      estimatedHours: '10 Hours',
+                      description: 'React.dev · Components, Hooks, State & Modern UI Patterns',
+                      url: 'https://react.dev/learn',
+                      courseId: 'javascript'
+                    }
+                  ]
+              ).map((res) => (
+                <div key={res.title} className="p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-brand-300 transition-all flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-rose-100 text-rose-700">
+                        {res.platform || 'Free Resource'}
+                      </span>
+                      <span className="text-xs text-slate-400">{res.estimatedHours || '4 Hours'}</span>
+                    </div>
+                    <h4 className="text-xs font-bold text-slate-800 leading-snug">
+                      {res.title}
+                    </h4>
+                    <p className="text-[11px] text-slate-500 mt-1 line-clamp-2">{res.description}</p>
                   </div>
-                  <h4 className="text-xs font-bold text-slate-800 leading-snug">
-                    Data Structures & Algorithms in Java / Python
-                  </h4>
-                  <p className="text-[11px] text-slate-500 mt-1">freeCodeCamp.org · Arrays, Trees, Graphs & Dynamic Programming</p>
-                </div>
-                <a
-                  href="https://www.youtube.com/watch?v=RBSGKlAnoiM"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-3 text-xs font-semibold text-brand-600 hover:text-brand-700 flex items-center gap-1"
-                >
-                  Start Course <ExternalLink className="w-3 h-3" />
-                </a>
-              </div>
-
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-brand-300 transition-all flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-sky-100 text-sky-700">
-                      Official Docs
-                    </span>
-                    <span className="text-xs text-slate-400">10 Hours</span>
+                  <div className="mt-3 pt-2 border-t border-slate-200 flex items-center justify-between gap-2">
+                    {res.courseId && (
+                      <button
+                        onClick={() => {
+                          sessionStorage.setItem('skillbridge_active_course_id', res.courseId);
+                          sessionStorage.removeItem('skillbridge_start_assessment');
+                          setActivePage('learning-resources');
+                        }}
+                        className="text-xs font-bold text-indigo-600 hover:text-indigo-700"
+                      >
+                        Hub Course &rarr;
+                      </button>
+                    )}
+                    <a
+                      href={res.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-xs font-semibold text-brand-600 hover:text-brand-700 flex items-center gap-1"
+                    >
+                      Start Learning <ExternalLink className="w-3 h-3" />
+                    </a>
                   </div>
-                  <h4 className="text-xs font-bold text-slate-800 leading-snug">
-                    React 18 Interactive Documentation & Sandboxes
-                  </h4>
-                  <p className="text-[11px] text-slate-500 mt-1">React.dev · Components, Hooks, State & Modern UI Patterns</p>
                 </div>
-                <a
-                  href="https://react.dev/learn"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-3 text-xs font-semibold text-brand-600 hover:text-brand-700 flex items-center gap-1"
-                >
-                  Start Reading <ExternalLink className="w-3 h-3" />
-                </a>
-              </div>
+              ))}
             </div>
           </div>
 

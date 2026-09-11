@@ -1762,14 +1762,51 @@ class DataStore {
     return (this.data.companies || []).find(c => c && c.id === id);
   }
 
-  // ==================== JOB ROLES ====================
+  // ==================== JOB ROLES & INDUSTRY BENCHMARKS ====================
   getJobRoles() {
-    return this.data.jobRoles || [];
+    const baseRoles = this.data.jobRoles || [];
+    const industryRoles = (this.data.industryRoles || []).map(r => ({
+      id: r.id,
+      title: `${r.title} (Industry)`,
+      category: r.category === 'software' ? 'Software' : r.category === 'hardware' ? 'Hardware / VLSI' : 'Core Engineering',
+      requiredSkills: r.requiredSkills || [],
+      industryRequirements: (r.requiredSkills || []).map(s => ({
+        skill: s,
+        level: 'Intermediate',
+        weight: Math.round(100 / ((r.requiredSkills || []).length || 1)),
+        category: 'Industry Requirement',
+        whyLearn: `Required by enterprise recruitment criteria for ${r.title}.`
+      }))
+    }));
+
+    const industryReqs = (this.data.industryRequirements || []).map(r => {
+      const skills = r.currentSkills || r.highDemandSkills || [];
+      return {
+        id: r.id,
+        title: `${r.companyName || 'Industry'} · ${r.roleTitle}`,
+        category: 'Industry Live Directive',
+        requiredSkills: skills,
+        industryRequirements: skills.map(s => ({
+          skill: s,
+          level: 'Intermediate',
+          weight: Math.round(100 / (skills.length || 1)),
+          category: 'Industry Requirement',
+          whyLearn: `Required by ${r.companyName || 'Industry'} for ${r.roleTitle}.`
+        }))
+      };
+    });
+
+    return [...baseRoles, ...industryRoles, ...industryReqs];
   }
 
   getJobRoleById(id) {
     if (!id) return null;
-    return (this.data.jobRoles || []).find(r => r && r.id === id);
+    const all = this.getJobRoles();
+    return all.find(r => 
+      r.id === id || 
+      r.title?.toLowerCase() === id?.toLowerCase() ||
+      r.title?.toLowerCase().includes(id?.toLowerCase())
+    );
   }
 
   // ==================== SKILL GAP ENGINE ====================
@@ -1793,6 +1830,49 @@ class DataStore {
       if (s && s.name) studentSkillsMap.set(s.name.toLowerCase().trim(), s);
     });
 
+    const HUB_MAP = {
+      'python': { courseId: 'python', courseName: 'Python', youtubeUrl: 'https://www.youtube.com/watch?v=rfscVS0vtbw', duration: '4.5 Hours', provider: 'freeCodeCamp (YouTube)' },
+      'dsa': { courseId: 'dsa', courseName: 'Data Structures & Algorithms (DSA)', youtubeUrl: 'https://www.youtube.com/watch?v=RBSGKlAnoiM', duration: '14 Hours', provider: 'freeCodeCamp (YouTube)' },
+      'data structures': { courseId: 'dsa', courseName: 'Data Structures & Algorithms (DSA)', youtubeUrl: 'https://www.youtube.com/watch?v=RBSGKlAnoiM', duration: '14 Hours', provider: 'freeCodeCamp (YouTube)' },
+      'data structures & algorithms': { courseId: 'dsa', courseName: 'Data Structures & Algorithms (DSA)', youtubeUrl: 'https://www.youtube.com/watch?v=RBSGKlAnoiM', duration: '14 Hours', provider: 'freeCodeCamp (YouTube)' },
+      'sql': { courseId: 'sql', courseName: 'SQL', youtubeUrl: 'https://www.youtube.com/watch?v=HXV3zeRR3h4', duration: '4.5 Hours', provider: 'freeCodeCamp (YouTube)' },
+      'sql & database design': { courseId: 'sql', courseName: 'SQL', youtubeUrl: 'https://www.youtube.com/watch?v=HXV3zeRR3h4', duration: '4.5 Hours', provider: 'freeCodeCamp (YouTube)' },
+      'dbms': { courseId: 'dbms', courseName: 'DBMS', youtubeUrl: 'https://www.youtube.com/watch?v=HXV3zeRR3h4', duration: '5 Hours', provider: 'freeCodeCamp (YouTube)' },
+      'git': { courseId: 'git', courseName: 'Git & GitHub', youtubeUrl: 'https://www.youtube.com/watch?v=RGOj5yHMFew', duration: '1.5 Hours', provider: 'freeCodeCamp (YouTube)' },
+      'git & github': { courseId: 'git', courseName: 'Git & GitHub', youtubeUrl: 'https://www.youtube.com/watch?v=RGOj5yHMFew', duration: '1.5 Hours', provider: 'freeCodeCamp (YouTube)' },
+      'git & version control': { courseId: 'git', courseName: 'Git & GitHub', youtubeUrl: 'https://www.youtube.com/watch?v=RGOj5yHMFew', duration: '1.5 Hours', provider: 'freeCodeCamp (YouTube)' },
+      'react': { courseId: 'react', courseName: 'React & Modern Frontend', youtubeUrl: 'https://www.youtube.com/watch?v=bMknfKXIFA8', duration: '12 Hours', provider: 'freeCodeCamp (YouTube)' },
+      'javascript': { courseId: 'javascript', courseName: 'JavaScript', youtubeUrl: 'https://www.youtube.com/watch?v=PkZNo7MFNFg', duration: '3.5 Hours', provider: 'freeCodeCamp (YouTube)' },
+      'typescript': { courseId: 'javascript', courseName: 'JavaScript / TypeScript', youtubeUrl: 'https://www.youtube.com/watch?v=30LWjhZzg50', duration: '3 Hours', provider: 'freeCodeCamp (YouTube)' },
+      'java': { courseId: 'java', courseName: 'Java', youtubeUrl: 'https://www.youtube.com/watch?v=xk4_1vDrzzo', duration: '12 Hours', provider: 'Bro Code (YouTube)' },
+      'c': { courseId: 'c', courseName: 'C Programming', youtubeUrl: 'https://www.youtube.com/watch?v=KJgsSFOSQv0', duration: '4 Hours', provider: 'freeCodeCamp (Mike Dane)' },
+      'c++': { courseId: 'cpp', courseName: 'C++', youtubeUrl: 'https://www.youtube.com/watch?v=vLnPwxZdW4Y', duration: '10 Hours', provider: 'freeCodeCamp (The Cherno)' },
+      'cpp': { courseId: 'cpp', courseName: 'C++', youtubeUrl: 'https://www.youtube.com/watch?v=vLnPwxZdW4Y', duration: '10 Hours', provider: 'freeCodeCamp (The Cherno)' },
+      'docker': { courseId: 'cloud', courseName: 'Cloud Computing (Docker & AWS)', youtubeUrl: 'https://www.youtube.com/watch?v=3c-iBn73dDE', duration: '3 Hours', provider: 'TechWorld with Nana (YouTube)' },
+      'docker & containerization': { courseId: 'cloud', courseName: 'Cloud Computing (Docker & AWS)', youtubeUrl: 'https://www.youtube.com/watch?v=3c-iBn73dDE', duration: '3 Hours', provider: 'TechWorld with Nana (YouTube)' },
+      'aws': { courseId: 'cloud', courseName: 'Cloud Computing (Docker & AWS)', youtubeUrl: 'https://www.youtube.com/watch?v=k1RI5locZE4', duration: '4 Hours', provider: 'freeCodeCamp (YouTube)' },
+      'cloud': { courseId: 'cloud', courseName: 'Cloud Computing', youtubeUrl: 'https://www.youtube.com/watch?v=k1RI5locZE4', duration: '4 Hours', provider: 'freeCodeCamp (YouTube)' },
+      'vlsi': { courseId: 'vlsi', courseName: 'VLSI Design', youtubeUrl: 'https://www.youtube.com/watch?v=N_8q6h2YpA4', duration: '6 Hours', provider: 'NPTEL (YouTube)' },
+      'verilog': { courseId: 'verilog', courseName: 'Verilog HDL', youtubeUrl: 'https://www.youtube.com/watch?v=PJGvPyx_N6Y', duration: '4 Hours', provider: 'NPTEL (YouTube)' },
+      'machine learning': { courseId: 'ml', courseName: 'Machine Learning', youtubeUrl: 'https://www.youtube.com/watch?v=GwIo3gDZCVQ', duration: '10 Hours', provider: 'freeCodeCamp (YouTube)' },
+      'ai': { courseId: 'ai', courseName: 'Artificial Intelligence', youtubeUrl: 'https://www.youtube.com/watch?v=JMUxmLyrhSk', duration: '6 Hours', provider: 'MIT OpenCourseWare (YouTube)' }
+    };
+
+    const resolveHub = (skillName) => {
+      const s = skillName.toLowerCase().trim();
+      if (HUB_MAP[s]) return HUB_MAP[s];
+      for (const [k, v] of Object.entries(HUB_MAP)) {
+        if (s.includes(k) || k.includes(s)) return v;
+      }
+      return {
+        courseId: 'dsa',
+        courseName: `${skillName} (Core Learning)`,
+        youtubeUrl: `https://www.youtube.com/results?search_query=${encodeURIComponent(skillName + ' tutorial freecodecamp')}`,
+        duration: '4 Hours',
+        provider: 'freeCodeCamp / YouTube'
+      };
+    };
+
     const skillsHave = [];
     const skillsNeed = [];
     let totalWeight = 0;
@@ -1804,43 +1884,50 @@ class DataStore {
       'Advanced': 1.0
     };
 
-    role.industryRequirements.forEach(req => {
-      totalWeight += req.weight;
+    const reqs = role.industryRequirements || [];
+
+    reqs.forEach(req => {
+      const weight = req.weight || Math.round(100 / (reqs.length || 1));
+      totalWeight += weight;
       let matched = studentSkillsMap.get(req.skill.toLowerCase());
       if (!matched) {
         for (const [sName, sObj] of studentSkillsMap.entries()) {
-          if (sName.includes(req.skill.toLowerCase()) || req.skill.toLowerCase().includes(sName)) {
+          if (sName.toLowerCase() === req.skill.toLowerCase() || sName.toLowerCase().includes(req.skill.toLowerCase()) || req.skill.toLowerCase().includes(sName.toLowerCase())) {
             matched = sObj;
             break;
           }
         }
       }
 
+      const hub = resolveHub(req.skill);
+
       if (matched) {
         const studentScore = levelMultiplier[matched.level] || 0.8;
-        const requiredScore = levelMultiplier[req.level] || 0.8;
+        const requiredScore = levelMultiplier[req.level || 'Intermediate'] || 0.8;
         const ratio = Math.min(1.0, studentScore / requiredScore);
         
-        earnedWeight += req.weight * ratio;
+        earnedWeight += weight * ratio;
 
         skillsHave.push({
           skill: req.skill,
-          category: req.category,
+          category: req.category || 'Technical',
           studentLevel: matched.level || 'Intermediate',
-          requiredLevel: req.level,
-          weight: req.weight,
+          requiredLevel: req.level || 'Intermediate',
+          weight: weight,
           verified: matched.verified || false,
-          rating: matched.rating || 3.8
+          rating: matched.rating || 3.8,
+          learningHub: hub
         });
       } else {
-        const priority = req.weight >= 15 ? 'High' : req.weight >= 10 ? 'Medium' : 'Low';
+        const priority = weight >= 20 ? 'High' : weight >= 10 ? 'Medium' : 'Low';
         skillsNeed.push({
           skill: req.skill,
-          category: req.category,
-          requiredLevel: req.level,
-          weight: req.weight,
+          category: req.category || 'Technical',
+          requiredLevel: req.level || 'Intermediate',
+          weight: weight,
           priority,
-          whyLearn: `Frequently evaluated (${req.weight}% role impact) by enterprise industry hiring teams for ${role.title} positions.`
+          whyLearn: req.whyLearn || `Frequently evaluated (${weight}% role impact) by enterprise industry hiring teams for ${role.title} positions.`,
+          learningHub: hub
         });
       }
     });
@@ -1849,8 +1936,26 @@ class DataStore {
 
     const missingNames = skillsNeed.map(s => s.skill).slice(0, 3).join(', ');
     const recommendationSummary = skillsNeed.length > 0
-      ? `You are currently ${matchPercentage}% matched with the ${role.title} industry benchmark. Master ${missingNames} to bridge your skill gap and maximize placement readiness.`
-      : `Outstanding! You meet 100% of the core industry requirements for ${role.title}. Continue practicing advanced mock technical assessments.`;
+      ? `You are currently ${matchPercentage}% matched with the ${role.title} industry benchmark. Master ${missingNames} in Learning Hub to bridge your skill gap and maximize placement readiness.`
+      : `Outstanding! You meet 100% of the core industry requirements for ${role.title}. Continue practicing advanced mock technical assessments in Learning Hub.`;
+
+    const recommendedLearningHubResources = skillsNeed.map(need => {
+      const hub = need.learningHub;
+      return {
+        id: `hub_res_${need.skill.toLowerCase().replace(/\s+/g, '_')}`,
+        skill: need.skill,
+        title: hub.courseName ? `${hub.courseName} Full Course` : `${need.skill} Masterclass`,
+        platform: hub.provider || 'freeCodeCamp (YouTube)',
+        url: hub.youtubeUrl,
+        courseId: hub.courseId,
+        courseName: hub.courseName,
+        type: 'Video Course & Practice',
+        level: need.requiredLevel || 'All Levels',
+        estimatedHours: hub.duration || '4 Hours',
+        rating: 4.9,
+        description: need.whyLearn
+      };
+    });
 
     return {
       studentId: student.id,
@@ -1859,7 +1964,8 @@ class DataStore {
       matchPercentage,
       skillsHave,
       skillsNeed,
-      recommendationSummary
+      recommendationSummary,
+      recommendedLearningHubResources
     };
   }
 

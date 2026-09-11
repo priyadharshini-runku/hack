@@ -833,6 +833,34 @@
       ],
       "recruitmentHistory": [
         {
+          "id": "rfb_1789097500909",
+          "studentId": "usr_student_1",
+          "studentName": "Rahul Sharma",
+          "companyName": "TechNova Solutions",
+          "role": "Full-Stack Developer",
+          "recruitedRole": "Full-Stack Developer",
+          "selected": true,
+          "status": "Selected",
+          "technicalPerformance": 4.8,
+          "technicalRating": 4.8,
+          "overallPerformance": 4.9,
+          "overallRating": 4.9,
+          "strongSkills": [
+            "React",
+            "JavaScript",
+            "Node.js"
+          ],
+          "weakSkills": [
+            "Docker",
+            "AWS"
+          ],
+          "areasForImprovement": "Hands-on practice with containerized deployments and CI/CD pipelines.",
+          "comments": "Outstanding algorithmic foundation and clear communication during the technical interview.",
+          "feedbackComments": "Outstanding algorithmic foundation and clear communication during the technical interview.",
+          "supportingEvidence": true,
+          "submittedAt": "2026-09-11T03:31:40.909Z"
+        },
+        {
           "id": "rfb_1789095719558",
           "studentId": "usr_student_1",
           "studentName": "Rahul Sharma",
@@ -2878,6 +2906,55 @@
   ],
   "industryRequirements": [
     {
+      "id": "ind_req_1789097500905",
+      "roleTitle": "Full-Stack Distributed Systems Engineer",
+      "category": "software",
+      "currentSkills": [
+        "TypeScript",
+        "Node.js",
+        "PostgreSQL",
+        "Docker"
+      ],
+      "emergingSkills": [
+        "AI Agents",
+        "Vector DBs",
+        "WASM"
+      ],
+      "jobRoleRequirements": "Minimum 75% skill compatibility with real-world production project portfolio.",
+      "recruitmentRequirements": "Minimum 75% skill compatibility with real-world production project portfolio.",
+      "technologyTrends": "Move towards micro-frontends and agentic backend services.",
+      "preferredCertifications": [
+        "AWS Solutions Architect Associate",
+        "CKA"
+      ],
+      "preferredTools": [
+        "Docker",
+        "GitHub Actions",
+        "AWS",
+        "Redis"
+      ],
+      "lessRelevantSkills": [
+        "PHP 5.x",
+        "jQuery"
+      ],
+      "decliningSkills": [
+        "PHP 5.x",
+        "jQuery"
+      ],
+      "futureSkillRequirements": [
+        "Autonomous Agents",
+        "Rust for Cloud"
+      ],
+      "futureRequirements": [
+        "Autonomous Agents",
+        "Rust for Cloud"
+      ],
+      "notes": "Direct academic advice: prioritize containerization in core software curriculum.",
+      "companyName": "TechNova Solutions",
+      "updatedBy": "TechNova Solutions",
+      "updatedAt": "2026-09-11T03:31:40.905Z"
+    },
+    {
       "id": "ind_req_1789095719546",
       "roleTitle": "Full-Stack Distributed Systems Engineer",
       "category": "software",
@@ -3212,6 +3289,34 @@
     }
   ],
   "recruitmentFeedbacks": [
+    {
+      "id": "rfb_1789097500909",
+      "studentId": "usr_student_1",
+      "studentName": "Rahul Sharma",
+      "companyName": "TechNova Solutions",
+      "role": "Full-Stack Developer",
+      "recruitedRole": "Full-Stack Developer",
+      "selected": true,
+      "status": "Selected",
+      "technicalPerformance": 4.8,
+      "technicalRating": 4.8,
+      "overallPerformance": 4.9,
+      "overallRating": 4.9,
+      "strongSkills": [
+        "React",
+        "JavaScript",
+        "Node.js"
+      ],
+      "weakSkills": [
+        "Docker",
+        "AWS"
+      ],
+      "areasForImprovement": "Hands-on practice with containerized deployments and CI/CD pipelines.",
+      "comments": "Outstanding algorithmic foundation and clear communication during the technical interview.",
+      "feedbackComments": "Outstanding algorithmic foundation and clear communication during the technical interview.",
+      "supportingEvidence": true,
+      "submittedAt": "2026-09-11T03:31:40.909Z"
+    },
     {
       "id": "rfb_1789095719558",
       "studentId": "usr_student_1",

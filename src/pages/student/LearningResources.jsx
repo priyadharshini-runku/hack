@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
   BookOpen, 
   Search, 
@@ -39,9 +39,11 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { COURSE_CATEGORIES, LEARNING_COURSES } from '../../data/learningHubCourses';
 import { LearningAssessmentEngine } from '../../components/learning/LearningAssessmentEngine';
+import { computeClientSkillGap } from '../../data/careerRoles';
 
 export const LearningResources = () => {
   const { user, profile, showToast } = useAuth();
+  const student = profile || user;
 
   // View state: 'catalog' | 'course' | 'assessment'
   const [view, setView] = useState('catalog');
@@ -53,6 +55,44 @@ export const LearningResources = () => {
 
   // Course view active learning path tab: 'beginner' | 'intermediate' | 'advanced'
   const [activePathTab, setActivePathTab] = useState('beginner');
+
+  // Compute skill gap to highlight industry-demanded courses
+  const gapAnalysis = useMemo(() => {
+    return computeClientSkillGap(student, student.targetRoleId || 'role_swe');
+  }, [student]);
+
+  const missingCourseIds = useMemo(() => {
+    const ids = new Set();
+    (gapAnalysis.skillsNeed || []).forEach(item => {
+      if (item.learningHub?.courseId) {
+        ids.add(item.learningHub.courseId.toLowerCase());
+      }
+    });
+    return ids;
+  }, [gapAnalysis]);
+
+  // Read active course or start assessment from navigation / sessionStorage
+  useEffect(() => {
+    try {
+      const activeCourseId = sessionStorage.getItem('skillbridge_active_course_id');
+      const startAssessment = sessionStorage.getItem('skillbridge_start_assessment');
+      if (activeCourseId) {
+        const found = LEARNING_COURSES.find(c => c.id.toLowerCase() === activeCourseId.toLowerCase());
+        if (found) {
+          setSelectedCourse(found);
+          if (startAssessment === 'true') {
+            setView('assessment');
+            sessionStorage.removeItem('skillbridge_start_assessment');
+          } else {
+            setView('course');
+          }
+        }
+        sessionStorage.removeItem('skillbridge_active_course_id');
+      }
+    } catch (err) {
+      console.warn('Error reading course navigation handshake:', err);
+    }
+  }, []);
 
   // Track completed resources in local storage
   const [completedResources, setCompletedResources] = useState(() => {
@@ -555,24 +595,61 @@ export const LearningResources = () => {
         </div>
       </div>
 
+      {/* Industry Benchmark Gap Recommendations Banner */}
+      {missingCourseIds.size > 0 && (
+        <div className="p-5 rounded-2xl bg-amber-50 border border-amber-200/90 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="flex items-start gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-700 flex items-center justify-center shrink-0 border border-amber-300">
+              <Target className="w-5 h-5 text-amber-700" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                Industry Target Benchmark Recommendations ({missingCourseIds.size} Courses)
+                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-200 text-amber-900">
+                  {gapAnalysis?.targetRole?.title || 'Target Role'}
+                </span>
+              </h3>
+              <p className="text-xs text-slate-600 mt-0.5">
+                These courses directly address the skill gaps identified in your profile for your target Industry role. Complete them and take the 30-min test to become placement ready!
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Courses Grid (20 Courses) */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredCourses.map((course) => (
-          <div
-            key={course.id}
-            className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-5 group hover:border-indigo-300"
-          >
-            <div className="space-y-3.5">
-              
-              {/* Header: Icon & Category */}
-              <div className="flex items-center justify-between">
-                <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-100 group-hover:scale-105 transition-transform">
-                  {renderCourseIcon(course.icon, "w-6 h-6")}
+        {filteredCourses.map((course) => {
+          const isIndustryGap = missingCourseIds.has(course.id.toLowerCase());
+          return (
+            <div
+              key={course.id}
+              className={`bg-white rounded-3xl border p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-5 group ${
+                isIndustryGap 
+                  ? 'border-amber-300 ring-2 ring-amber-400/30 bg-amber-50/10 hover:border-amber-400' 
+                  : 'border-slate-200 hover:border-indigo-300'
+              }`}
+            >
+              <div className="space-y-3.5">
+                
+                {/* Header: Icon & Category */}
+                <div className="flex items-center justify-between">
+                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border group-hover:scale-105 transition-transform ${
+                    isIndustryGap ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-indigo-50 text-indigo-600 border-indigo-100'
+                  }`}>
+                    {renderCourseIcon(course.icon, "w-6 h-6")}
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    {isIndustryGap && (
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">
+                        ⚡ Role Gap
+                      </span>
+                    )}
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">
+                      {course.category}
+                    </span>
+                  </div>
                 </div>
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">
-                  {course.category}
-                </span>
-              </div>
 
               {/* Course Title & Tagline */}
               <div>
@@ -640,7 +717,8 @@ export const LearningResources = () => {
             </div>
 
           </div>
-        ))}
+          );
+        })}
       </div>
 
       {filteredCourses.length === 0 && (

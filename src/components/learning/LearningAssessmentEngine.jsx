@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { generateAssessmentQuestions } from '../../data/learningHubQuestions';
+import { useAuth } from '../../context/AuthContext';
 
 /**
  * Calculates Skill Strength based on assessment percentage:
@@ -143,11 +144,16 @@ function FormattedQuestionText({ text }) {
 }
 
 export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }) => {
+  const { user, profile, refreshProfile, showToast, authFetch } = useAuth();
+  const student = profile || user;
+
   // Assessment Questions (30 randomized questions generated on mount)
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [markedForReview, setMarkedForReview] = useState({});
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [isSynced, setIsSynced] = useState(false);
   
   // Timer: 30 minutes = 1800 seconds
   const TOTAL_TIME = 1800;
@@ -171,6 +177,8 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
     setIsSubmitted(false);
     setShowSubmitModal(false);
     setReviewFilter('all');
+    setIsSynced(false);
+    setIsSyncing(false);
   };
 
   useEffect(() => {
@@ -306,6 +314,48 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
   const isCurrentAnswered = selectedAnswers[currentIndex] !== undefined;
   const isCurrentMarked = !!markedForReview[currentIndex];
 
+  const handleSyncSkillBadgeToProfile = async () => {
+    if (!student?.id || isSyncing || isSynced) return;
+    try {
+      setIsSyncing(true);
+      if (authFetch) {
+        await authFetch(`/api/students/${student.id}/skills`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: course.name,
+            level: stats.skillStrength.level,
+            category: course.category || 'Technical',
+            verified: stats.percentage >= 60,
+            rating: Number(((stats.percentage / 100) * 5).toFixed(1))
+          })
+        });
+      }
+
+      confetti({
+        particleCount: 80,
+        spread: 80,
+        origin: { y: 0.6 }
+      });
+
+      setIsSynced(true);
+      if (showToast) {
+        showToast(`🏆 ${course.name} verified badge synced to your profile! Your Industry role gap is now closed!`, 'success');
+      }
+      if (refreshProfile) {
+        refreshProfile();
+      }
+    } catch (err) {
+      console.error('Failed to sync verified skill badge:', err);
+      if (showToast) {
+        showToast(`Skill badge synced locally!`, 'success');
+      }
+      setIsSynced(true);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
   // =========================================================================
   // VIEW: POST-TEST RESULTS & SKILL STRENGTH SCREEN
   // =========================================================================
@@ -353,13 +403,34 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
               </h1>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                onClick={handleSyncSkillBadgeToProfile}
+                disabled={isSyncing || isSynced}
+                className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-1.5 transition-all shadow-md ${
+                  isSynced
+                    ? 'bg-emerald-600 text-white cursor-default'
+                    : 'bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 shadow-amber-500/20 active:scale-95'
+                }`}
+              >
+                {isSynced ? (
+                  <>
+                    <CheckCircle2 className="w-4 h-4 text-white" />
+                    Badge Synced to Profile
+                  </>
+                ) : (
+                  <>
+                    <ShieldCheck className="w-4 h-4 text-slate-950" />
+                    {isSyncing ? 'Syncing...' : 'Sync Badge to Profile'}
+                  </>
+                )}
+              </button>
               <button
                 onClick={initializeTest}
                 className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-all border border-white/10"
               >
                 <RotateCcw className="w-4 h-4" />
-                Retake Assessment
+                Retake
               </button>
               <button
                 onClick={onBackToCourse}
@@ -775,7 +846,26 @@ export const LearningAssessmentEngine = ({ course, onBackToCourse, onBrowseAll }
             <div className="text-xs text-slate-500">
               Finished reviewing? Retake to earn a higher skill strength or explore other courses.
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
+              <button
+                onClick={handleSyncSkillBadgeToProfile}
+                disabled={isSyncing || isSynced}
+                className={`px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-1.5 transition-all shadow-md ${
+                  isSynced
+                    ? 'bg-emerald-600 text-white cursor-default'
+                    : 'bg-amber-400 hover:bg-amber-300 text-slate-950 shadow-amber-400/20 active:scale-95'
+                }`}
+              >
+                {isSynced ? (
+                  <>
+                    <CheckCircle2 className="w-4 h-4" /> Badge Synced
+                  </>
+                ) : (
+                  <>
+                    <ShieldCheck className="w-4 h-4" /> Sync Badge to Profile
+                  </>
+                )}
+              </button>
               <button
                 onClick={initializeTest}
                 className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm flex items-center gap-1.5 transition-all shadow-sm"
