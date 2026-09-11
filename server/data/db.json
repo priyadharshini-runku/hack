@@ -738,7 +738,7 @@
           "verifiedBy": "TechNova Solutions",
           "rating": 4.8,
           "industryEndorsed": true,
-          "industryEndorsements": 1
+          "industryEndorsements": 2
         },
         {
           "name": "SQL",
@@ -748,7 +748,7 @@
           "rating": 3.5,
           "industryEndorsed": true,
           "verifiedBy": "TechNova Solutions",
-          "industryEndorsements": 3
+          "industryEndorsements": 4
         },
         {
           "name": "Communication",
@@ -832,6 +832,26 @@
         "Class Representative for CS Batch 2023-27"
       ],
       "recruitmentHistory": [
+        {
+          "id": "rfb_1789094835247",
+          "studentId": "usr_student_1",
+          "studentName": "Rahul Sharma",
+          "companyName": "TechNova Solutions",
+          "role": "Software Developer",
+          "selected": true,
+          "technicalPerformance": 5,
+          "overallPerformance": 5,
+          "strongSkills": [
+            "Python",
+            "SQL"
+          ],
+          "weakSkills": [
+            "Docker"
+          ],
+          "areasForImprovement": "",
+          "comments": "Excellent conceptual grasp and code clarity.",
+          "submittedAt": "2026-09-11T02:47:15.247Z"
+        },
         {
           "id": "rfb_1789093300936",
           "studentId": "usr_student_1",
@@ -2784,6 +2804,20 @@
         "Linux"
       ],
       "updatedAt": "2026-09-11T02:21:40.926Z"
+    },
+    {
+      "id": "ind_role_1789094835242",
+      "category": "Software",
+      "title": "NextGen Cloud Architect",
+      "description": "Industry Software role focusing on modern engineering practices.",
+      "requiredSkills": [
+        "AWS",
+        "Kubernetes",
+        "Terraform",
+        "Node.js",
+        "Python"
+      ],
+      "updatedAt": "2026-09-11T02:47:15.242Z"
     }
   ],
   "industryRequirements": [
@@ -3024,6 +3058,26 @@
     }
   ],
   "recruitmentFeedbacks": [
+    {
+      "id": "rfb_1789094835247",
+      "studentId": "usr_student_1",
+      "studentName": "Rahul Sharma",
+      "companyName": "TechNova Solutions",
+      "role": "Software Developer",
+      "selected": true,
+      "technicalPerformance": 5,
+      "overallPerformance": 5,
+      "strongSkills": [
+        "Python",
+        "SQL"
+      ],
+      "weakSkills": [
+        "Docker"
+      ],
+      "areasForImprovement": "",
+      "comments": "Excellent conceptual grasp and code clarity.",
+      "submittedAt": "2026-09-11T02:47:15.247Z"
+    },
     {
       "id": "rfb_1789093300936",
       "studentId": "usr_student_1",

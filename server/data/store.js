@@ -2108,9 +2108,13 @@ class DataStore {
     minMatch = 0,
     branch = 'All',
     collegeId = 'All',
+    college = 'All',
     minAssessment = 0,
+    minScore = 0,
     readinessLevel = 'All',
-    skillFilter = ''
+    readiness = 'All',
+    skillFilter = '',
+    skillQuery = ''
   } = {}) {
     const students = this.data.students || [];
 
@@ -2123,19 +2127,32 @@ class DataStore {
       const studentSkills = st.skills || [];
       const studentSkillNames = studentSkills.map(s => (s.name || '').toLowerCase().trim());
 
-      // Evaluate matching skills and strong skills
+      // Evaluate matching skills, strong skills, and missing skills
       const matchedSkills = [];
       const strongSkills = [];
       const missingSkills = [];
+      let totalEarnedScore = 0;
 
       normalizedReqSkills.forEach(reqSkill => {
         const reqLower = reqSkill.toLowerCase();
         const foundIndex = studentSkillNames.findIndex(sn => sn === reqLower || sn.includes(reqLower) || reqLower.includes(sn));
         if (foundIndex >= 0) {
           const sObj = studentSkills[foundIndex];
-          matchedSkills.push(sObj.name || reqSkill);
-          if (sObj.level === 'Advanced' || sObj.level === 'Intermediate' || (sObj.rating && sObj.rating >= 4.0) || sObj.verified) {
-            strongSkills.push(sObj.name || reqSkill);
+          const sName = sObj.name || reqSkill;
+          matchedSkills.push(sName);
+
+          const isAdvanced = sObj.level === 'Advanced';
+          const isIntermediate = sObj.level === 'Intermediate' || !sObj.level;
+          const isVerified = Boolean(sObj.verified);
+          const hasHighRating = (sObj.rating && sObj.rating >= 4.0);
+
+          if (isAdvanced || hasHighRating || isVerified) {
+            strongSkills.push(sName);
+            totalEarnedScore += 1.0;
+          } else if (isIntermediate) {
+            totalEarnedScore += 0.85;
+          } else {
+            totalEarnedScore += 0.6;
           }
         } else {
           missingSkills.push(reqSkill);
@@ -2145,7 +2162,7 @@ class DataStore {
       // Calculate Skill Match Percentage
       const totalReq = Math.max(normalizedReqSkills.length, 1);
       const matchPercentage = normalizedReqSkills.length > 0
-        ? Math.min(100, Math.round((matchedSkills.length / totalReq) * 100))
+        ? Math.min(100, Math.round((totalEarnedScore / totalReq) * 100))
         : 75; // Default baseline if no skills specified
 
       // Assessment Score: Use existing student assessment if recorded, or realistic model
@@ -2155,7 +2172,7 @@ class DataStore {
       let studentReadiness = 'Developing';
       if (matchPercentage >= 75 && baseAssessment >= 70) {
         studentReadiness = 'High Readiness';
-      } else if (matchPercentage >= 45) {
+      } else if (matchPercentage >= 45 || baseAssessment >= 65) {
         studentReadiness = 'Moderate Match';
       }
 
@@ -2166,16 +2183,21 @@ class DataStore {
         technologies: p.technologies || []
       }));
 
+      const resolvedBranch = st.department || 'Computer Science & Engineering';
+      const resolvedCollege = st.collegeName || 'Apex Institute of Technology';
+
       return {
         id: st.id,
         name: st.name,
         email: st.email,
         phone: st.phone || '+91 98765 00000',
         avatar: st.avatar,
-        college: st.collegeName || 'Apex Institute of Technology',
+        college: resolvedCollege,
+        collegeName: resolvedCollege,
         collegeId: st.collegeId || 'col_apex',
         institutionId: st.institutionId || 'INST001',
-        branch: st.department || 'Computer Science & Engineering',
+        branch: resolvedBranch,
+        department: resolvedBranch,
         year: st.year || '3rd Year',
         cgpa: st.cgpa || 8.5,
         targetRole: st.targetRoleTitle || roleTitle || 'Software Developer',
@@ -2187,6 +2209,7 @@ class DataStore {
         matchPercentage,
         assessmentScore: baseAssessment,
         readinessLevel: studentReadiness,
+        readiness: studentReadiness,
         certifications: relevantCertifications,
         projects: relevantProjects,
         recruitmentHistory: st.recruitmentHistory || [],
@@ -2200,26 +2223,33 @@ class DataStore {
     if (minMatch > 0) {
       filtered = filtered.filter(c => c.matchPercentage >= minMatch);
     }
-    if (minAssessment > 0) {
-      filtered = filtered.filter(c => c.assessmentScore >= minAssessment);
+    const effectiveMinScore = Math.max(Number(minAssessment) || 0, Number(minScore) || 0);
+    if (effectiveMinScore > 0) {
+      filtered = filtered.filter(c => c.assessmentScore >= effectiveMinScore);
     }
     if (branch && branch !== 'All') {
       filtered = filtered.filter(c => c.branch.toLowerCase().includes(branch.toLowerCase()));
     }
-    if (collegeId && collegeId !== 'All') {
-      const cTerm = collegeId.toLowerCase();
+    const effectiveCollege = (college && college !== 'All') ? college : (collegeId && collegeId !== 'All' ? collegeId : 'All');
+    if (effectiveCollege !== 'All') {
+      const cTerm = effectiveCollege.toLowerCase().trim();
       filtered = filtered.filter(c => 
-        c.institutionId.toLowerCase() === cTerm || 
-        c.collegeId.toLowerCase() === cTerm || 
-        c.college.toLowerCase().includes(cTerm)
+        (c.institutionId && c.institutionId.toLowerCase() === cTerm) || 
+        (c.collegeId && c.collegeId.toLowerCase() === cTerm) || 
+        (c.college && c.college.toLowerCase().includes(cTerm))
       );
     }
-    if (readinessLevel && readinessLevel !== 'All') {
-      filtered = filtered.filter(c => c.readinessLevel.toLowerCase() === readinessLevel.toLowerCase());
+    const effectiveReadiness = (readiness && readiness !== 'All') ? readiness : (readinessLevel && readinessLevel !== 'All' ? readinessLevel : 'All');
+    if (effectiveReadiness !== 'All') {
+      const rTerm = effectiveReadiness.toLowerCase().trim();
+      filtered = filtered.filter(c => 
+        (c.readiness && c.readiness.toLowerCase() === rTerm) ||
+        (c.readinessLevel && c.readinessLevel.toLowerCase() === rTerm)
+      );
     }
-    if (skillFilter && skillFilter.trim()) {
-      const sTerm = skillFilter.toLowerCase().trim();
-      filtered = filtered.filter(c => c.skills.some(s => s.toLowerCase().includes(sTerm)));
+    const effectiveSkillQuery = (skillQuery || skillFilter || '').toLowerCase().trim();
+    if (effectiveSkillQuery) {
+      filtered = filtered.filter(c => c.skills.some(s => s.toLowerCase().includes(effectiveSkillQuery)));
     }
 
     // Sort by match percentage descending, then assessment score descending
