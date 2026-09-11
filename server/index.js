@@ -23,6 +23,9 @@ app.use((req, res, next) => {
   if (!req.user && userRole) {
     req.userRole = userRole;
   }
+  if (req.userRole === 'industry' || req.userRole === 'recruiter') {
+    req.userRole = 'company';
+  }
 
   console.log(`[API] ${req.method} ${req.url} (Role: ${req.userRole || 'anonymous'}, User: ${req.user?.name || req.user?.id || 'none'})`);
   next();
@@ -453,7 +456,85 @@ app.post('/api/workshops', (req, res) => {
 
 // ==================== INDUSTRY TRENDS ====================
 app.get('/api/trends', (req, res) => {
-  res.json(store.getIndustryTrends());
+  res.json(store.getIndustrySkillTrends());
+});
+
+// ==================== INDUSTRY RECRUITMENT & INTELLIGENCE API ====================
+app.get('/api/industry/roles', (req, res) => {
+  const { category } = req.query;
+  res.json(store.getIndustryRoles(category));
+});
+
+app.post('/api/industry/roles', (req, res) => {
+  const result = store.addOrUpdateIndustryRole(req.body);
+  if (result.error) {
+    return res.status(400).json({ success: false, error: result.error });
+  }
+  res.status(201).json(result);
+});
+
+app.get('/api/industry/requirements', (req, res) => {
+  const { category, roleTitle } = req.query;
+  res.json(store.getIndustryRequirements({ category, roleTitle }));
+});
+
+app.post('/api/industry/requirements', (req, res) => {
+  const result = store.submitIndustryRequirement(req.body);
+  if (result.error) {
+    return res.status(400).json({ success: false, error: result.error });
+  }
+  res.status(201).json(result);
+});
+
+app.post('/api/industry/candidates/match', (req, res) => {
+  const candidates = store.matchCandidates(req.body);
+  res.json(candidates);
+});
+
+app.get('/api/industry/candidates', (req, res) => {
+  const { category, roleTitle, requiredSkills, minMatch, branch, collegeId, minAssessment, readinessLevel, skill } = req.query;
+  const skillsArray = requiredSkills ? requiredSkills.split(',').map(s => s.trim()) : [];
+  const candidates = store.matchCandidates({
+    category,
+    roleTitle,
+    requiredSkills: skillsArray,
+    minMatch: minMatch ? Number(minMatch) : 0,
+    branch,
+    collegeId,
+    minAssessment: minAssessment ? Number(minAssessment) : 0,
+    readinessLevel,
+    skillFilter: skill
+  });
+  res.json(candidates);
+});
+
+app.get('/api/industry/trends', (req, res) => {
+  res.json(store.getIndustrySkillTrends());
+});
+
+app.post('/api/industry/feedback', (req, res) => {
+  const result = store.submitRecruitmentFeedback(req.body);
+  if (result.error) {
+    return res.status(400).json({ success: false, error: result.error });
+  }
+  res.status(201).json(result);
+});
+
+app.get('/api/industry/feedback/student/:studentId', (req, res) => {
+  res.json(store.getRecruitmentFeedbacksForStudent(req.params.studentId));
+});
+
+// ==================== INSTITUTION AGGREGATED INDUSTRY INSIGHTS ====================
+app.get('/api/college/industry-insights', (req, res) => {
+  const requester = req.user;
+  const requesterRole = req.userRole || requester?.role;
+
+  let targetCollege = req.query.institutionId || req.query.collegeName || req.query.collegeId;
+  if (requesterRole === 'college' && requester) {
+    targetCollege = requester.institutionId || requester.collegeId || requester.collegeName;
+  }
+
+  res.json(store.getInstitutionIndustryInsights(targetCollege));
 });
 
 // ==================== SYSTEM RESET ====================

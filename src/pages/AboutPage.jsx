@@ -96,7 +96,7 @@ export const AboutPage = ({ setActivePage }) => {
               Verifiable Industry Endorsements
             </h4>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Self-reported skills only go so far. When a student completes an internship, structured ratings from verified hiring managers provide trusted signals for future recruiters.
+              Self-reported skills only go so far. When a student completes an internship, structured ratings from verified hiring managers provide trusted signals for future industry employers.
             </p>
           </div>
 

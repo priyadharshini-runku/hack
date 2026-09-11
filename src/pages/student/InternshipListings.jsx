@@ -147,7 +147,7 @@ export const InternshipListings = ({ setActivePage }) => {
             Internships & Placement Openings
           </h1>
           <p className="text-brand-100 text-sm max-w-2xl">
-            Explore verified opportunities with live skill match breakdowns. High match rates fast-track your profile for recruiter shortlisting.
+            Explore verified opportunities with live skill match breakdowns. High match rates fast-track your profile for industry shortlisting.
           </p>
         </div>
 

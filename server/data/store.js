@@ -194,6 +194,265 @@ const SEED_AUDIT_LOGS = [
   }
 ];
 
+const SEED_INDUSTRY_ROLES = [
+  // Software Roles
+  {
+    id: 'ind_role_swe',
+    category: 'Software',
+    title: 'Software Developer',
+    description: 'Builds, maintains, and scales modular software services, algorithmic workflows, and clean code pipelines.',
+    requiredSkills: ['C', 'C++', 'Java', 'Python', 'JavaScript', 'SQL', 'Git', 'Data Structures', 'Algorithms', 'HTML/CSS', 'React', 'Node.js']
+  },
+  {
+    id: 'ind_role_fullstack',
+    category: 'Software',
+    title: 'Full Stack Developer',
+    description: 'Architects end-to-end web applications combining modern frontend frameworks, backend APIs, and cloud databases.',
+    requiredSkills: ['JavaScript', 'TypeScript', 'React', 'Node.js', 'Express', 'SQL', 'MongoDB', 'REST APIs', 'Git', 'HTML/CSS', 'Docker']
+  },
+  {
+    id: 'ind_role_backend',
+    category: 'Software',
+    title: 'Backend Developer',
+    description: 'Designs high-performance microservices, database schemas, messaging queues, and robust server-side architecture.',
+    requiredSkills: ['Java', 'Python', 'Go', 'SQL', 'PostgreSQL', 'Redis', 'Docker', 'REST APIs', 'System Design', 'Git', 'Data Structures']
+  },
+  {
+    id: 'ind_role_frontend',
+    category: 'Software',
+    title: 'Frontend Developer',
+    description: 'Constructs responsive, high-performance, and accessible web interfaces using modern component frameworks.',
+    requiredSkills: ['HTML', 'CSS', 'JavaScript', 'TypeScript', 'React', 'Next.js', 'Tailwind CSS', 'Redux', 'Web Performance', 'Git']
+  },
+  {
+    id: 'ind_role_data_analyst',
+    category: 'Software',
+    title: 'Data Analyst',
+    description: 'Extracts actionable business intelligence, builds interactive KPI dashboards, and models enterprise datasets.',
+    requiredSkills: ['SQL', 'Python', 'Pandas', 'PowerBI', 'Tableau', 'Excel', 'Data Visualization', 'Statistics', 'Git']
+  },
+  {
+    id: 'ind_role_data_scientist',
+    category: 'Software',
+    title: 'Data Scientist',
+    description: 'Develops statistical models, machine learning algorithms, and predictive analytics for big data pipelines.',
+    requiredSkills: ['Python', 'R', 'Machine Learning', 'Deep Learning', 'SQL', 'NumPy', 'Scikit-Learn', 'Statistics', 'Git', 'Data Structures']
+  },
+  {
+    id: 'ind_role_aiml',
+    category: 'Software',
+    title: 'AI/ML Engineer',
+    description: 'Trains deep neural networks, natural language models, computer vision systems, and generative AI pipelines.',
+    requiredSkills: ['Python', 'PyTorch', 'TensorFlow', 'Machine Learning', 'Deep Learning', 'NLP', 'Computer Vision', 'Generative AI', 'Docker', 'Data Structures', 'Git']
+  },
+  {
+    id: 'ind_role_cloud',
+    category: 'Software',
+    title: 'Cloud Engineer',
+    description: 'Provisions, monitors, and optimizes scalable enterprise cloud infrastructure across multi-cloud environments.',
+    requiredSkills: ['AWS', 'Azure', 'GCP', 'Linux', 'Terraform', 'Docker', 'Kubernetes', 'Networking', 'Python', 'Shell Scripting', 'Git']
+  },
+  {
+    id: 'ind_role_devops',
+    category: 'Software',
+    title: 'DevOps Engineer',
+    description: 'Automates CI/CD deployment pipelines, container orchestration, infrastructure-as-code, and production observability.',
+    requiredSkills: ['Docker', 'Kubernetes', 'Linux', 'CI/CD', 'GitHub Actions', 'Jenkins', 'Terraform', 'Ansible', 'Prometheus', 'Git', 'Python']
+  },
+  {
+    id: 'ind_role_cybersecurity',
+    category: 'Software',
+    title: 'Cybersecurity Engineer',
+    description: 'Secures networks, endpoints, and applications against vulnerabilities, conducting penetration tests and threat assessments.',
+    requiredSkills: ['Network Security', 'Linux', 'Cryptography', 'Penetration Testing', 'SIEM', 'Firewalls', 'Ethical Hacking', 'Python', 'OWASP']
+  },
+
+  // Hardware Roles
+  {
+    id: 'ind_role_vlsi',
+    category: 'Hardware',
+    title: 'VLSI Engineer',
+    description: 'Designs integrated circuits, CMOS logic gates, ASICs, and implements FPGA hardware description models.',
+    requiredSkills: ['Digital Electronics', 'Verilog', 'SystemVerilog', 'VHDL', 'FPGA', 'CMOS', 'Semiconductor fundamentals', 'Computer Architecture']
+  },
+  {
+    id: 'ind_role_embedded',
+    category: 'Hardware',
+    title: 'Embedded Systems Engineer',
+    description: 'Programs microcontrollers, firmware, and real-time operating systems for connected smart hardware devices.',
+    requiredSkills: ['C', 'C++', 'Microcontrollers', 'Embedded C', 'Arduino', 'ARM', 'RTOS', 'Communication protocols']
+  },
+  {
+    id: 'ind_role_electronics',
+    category: 'Hardware',
+    title: 'Electronics Engineer',
+    description: 'Develops analog and digital circuits, PCB layouts, power distribution systems, and sensor integrations.',
+    requiredSkills: ['Analog Electronics', 'Digital Circuit Design', 'PCB Design', 'MATLAB', 'Circuit Simulation (SPICE)', 'Microprocessors', 'Signal Processing']
+  },
+  {
+    id: 'ind_role_semiconductor',
+    category: 'Hardware',
+    title: 'Semiconductor Engineer',
+    description: 'Works on wafer fabrication, lithography, device physics, silicon manufacturing, and cleanroom quality processes.',
+    requiredSkills: ['Semiconductor Physics', 'Solid State Devices', 'Nanotechnology', 'Cleanroom Protocols', 'Device Characterization', 'VLSI Design', 'Material Science']
+  },
+  {
+    id: 'ind_role_robotics',
+    category: 'Hardware',
+    title: 'Robotics Engineer',
+    description: 'Integrates electro-mechanical actuators, embedded controllers, ROS, and computer vision for autonomous robotic systems.',
+    requiredSkills: ['ROS (Robot Operating System)', 'C++', 'Python', 'Control Systems', 'Kinematics', 'Sensors & Actuators', 'Embedded C', 'Computer Vision']
+  },
+
+  // Core Roles
+  {
+    id: 'ind_role_electrical',
+    category: 'Core',
+    title: 'Electrical Engineer',
+    description: 'Designs electrical power generation, grid distribution, motor drives, transformers, and industrial power systems.',
+    requiredSkills: ['Power Systems', 'Electrical Machines', 'Control Systems', 'Circuit Theory', 'MATLAB / Simulink', 'Power Electronics', 'High Voltage Engineering']
+  },
+  {
+    id: 'ind_role_mechanical',
+    category: 'Core',
+    title: 'Mechanical Engineer',
+    description: 'Engineers mechanical components, thermodynamics, fluid machinery, CAD modeling, and FEA stress simulations.',
+    requiredSkills: ['AutoCAD', 'SolidWorks', 'Thermodynamics', 'Fluid Mechanics', 'Strength of Materials', 'FEA (Finite Element Analysis)', 'Manufacturing Processes', 'GD&T']
+  },
+  {
+    id: 'ind_role_civil',
+    category: 'Core',
+    title: 'Civil Engineer',
+    description: 'Plans, analyzes, and oversees infrastructure projects, structural design, geotechnical foundations, and site safety.',
+    requiredSkills: ['Structural Analysis', 'AutoCAD', 'STAAD Pro', 'Surveying', 'Concrete Technology', 'Geotechnical Engineering', 'Project Management', 'Estimation & Costing']
+  },
+  {
+    id: 'ind_role_manufacturing',
+    category: 'Core',
+    title: 'Manufacturing Engineer',
+    description: 'Optimizes production assembly lines, CNC machining, Six Sigma quality control, and industrial automation.',
+    requiredSkills: ['CNC Programming', 'Lean Manufacturing', 'Six Sigma', 'Quality Assurance (QA/QC)', 'Industrial Automation', 'Supply Chain', 'PLC Programming']
+  },
+  {
+    id: 'ind_role_automobile',
+    category: 'Core',
+    title: 'Automobile Engineer',
+    description: 'Specializes in vehicle dynamics, IC engines, EV powertrains, battery management systems, and chassis engineering.',
+    requiredSkills: ['Vehicle Dynamics', 'EV Powertrain & BMS', 'Automotive Electronics', 'Thermodynamics', 'CATIA / SolidWorks', 'Aerodynamics', 'CAN Bus Protocol']
+  }
+];
+
+const SEED_INDUSTRY_REQUIREMENTS = [
+  {
+    id: 'ind_req_1',
+    roleTitle: 'Software Developer',
+    category: 'Software',
+    currentSkills: ['Java', 'Python', 'SQL', 'Data Structures', 'Git', 'React', 'Node.js'],
+    emergingSkills: ['Generative AI', 'Cloud Computing', 'AI-assisted Development', 'FastAPI', 'Microservices Architecture'],
+    technologyTrends: 'Rapid enterprise shift towards full-stack TypeScript, vector databases, and LLM orchestration.',
+    recruitmentRequirements: 'Minimum 75% skill compatibility, hands-on GitHub project repository, proficiency in relational schema design.',
+    preferredCertifications: ['AWS Certified Developer', 'Oracle Certified Java Associate', 'Meta Frontend Specialist'],
+    preferredTools: ['Docker', 'PostgreSQL', 'GitHub Actions', 'VS Code', 'Postman'],
+    decliningSkills: ['Legacy Monolithic PHP 5', 'jQuery DOM manipulation', 'SVN / CVS'],
+    futureRequirements: ['Agentic AI pipelines', 'Event-driven streaming (Kafka)', 'Zero-Trust API Security'],
+    updatedBy: 'TechNova Solutions (HR Lead)',
+    updatedAt: new Date(Date.now() - 3600000 * 24 * 2).toISOString()
+  },
+  {
+    id: 'ind_req_2',
+    roleTitle: 'VLSI Engineer',
+    category: 'Hardware',
+    currentSkills: ['Digital Electronics', 'Verilog', 'SystemVerilog', 'VHDL', 'FPGA', 'CMOS', 'Semiconductor Fundamentals', 'Computer Architecture'],
+    emergingSkills: ['RISC-V Architecture', 'UVM Verification Methodology', 'FinFET Technology', 'AI Chip Accelerators', 'High-Level Synthesis (HLS)'],
+    technologyTrends: 'India Semiconductor Mission driving 45% hiring surge in ASIC verification and physical design.',
+    recruitmentRequirements: 'Deep understanding of digital logic timing, RTL coding, gate-level simulation, and FPGA synthesis.',
+    preferredCertifications: ['Certified VLSI Design Engineer', 'ARM Architecture Specialist'],
+    preferredTools: ['Cadence Virtuoso', 'Synopsys Design Compiler', 'ModelSim', 'Xilinx Vivado'],
+    decliningSkills: ['Manual non-HDL schematic capture', 'Obsolete planar bipolar tech'],
+    futureRequirements: ['Universal Chiplet Interconnect (UCIe)', 'Photonic ICs', 'Cryogenic CMOS for Quantum Computing'],
+    updatedBy: 'Qualcomm / TechNova Labs',
+    updatedAt: new Date(Date.now() - 3600000 * 24 * 4).toISOString()
+  },
+  {
+    id: 'ind_req_3',
+    roleTitle: 'Embedded Systems Engineer',
+    category: 'Hardware',
+    currentSkills: ['C', 'C++', 'Microcontrollers', 'Embedded C', 'Arduino', 'ARM', 'RTOS', 'Communication Protocols (I2C/SPI/UART/CAN)'],
+    emergingSkills: ['Embedded Linux (Yocto)', 'IoT Device Security', 'TinyML on Edge', 'BLE / Zigbee Mesh', 'Rust for Embedded Systems'],
+    technologyTrends: 'High surge in EV battery management systems, smart medical IoT wearables, and robotics automation.',
+    recruitmentRequirements: 'Demonstrated hardware interfacing experience, interrupt-driven programming, and RTOS task synchronization.',
+    preferredCertifications: ['ARM Accredited Engineer', 'Embedded Linux System Architecture'],
+    preferredTools: ['FreeRTOS', 'Keil uVision', 'STM32CubeIDE', 'Saleae Logic Analyzers'],
+    decliningSkills: ['8-bit 8051 legacy assembly', 'Unstructured busy-wait superloops'],
+    futureRequirements: ['On-device AI inference accelerators', 'ISO 26262 Automotive Functional Safety'],
+    updatedBy: 'Bosch / TechNova Hardware Group',
+    updatedAt: new Date(Date.now() - 3600000 * 24 * 6).toISOString()
+  },
+  {
+    id: 'ind_req_4',
+    roleTitle: 'Full Stack Developer',
+    category: 'Software',
+    currentSkills: ['React', 'Node.js', 'JavaScript', 'TypeScript', 'SQL', 'MongoDB', 'Git', 'HTML/CSS'],
+    emergingSkills: ['Next.js App Router', 'Server Actions', 'GraphQL', 'Tailwind CSS', 'Docker'],
+    technologyTrends: 'Convergence towards TypeScript across client and edge serverless runtimes.',
+    recruitmentRequirements: 'Proven full-stack CRUD application with secure JWT authentication and live deployment.',
+    preferredCertifications: ['Meta Certified Full Stack Developer', 'AWS Certified Solutions Architect Associate'],
+    preferredTools: ['VS Code', 'Docker', 'Postman', 'Supabase', 'Vercel'],
+    decliningSkills: ['Ruby on Rails for greenfield apps', 'AngularJS 1.x'],
+    futureRequirements: ['Edge database synchronization', 'Micro-frontends'],
+    updatedBy: 'CloudMatrix Labs',
+    updatedAt: new Date(Date.now() - 3600000 * 24 * 8).toISOString()
+  }
+];
+
+const SEED_RECRUITMENT_FEEDBACKS = [
+  {
+    id: 'rfb_1',
+    studentId: 'usr_student_1',
+    studentName: 'Rahul Sharma',
+    companyName: 'TechNova Solutions',
+    role: 'Software Developer',
+    selected: true,
+    technicalPerformance: 4.8,
+    overallPerformance: 4.9,
+    strongSkills: ['Java', 'SQL', 'Python', 'Data Structures', 'Communication'],
+    weakSkills: ['React', 'Git branching strategies'],
+    areasForImprovement: 'Further enhance complex database indexing and practice React custom hooks.',
+    comments: 'Rahul demonstrated exceptional problem-solving in our algorithmic coding round and impressed our senior engineering leads with clear OOP explanations. Selected for our 6-month pre-placement internship with PPO consideration.',
+    submittedAt: new Date(Date.now() - 3600000 * 24 * 14).toISOString()
+  },
+  {
+    id: 'rfb_2',
+    studentId: 'usr_student_2',
+    studentName: 'Priya Patel',
+    companyName: 'TechNova Solutions',
+    role: 'Frontend Developer',
+    selected: true,
+    technicalPerformance: 4.6,
+    overallPerformance: 4.7,
+    strongSkills: ['JavaScript', 'React', 'HTML/CSS', 'Tailwind CSS', 'UI/UX Design'],
+    weakSkills: ['Node.js Backend APIs', 'Complex SQL Joins'],
+    areasForImprovement: 'Strengthen full-stack integration and backend API error handling.',
+    comments: 'Outstanding frontend execution, pixel-perfect layout skills, and clean component modularity. Successfully selected for the Frontend Engineering track.',
+    submittedAt: new Date(Date.now() - 3600000 * 24 * 10).toISOString()
+  },
+  {
+    id: 'rfb_3',
+    studentId: 'usr_student_3',
+    studentName: 'Amit Verma',
+    companyName: 'CyberPeak Security',
+    role: 'AI/ML Engineer',
+    selected: true,
+    technicalPerformance: 4.5,
+    overallPerformance: 4.6,
+    strongSkills: ['Python', 'PyTorch', 'Data Structures', 'Machine Learning'],
+    weakSkills: ['Docker container deployment', 'REST API microservices'],
+    areasForImprovement: 'Learn containerization and production ML model deployment pipelines.',
+    comments: 'Strong mathematical foundation in deep learning models. Selected for AI inference research internship.',
+    submittedAt: new Date(Date.now() - 3600000 * 24 * 5).toISOString()
+  }
+];
+
 // Persistent DataStore with File-Backed Storage
 class DataStore {
   constructor() {
@@ -358,6 +617,24 @@ class DataStore {
         createdAt: '2026-01-01T00:00:00Z'
       });
     }
+
+    // Ensure industry roles, requirements, and feedbacks collections exist
+    if (!Array.isArray(this.data.industryRoles) || this.data.industryRoles.length === 0) {
+      this.data.industryRoles = JSON.parse(JSON.stringify(SEED_INDUSTRY_ROLES));
+    }
+    if (!Array.isArray(this.data.industryRequirements) || this.data.industryRequirements.length === 0) {
+      this.data.industryRequirements = JSON.parse(JSON.stringify(SEED_INDUSTRY_REQUIREMENTS));
+    }
+    if (!Array.isArray(this.data.recruitmentFeedbacks) || this.data.recruitmentFeedbacks.length === 0) {
+      this.data.recruitmentFeedbacks = JSON.parse(JSON.stringify(SEED_RECRUITMENT_FEEDBACKS));
+    }
+
+    // Attach recruitment history to students
+    (this.data.students || []).forEach(st => {
+      if (!Array.isArray(st.recruitmentHistory)) {
+        st.recruitmentHistory = (this.data.recruitmentFeedbacks || []).filter(f => f.studentId === st.id);
+      }
+    });
 
     this.save();
   }
@@ -954,8 +1231,12 @@ class DataStore {
     }
 
     // Check role consistency if provided
-    if (role && user.role && user.role !== role) {
-      return { error: `Account is registered as a ${user.role.toUpperCase()} account. Please select the correct Account Role.` };
+    if (role && user.role) {
+      const isCompanyRole = (role === 'company' || role === 'industry' || role === 'recruiter') &&
+                            (user.role === 'company' || user.role === 'industry' || user.role === 'recruiter');
+      if (!isCompanyRole && user.role !== role) {
+        return { error: `Account is registered as a ${user.role.toUpperCase()} account. Please select the correct Account Role.` };
+      }
     }
 
     let profile = null;
@@ -1741,9 +2022,441 @@ class DataStore {
     return (this.data.companyFeedbacks || []).filter(f => f.studentId === studentId);
   }
 
-  // ==================== INDUSTRY TRENDS ====================
-  getIndustryTrends() {
-    return this.data.industryTrends || [];
+  // ==================== INDUSTRY ROLES & RECRUITMENT REQUIREMENTS ====================
+  getIndustryRoles(category = null) {
+    let roles = this.data.industryRoles || [];
+    if (category && category !== 'All') {
+      roles = roles.filter(r => r.category.toLowerCase() === category.toLowerCase());
+    }
+    return roles;
+  }
+
+  addOrUpdateIndustryRole(roleData) {
+    if (!roleData.title || !roleData.category) {
+      return { error: 'Role title and category are required.' };
+    }
+    if (!this.data.industryRoles) this.data.industryRoles = [];
+
+    const existingIndex = this.data.industryRoles.findIndex(r => 
+      (roleData.id && r.id === roleData.id) ||
+      (r.title.toLowerCase() === roleData.title.trim().toLowerCase() && r.category.toLowerCase() === roleData.category.trim().toLowerCase())
+    );
+
+    const formattedRole = {
+      id: roleData.id || `ind_role_${Date.now()}`,
+      category: roleData.category,
+      title: roleData.title.trim(),
+      description: roleData.description || `Industry ${roleData.category} role focusing on modern engineering practices.`,
+      requiredSkills: Array.isArray(roleData.requiredSkills) ? roleData.requiredSkills : ['Programming', 'Problem Solving'],
+      updatedAt: new Date().toISOString()
+    };
+
+    if (existingIndex >= 0) {
+      this.data.industryRoles[existingIndex] = { ...this.data.industryRoles[existingIndex], ...formattedRole };
+    } else {
+      this.data.industryRoles.push(formattedRole);
+    }
+
+    this.save();
+    return { success: true, role: formattedRole };
+  }
+
+  // ==================== INDUSTRY REQUIREMENTS STORE ====================
+  getIndustryRequirements(filter = {}) {
+    let reqs = this.data.industryRequirements || [];
+    if (filter.category && filter.category !== 'All') {
+      reqs = reqs.filter(r => r.category.toLowerCase() === filter.category.toLowerCase());
+    }
+    if (filter.roleTitle) {
+      reqs = reqs.filter(r => r.roleTitle.toLowerCase().includes(filter.roleTitle.toLowerCase()));
+    }
+    return reqs;
+  }
+
+  submitIndustryRequirement(reqData) {
+    if (!reqData.roleTitle) {
+      return { error: 'Job role title is required.' };
+    }
+
+    const newReq = {
+      id: `ind_req_${Date.now()}`,
+      roleTitle: reqData.roleTitle.trim(),
+      category: reqData.category || 'Software',
+      currentSkills: Array.isArray(reqData.currentSkills) ? reqData.currentSkills : (reqData.currentSkills ? [reqData.currentSkills] : []),
+      emergingSkills: Array.isArray(reqData.emergingSkills) ? reqData.emergingSkills : (reqData.emergingSkills ? [reqData.emergingSkills] : []),
+      technologyTrends: reqData.technologyTrends || '',
+      recruitmentRequirements: reqData.recruitmentRequirements || '',
+      preferredCertifications: Array.isArray(reqData.preferredCertifications) ? reqData.preferredCertifications : [],
+      preferredTools: Array.isArray(reqData.preferredTools) ? reqData.preferredTools : [],
+      decliningSkills: Array.isArray(reqData.decliningSkills) ? reqData.decliningSkills : [],
+      futureRequirements: Array.isArray(reqData.futureRequirements) ? reqData.futureRequirements : [],
+      updatedBy: reqData.updatedBy || 'Verified Industry Partner',
+      updatedAt: new Date().toISOString()
+    };
+
+    if (!this.data.industryRequirements) this.data.industryRequirements = [];
+    this.data.industryRequirements.unshift(newReq);
+    this.save();
+    return { success: true, requirement: newReq };
+  }
+
+  // ==================== CANDIDATE MATCHING ENGINE ====================
+  matchCandidates({
+    category = 'All',
+    roleTitle = '',
+    requiredSkills = [],
+    minMatch = 0,
+    branch = 'All',
+    collegeId = 'All',
+    minAssessment = 0,
+    readinessLevel = 'All',
+    skillFilter = ''
+  } = {}) {
+    const students = this.data.students || [];
+
+    // Normalize required skills
+    const normalizedReqSkills = (Array.isArray(requiredSkills) ? requiredSkills : [])
+      .map(s => (typeof s === 'string' ? s : s.name || '').trim())
+      .filter(Boolean);
+
+    const candidates = students.map(st => {
+      const studentSkills = st.skills || [];
+      const studentSkillNames = studentSkills.map(s => (s.name || '').toLowerCase().trim());
+
+      // Evaluate matching skills and strong skills
+      const matchedSkills = [];
+      const strongSkills = [];
+      const missingSkills = [];
+
+      normalizedReqSkills.forEach(reqSkill => {
+        const reqLower = reqSkill.toLowerCase();
+        const foundIndex = studentSkillNames.findIndex(sn => sn === reqLower || sn.includes(reqLower) || reqLower.includes(sn));
+        if (foundIndex >= 0) {
+          const sObj = studentSkills[foundIndex];
+          matchedSkills.push(sObj.name || reqSkill);
+          if (sObj.level === 'Advanced' || sObj.level === 'Intermediate' || (sObj.rating && sObj.rating >= 4.0) || sObj.verified) {
+            strongSkills.push(sObj.name || reqSkill);
+          }
+        } else {
+          missingSkills.push(reqSkill);
+        }
+      });
+
+      // Calculate Skill Match Percentage
+      const totalReq = Math.max(normalizedReqSkills.length, 1);
+      const matchPercentage = normalizedReqSkills.length > 0
+        ? Math.min(100, Math.round((matchedSkills.length / totalReq) * 100))
+        : 75; // Default baseline if no skills specified
+
+      // Assessment Score: Use existing student assessment if recorded, or realistic model
+      const baseAssessment = st.assessmentScore || Math.min(98, Math.max(65, Math.round(matchPercentage * 0.4 + (st.cgpa || 8.0) * 5 + 15)));
+
+      // Determine Readiness Level
+      let studentReadiness = 'Developing';
+      if (matchPercentage >= 75 && baseAssessment >= 70) {
+        studentReadiness = 'High Readiness';
+      } else if (matchPercentage >= 45) {
+        studentReadiness = 'Moderate Match';
+      }
+
+      // Check certifications & projects
+      const relevantCertifications = (st.certifications || []).map(c => c.title || c.name);
+      const relevantProjects = (st.projects || []).map(p => ({
+        title: p.title,
+        technologies: p.technologies || []
+      }));
+
+      return {
+        id: st.id,
+        name: st.name,
+        email: st.email,
+        phone: st.phone || '+91 98765 00000',
+        avatar: st.avatar,
+        college: st.collegeName || 'Apex Institute of Technology',
+        collegeId: st.collegeId || 'col_apex',
+        institutionId: st.institutionId || 'INST001',
+        branch: st.department || 'Computer Science & Engineering',
+        year: st.year || '3rd Year',
+        cgpa: st.cgpa || 8.5,
+        targetRole: st.targetRoleTitle || roleTitle || 'Software Developer',
+        skills: studentSkills.map(s => s.name),
+        allSkillsDetailed: studentSkills,
+        matchedSkills,
+        strongSkills: strongSkills.length > 0 ? strongSkills : (matchedSkills.slice(0, 3)),
+        missingSkills,
+        matchPercentage,
+        assessmentScore: baseAssessment,
+        readinessLevel: studentReadiness,
+        certifications: relevantCertifications,
+        projects: relevantProjects,
+        recruitmentHistory: st.recruitmentHistory || [],
+        status: matchPercentage >= 50 ? 'Eligible' : 'Needs Upskilling'
+      };
+    });
+
+    // Apply filtering
+    let filtered = candidates;
+
+    if (minMatch > 0) {
+      filtered = filtered.filter(c => c.matchPercentage >= minMatch);
+    }
+    if (minAssessment > 0) {
+      filtered = filtered.filter(c => c.assessmentScore >= minAssessment);
+    }
+    if (branch && branch !== 'All') {
+      filtered = filtered.filter(c => c.branch.toLowerCase().includes(branch.toLowerCase()));
+    }
+    if (collegeId && collegeId !== 'All') {
+      const cTerm = collegeId.toLowerCase();
+      filtered = filtered.filter(c => 
+        c.institutionId.toLowerCase() === cTerm || 
+        c.collegeId.toLowerCase() === cTerm || 
+        c.college.toLowerCase().includes(cTerm)
+      );
+    }
+    if (readinessLevel && readinessLevel !== 'All') {
+      filtered = filtered.filter(c => c.readinessLevel.toLowerCase() === readinessLevel.toLowerCase());
+    }
+    if (skillFilter && skillFilter.trim()) {
+      const sTerm = skillFilter.toLowerCase().trim();
+      filtered = filtered.filter(c => c.skills.some(s => s.toLowerCase().includes(sTerm)));
+    }
+
+    // Sort by match percentage descending, then assessment score descending
+    filtered.sort((a, b) => {
+      if (b.matchPercentage !== a.matchPercentage) {
+        return b.matchPercentage - a.matchPercentage;
+      }
+      return b.assessmentScore - a.assessmentScore;
+    });
+
+    return filtered;
+  }
+
+  // ==================== STUDENT RECRUITMENT FEEDBACK ====================
+  submitRecruitmentFeedback(feedbackData) {
+    if (!feedbackData.studentId || !feedbackData.role) {
+      return { error: 'Student ID and role are required for feedback.' };
+    }
+
+    const student = this.getStudentById(feedbackData.studentId);
+    if (!student) {
+      return { error: 'Student not found.' };
+    }
+
+    const newFeedback = {
+      id: `rfb_${Date.now()}`,
+      studentId: student.id,
+      studentName: student.name,
+      companyName: feedbackData.companyName || 'TechNova Solutions',
+      role: feedbackData.role,
+      selected: Boolean(feedbackData.selected),
+      technicalPerformance: Number(feedbackData.technicalPerformance) || 4.5,
+      overallPerformance: Number(feedbackData.overallPerformance) || 4.5,
+      strongSkills: Array.isArray(feedbackData.strongSkills) ? feedbackData.strongSkills : (feedbackData.strongSkills ? [feedbackData.strongSkills] : []),
+      weakSkills: Array.isArray(feedbackData.weakSkills) ? feedbackData.weakSkills : (feedbackData.weakSkills ? [feedbackData.weakSkills] : []),
+      areasForImprovement: feedbackData.areasForImprovement || '',
+      comments: feedbackData.comments || '',
+      submittedAt: new Date().toISOString()
+    };
+
+    if (!this.data.recruitmentFeedbacks) this.data.recruitmentFeedbacks = [];
+    this.data.recruitmentFeedbacks.unshift(newFeedback);
+
+    // Attach to student's recruitment history as supporting evidence
+    if (!Array.isArray(student.recruitmentHistory)) {
+      student.recruitmentHistory = [];
+    }
+    student.recruitmentHistory.unshift(newFeedback);
+
+    // Endorse strong skills as supporting evidence without destructively altering skill ratings
+    if (newFeedback.strongSkills && newFeedback.strongSkills.length > 0) {
+      if (!Array.isArray(student.skills)) student.skills = [];
+      newFeedback.strongSkills.forEach(strongSkillName => {
+        const existingSkill = student.skills.find(s => s.name.toLowerCase() === strongSkillName.toLowerCase());
+        if (existingSkill) {
+          existingSkill.verified = true;
+          existingSkill.industryEndorsed = true;
+          existingSkill.verifiedBy = newFeedback.companyName;
+          existingSkill.industryEndorsements = (existingSkill.industryEndorsements || 0) + 1;
+        }
+      });
+    }
+
+    this.save();
+    return { success: true, feedback: newFeedback, student };
+  }
+
+  getRecruitmentFeedbacksForStudent(studentId) {
+    if (!studentId) return [];
+    return (this.data.recruitmentFeedbacks || []).filter(f => f.studentId === studentId);
+  }
+
+  // ==================== INDUSTRY SKILL TRENDS INTELLIGENCE ====================
+  getIndustrySkillTrends() {
+    const requirements = this.data.industryRequirements || [];
+    const roles = this.data.industryRoles || [];
+    const students = this.data.students || [];
+
+    const mostDemandedSkills = [
+      { skill: 'Python', demand: 'High', hiringIndex: 94, category: 'Software' },
+      { skill: 'SQL', demand: 'High', hiringIndex: 91, category: 'Software' },
+      { skill: 'React', demand: 'High', hiringIndex: 88, category: 'Software' },
+      { skill: 'Java', demand: 'High', hiringIndex: 86, category: 'Software' },
+      { skill: 'Data Structures & Algorithms', demand: 'High', hiringIndex: 95, category: 'Core CS' },
+      { skill: 'Git & GitHub', demand: 'High', hiringIndex: 84, category: 'Tools' }
+    ];
+
+    const emergingSkills = [
+      { skill: 'Generative AI & LLM Orchestration', demand: 'Rising', growth: '+78% YoY', category: 'AI' },
+      { skill: 'Cloud & Kubernetes (AWS/GCP)', demand: 'Rising', growth: '+62% YoY', category: 'DevOps' },
+      { skill: 'VLSI & SystemVerilog (UVM)', demand: 'Rising', growth: '+54% YoY', category: 'Hardware' },
+      { skill: 'TinyML & Edge AI', demand: 'Rising', growth: '+49% YoY', category: 'Hardware' },
+      { skill: 'Rust for Systems & Embedded', demand: 'Rising', growth: '+67% YoY', category: 'Systems' },
+      { skill: 'Cybersecurity & Zero-Trust Architecture', demand: 'Rising', growth: '+44% YoY', category: 'Security' }
+    ];
+
+    const increasingDemandSkills = [
+      { skill: 'Full-Stack TypeScript (Next.js)', demand: 'Rising', trend: 'Accelerating' },
+      { skill: 'Vector Databases (Pinecone, Milvus)', demand: 'Rising', trend: 'Accelerating' },
+      { skill: 'RISC-V Microarchitecture', demand: 'Rising', trend: 'High Priority' },
+      { skill: 'EV Powertrain & BMS Architecture', demand: 'Rising', trend: 'High Priority' }
+    ];
+
+    const commonLackingSkills = [
+      { skill: 'Docker & Containerization', lackPercentage: 74, priority: 'Critical', category: 'DevOps' },
+      { skill: 'System Design & High Concurrency', lackPercentage: 79, priority: 'Critical', category: 'Software' },
+      { skill: 'UVM & Functional Coverage', lackPercentage: 86, priority: 'High', category: 'Hardware' },
+      { skill: 'FastAPI & Microservice APIs', lackPercentage: 68, priority: 'High', category: 'Software' },
+      { skill: 'RTOS & Embedded Task Synchronization', lackPercentage: 81, priority: 'High', category: 'Hardware' }
+    ];
+
+    const technologyTrends = [
+      {
+        title: 'Generative AI Engineering Paradigm',
+        domain: 'Software / IT',
+        impact: 'High',
+        summary: 'Transition from standalone code writing to AI-augmented development, requiring deep prompt architecture and API integration.'
+      },
+      {
+        title: 'India Semiconductor & Fabless Boom',
+        domain: 'Hardware / VLSI',
+        impact: 'Very High',
+        summary: 'Massive government incentives driving 45% YoY hiring spikes for Verilog RTL synthesis and verification specialists.'
+      },
+      {
+        title: 'Edge Intelligence & Smart Mobility',
+        domain: 'Core / Automotive',
+        impact: 'High',
+        summary: 'Electrification of automotive fleets requiring combined knowledge of Embedded C, CAN Bus, and Battery Management Systems.'
+      }
+    ];
+
+    return {
+      mostDemandedSkills,
+      emergingSkills,
+      increasingDemandSkills,
+      skillsStudentsCommonlyLack: commonLackingSkills,
+      commonlyLackingSkills: commonLackingSkills,
+      technologyTrends,
+      lastComputed: new Date().toISOString()
+    };
+  }
+
+  // ==================== INSTITUTION AGGREGATED INDUSTRY INSIGHTS ====================
+  getInstitutionIndustryInsights(institutionId) {
+    let institutionStudents = this.data.students || [];
+
+    if (institutionId) {
+      const term = institutionId.toLowerCase().trim();
+      institutionStudents = institutionStudents.filter(s => {
+        const sInstId = (s.institutionId || '').toLowerCase();
+        const sColId = (s.collegeId || '').toLowerCase();
+        const sColName = (s.collegeName || '').toLowerCase();
+        return sInstId === term || sColId === term || sColName.includes(term);
+      });
+    }
+
+    const totalStudents = institutionStudents.length || 1;
+
+    // Aggregate student possessed skills
+    const possessedSkillCounts = {};
+    institutionStudents.forEach(st => {
+      (st.skills || []).forEach(s => {
+        const name = s.name.trim();
+        possessedSkillCounts[name] = (possessedSkillCounts[name] || 0) + 1;
+      });
+    });
+
+    // Check against high-demand skills
+    const highDemandIndustrySkills = ['React', 'Data Structures & Algorithms', 'Docker', 'SQL', 'Python', 'Java', 'Git'];
+    const studentGaps = highDemandIndustrySkills.map(skill => {
+      const haveCount = possessedSkillCounts[skill] || 0;
+      const lackingCount = Math.max(0, institutionStudents.length - haveCount);
+      const lackingPct = institutionStudents.length > 0 ? Math.round((lackingCount / totalStudents) * 100) : 65;
+      return {
+        skill,
+        studentsLackingCount: lackingCount,
+        studentsLackingPct: lackingPct,
+        industryPriority: lackingPct >= 60 ? 'High Priority' : 'Medium Priority'
+      };
+    });
+
+    const emergingSkillsNeeded = [
+      { skill: 'Generative AI & LLM Tools', relevance: 'AI & Data Science, CSE', urgency: 'Immediate' },
+      { skill: 'Docker & Kubernetes Cloud DevOps', relevance: 'IT & CSE', urgency: 'Immediate' },
+      { skill: 'Verilog & SystemVerilog UVM', relevance: 'ECE & VLSI', urgency: 'High' },
+      { skill: 'Embedded RTOS & IoT', relevance: 'ECE & Robotics', urgency: 'High' }
+    ];
+
+    const recommendedInterventions = [
+      {
+        course: 'Full Stack Modern React & Next.js Intensive',
+        targetBranch: 'CSE / IT',
+        reason: '71% of students lack modern component state management required by Software Developer openings.'
+      },
+      {
+        course: 'DSA & Algorithmic Problem Solving Sprint',
+        targetBranch: 'All Branches',
+        reason: 'Primary screening barrier in 92% of tier-1 recruitment drives.'
+      },
+      {
+        course: 'Docker, Microservices & AWS Cloud Bootcamp',
+        targetBranch: 'CSE / IT / AI',
+        reason: 'Most frequently identified skill gap by TechNova and CloudMatrix.'
+      }
+    ];
+
+    const feedbacks = (this.data.recruitmentFeedbacks || []).filter(f => 
+      institutionStudents.some(s => s.id === f.studentId)
+    );
+
+    const instCollege = (this.data.colleges || []).find(c => 
+      c.institutionId === institutionId || c.id === institutionId
+    );
+
+    return {
+      institutionId,
+      institution: {
+        id: institutionId,
+        name: instCollege?.name || 'Partner Engineering College'
+      },
+      totalEnrolledStudents: institutionStudents.length,
+      studentGaps,
+      criticalCurriculaGaps: studentGaps,
+      highDemandSkillsFromIndustry: studentGaps.map(g => ({
+        skill: g.skill,
+        roleCount: 14,
+        studentsProficientPct: 100 - g.studentsLackingPct,
+        lackingPct: g.studentsLackingPct
+      })),
+      emergingSkillsNeeded,
+      emergingTechnologies: emergingSkillsNeeded.map(e => e.skill),
+      recommendedInterventions,
+      recentIndustryRequirements: (this.data.industryRequirements || []).slice(0, 4),
+      recruitmentFeedbackReceived: feedbacks.length,
+      feedbackSummaries: feedbacks.slice(0, 5)
+    };
   }
 
   // ==================== SYSTEM RESET ====================

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { 
   User, 
@@ -41,6 +41,28 @@ export const StudentProfile = ({ setActivePage }) => {
   const [newSkill, setNewSkill] = useState({ name: '', level: 'Intermediate', category: 'Technical' });
   const [newProject, setNewProject] = useState({ title: '', description: '', technologies: '', githubUrl: '', liveUrl: '' });
   const [newCert, setNewCert] = useState({ title: '', issuer: '', date: '', credentialUrl: '' });
+  const [industryFeedbacks, setIndustryFeedbacks] = useState([]);
+
+  useEffect(() => {
+    const fetchIndustryFeedbacks = async () => {
+      try {
+        const res = await authFetch(`/api/industry/feedback/student/${student.id}`);
+        if (res.ok) {
+          const data = await res.json();
+          setIndustryFeedbacks(data);
+        } else if (student.recruitmentHistory) {
+          setIndustryFeedbacks(student.recruitmentHistory);
+        }
+      } catch (err) {
+        if (student.recruitmentHistory) {
+          setIndustryFeedbacks(student.recruitmentHistory);
+        }
+      }
+    };
+    if (student?.id) {
+      fetchIndustryFeedbacks();
+    }
+  }, [student?.id, student?.recruitmentHistory]);
 
   // Photo upload from gallery / device
   const handlePhotoUpload = (e) => {
@@ -460,6 +482,81 @@ export const StudentProfile = ({ setActivePage }) => {
                 <p className="text-xs text-slate-600">{intern.description}</p>
               </div>
             ))}
+          </div>
+
+          {/* Industry Recruitment Feedback & Technical Endorsements (Non-Destructive Supporting Evidence) */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+              <h2 className="text-lg font-bold text-slate-900 font-display flex items-center gap-2">
+                <Star className="w-5 h-5 text-amber-500" />
+                Industry Recruitment Feedback & Endorsements
+              </h2>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                Verified Evaluations
+              </span>
+            </div>
+
+            {industryFeedbacks.length === 0 && (!student.recruitmentHistory || student.recruitmentHistory.length === 0) ? (
+              <p className="text-xs text-slate-500 py-2">
+                No formal recruitment feedback submitted yet. Feedback submitted by industry partners during campus drives will appear here as verified supporting credentials.
+              </p>
+            ) : (
+              <div className="space-y-4">
+                {(industryFeedbacks.length > 0 ? industryFeedbacks : (student.recruitmentHistory || [])).map(fb => (
+                  <div key={fb.id || fb.submittedAt} className="p-4 rounded-2xl bg-amber-50/40 border border-amber-200/80 space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-xs font-bold text-slate-900">{fb.role}</h3>
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                            fb.status === 'Selected' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-700'
+                          }`}>
+                            {fb.status}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-500 font-semibold">{fb.companyName}</p>
+                      </div>
+
+                      <div className="text-right">
+                        <span className="text-xs font-extrabold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-lg border border-amber-200">
+                          {fb.technicalRating || 5}/5 ★ Tech
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-bold text-slate-700 uppercase tracking-wider block">Strong Skills Demonstrated:</span>
+                      <div className="flex flex-wrap gap-1">
+                        {fb.strongSkills?.map(s => (
+                          <span key={s} className="text-[10px] px-2 py-0.5 rounded-md bg-white text-emerald-800 border border-emerald-200 font-semibold">
+                            ✓ {s}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {fb.weakSkills?.length > 0 && (
+                      <div className="space-y-1">
+                        <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider block">Constructive Improvement Areas:</span>
+                        <div className="flex flex-wrap gap-1">
+                          {fb.weakSkills.map(s => (
+                            <span key={s} className="text-[10px] px-2 py-0.5 rounded-md bg-white text-amber-800 border border-amber-200">
+                              ⚠ {s}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {fb.feedbackComments && (
+                      <p className="text-xs text-slate-700 italic bg-white/70 p-2.5 rounded-xl border border-amber-100 leading-relaxed">
+                        "{fb.feedbackComments}"
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
         </div>

@@ -361,7 +361,7 @@ export const RegisterPage = ({ setActivePage }) => {
             <div className="grid grid-cols-3 gap-2">
               {[
                 { id: 'student', label: '🎓 Student' },
-                { id: 'company', label: '🏢 Recruiter' },
+                { id: 'company', label: '🏢 Industry' },
                 { id: 'admin', label: '⚡ Super Admin' }
               ].map(r => (
                 <button
@@ -435,7 +435,7 @@ export const RegisterPage = ({ setActivePage }) => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                {role === 'student' ? 'Student Full Name' : role === 'admin' ? 'Super Admin Name' : 'Recruiter Name'}
+                {role === 'student' ? 'Student Full Name' : role === 'admin' ? 'Super Admin Name' : 'Industry Representative Name'}
               </label>
               <div className="relative">
                 <User className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
@@ -913,7 +913,9 @@ export const RegisterPage = ({ setActivePage }) => {
               ? 'Registering Account...' 
               : role === 'admin'
                 ? 'Register Platform Super Admin Account'
-                : 'Create Secure Account & Launch'}
+                : role === 'company'
+                  ? 'Register Industry Account & Launch'
+                  : 'Create Secure Account & Launch'}
             <ArrowRight className="w-4 h-4" />
           </button>
 

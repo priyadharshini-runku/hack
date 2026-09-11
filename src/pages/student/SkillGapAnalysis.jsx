@@ -322,6 +322,14 @@ export const SkillGapAnalysis = ({ setActivePage }) => {
                   <span className="text-[11px] text-slate-500">Target Proficiency: <strong>{item.requiredLevel}</strong></span>
                   <div className="flex items-center gap-2">
                     <button
+                      onClick={() => setActivePage('learning-resources')}
+                      className="text-xs font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-3 py-1 rounded-lg border border-emerald-300 transition-colors flex items-center gap-1 shadow-2xs"
+                      title="Study free courses and tutorials for this skill in Learning Hub"
+                    >
+                      <BookOpen className="w-3.5 h-3.5 text-emerald-600" />
+                      Learn in Hub
+                    </button>
+                    <button
                       onClick={() => setActiveTestSkill(item.skill)}
                       className="text-xs font-bold text-brand-700 hover:text-brand-800 bg-white hover:bg-brand-50 px-3 py-1 rounded-lg border border-brand-300 transition-colors flex items-center gap-1 shadow-2xs"
                       title="Take official 50-question 30-minute exam to earn a verified skill badge"

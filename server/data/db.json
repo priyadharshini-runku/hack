@@ -10,8 +10,8 @@
       "institutionId": "INST001",
       "createdAt": "2026-01-10T10:00:00Z",
       "collegeName": "Apex Institute of Technology",
-      "badge": "Institution (INST001)",
-      "password": "ApexInst#2026"
+      "password": "password123",
+      "badge": "Institution (INST001)"
     },
     {
       "id": "usr_student_2",
@@ -34,8 +34,8 @@
       "institutionId": "INST002",
       "createdAt": "2026-01-15T10:00:00Z",
       "collegeName": "Indian Institute of Technology Bombay (IIT Bombay)",
-      "badge": "Institution (INST002)",
-      "password": "IITBInst#2026"
+      "password": "password123",
+      "badge": "Institution (INST002)"
     },
     {
       "id": "usr_student_4",
@@ -726,22 +726,29 @@
           "category": "Technical",
           "verified": true,
           "verifiedBy": "TechNova Solutions",
-          "rating": 4.5
+          "rating": 4.5,
+          "industryEndorsed": true,
+          "industryEndorsements": 3
         },
         {
           "name": "Python",
           "level": "Advanced",
           "category": "Technical",
           "verified": true,
-          "verifiedBy": "Apex Lab Exam",
-          "rating": 4.8
+          "verifiedBy": "TechNova Solutions",
+          "rating": 4.8,
+          "industryEndorsed": true,
+          "industryEndorsements": 1
         },
         {
           "name": "SQL",
           "level": "Intermediate",
           "category": "Technical",
-          "verified": false,
-          "rating": 3.5
+          "verified": true,
+          "rating": 3.5,
+          "industryEndorsed": true,
+          "verifiedBy": "TechNova Solutions",
+          "industryEndorsements": 3
         },
         {
           "name": "Communication",
@@ -823,6 +830,97 @@
         "Winner (1st Place) - AIT Annual CodeSprint Hackathon 2025 (out of 120 teams)",
         "LeetCode Knight: Top 5% Global Ranking (Solved 450+ algorithmic problems)",
         "Class Representative for CS Batch 2023-27"
+      ],
+      "recruitmentHistory": [
+        {
+          "id": "rfb_1789093300936",
+          "studentId": "usr_student_1",
+          "studentName": "Rahul Sharma",
+          "companyName": "TechNova Solutions",
+          "role": "Full Stack Engineer",
+          "selected": true,
+          "technicalPerformance": 5,
+          "overallPerformance": 5,
+          "strongSkills": [
+            "Java",
+            "SQL",
+            "System Architecture"
+          ],
+          "weakSkills": [
+            "Terraform",
+            "Kubernetes"
+          ],
+          "areasForImprovement": "",
+          "comments": "Rahul performed exceptionally in the live data structures pair-programming challenge.",
+          "submittedAt": "2026-09-11T02:21:40.936Z"
+        },
+        {
+          "id": "rfb_1789093218828",
+          "studentId": "usr_student_1",
+          "studentName": "Rahul Sharma",
+          "companyName": "TechNova Solutions",
+          "role": "Full Stack Engineer",
+          "selected": true,
+          "technicalPerformance": 5,
+          "overallPerformance": 5,
+          "strongSkills": [
+            "Java",
+            "SQL",
+            "System Architecture"
+          ],
+          "weakSkills": [
+            "Terraform",
+            "Kubernetes"
+          ],
+          "areasForImprovement": "",
+          "comments": "Rahul performed exceptionally in the live data structures pair-programming challenge.",
+          "submittedAt": "2026-09-11T02:20:18.828Z"
+        },
+        {
+          "id": "rfb_1789069984929",
+          "studentId": "usr_student_1",
+          "studentName": "Rahul Sharma",
+          "companyName": "TechNova Solutions",
+          "role": "Software Developer Intern",
+          "selected": true,
+          "technicalPerformance": 4.9,
+          "overallPerformance": 5,
+          "strongSkills": [
+            "Java",
+            "SQL",
+            "Python"
+          ],
+          "weakSkills": [
+            "React"
+          ],
+          "areasForImprovement": "Deepen React component lifecycle and hook optimization.",
+          "comments": "Outstanding algorithmic efficiency and exceptional engineering attitude.",
+          "submittedAt": "2026-09-10T19:53:04.929Z"
+        },
+        {
+          "id": "rfb_1",
+          "studentId": "usr_student_1",
+          "studentName": "Rahul Sharma",
+          "companyName": "TechNova Solutions",
+          "role": "Software Developer",
+          "selected": true,
+          "technicalPerformance": 4.8,
+          "overallPerformance": 4.9,
+          "strongSkills": [
+            "Java",
+            "SQL",
+            "Python",
+            "Data Structures",
+            "Communication"
+          ],
+          "weakSkills": [
+            "React",
+            "Git branching strategies"
+          ],
+          "areasForImprovement": "Further enhance complex database indexing and practice React custom hooks.",
+          "comments": "Rahul demonstrated exceptional problem-solving in our algorithmic coding round and impressed our senior engineering leads with clear OOP explanations. Selected for our 6-month pre-placement internship with PPO consideration.",
+          "submittedAt": "2026-08-27T19:53:04.922Z"
+        }
       ]
     },
     {
@@ -914,6 +1012,32 @@
       "achievements": [
         "Dean’s Merit List for Academic Excellence (Semester 1 to 7)",
         "Lead Organizer of Apex Web Development Society"
+      ],
+      "recruitmentHistory": [
+        {
+          "id": "rfb_2",
+          "studentId": "usr_student_2",
+          "studentName": "Priya Patel",
+          "companyName": "TechNova Solutions",
+          "role": "Frontend Developer",
+          "selected": true,
+          "technicalPerformance": 4.6,
+          "overallPerformance": 4.7,
+          "strongSkills": [
+            "JavaScript",
+            "React",
+            "HTML/CSS",
+            "Tailwind CSS",
+            "UI/UX Design"
+          ],
+          "weakSkills": [
+            "Node.js Backend APIs",
+            "Complex SQL Joins"
+          ],
+          "areasForImprovement": "Strengthen full-stack integration and backend API error handling.",
+          "comments": "Outstanding frontend execution, pixel-perfect layout skills, and clean component modularity. Successfully selected for the Frontend Engineering track.",
+          "submittedAt": "2026-08-31T19:53:04.922Z"
+        }
       ]
     },
     {
@@ -998,6 +1122,31 @@
       "achievements": [
         "Published research paper in IEEE Student Conference 2025",
         "Kaggle Competitions Expert (Top 2% in Computer Vision Challenge)"
+      ],
+      "recruitmentHistory": [
+        {
+          "id": "rfb_3",
+          "studentId": "usr_student_3",
+          "studentName": "Amit Verma",
+          "companyName": "CyberPeak Security",
+          "role": "AI/ML Engineer",
+          "selected": true,
+          "technicalPerformance": 4.5,
+          "overallPerformance": 4.6,
+          "strongSkills": [
+            "Python",
+            "PyTorch",
+            "Data Structures",
+            "Machine Learning"
+          ],
+          "weakSkills": [
+            "Docker container deployment",
+            "REST API microservices"
+          ],
+          "areasForImprovement": "Learn containerization and production ML model deployment pipelines.",
+          "comments": "Strong mathematical foundation in deep learning models. Selected for AI inference research internship.",
+          "submittedAt": "2026-09-05T19:53:04.922Z"
+        }
       ]
     },
     {
@@ -1089,7 +1238,8 @@
       "achievements": [
         "Finalist: ACM ICPC Regional Contest 2025",
         "Academic Merit Scholar at IIT Bombay"
-      ]
+      ],
+      "recruitmentHistory": []
     }
   ],
   "learningResources": [
@@ -1931,6 +2081,17 @@
   ],
   "auditLogs": [
     {
+      "id": "log_1789093300923_moq1",
+      "timestamp": "2026-09-11T02:21:40.923Z",
+      "action": "INSTITUTION_LOGIN_SUCCESS",
+      "actorType": "Institution",
+      "actorName": "Apex Institute of Technology",
+      "actorEmail": "apex.institution@gmail.com",
+      "collegeName": "Apex Institute of Technology",
+      "details": "Authenticated successfully with Institution ID: INST001.",
+      "status": "Success"
+    },
+    {
       "id": "log_1789068695815_i70l",
       "timestamp": "2026-09-10T19:31:35.815Z",
       "action": "INSTITUTION_LOGIN_SUCCESS",
@@ -2204,6 +2365,767 @@
       "collegeName": "Apex Institute of Technology",
       "details": "Generated and securely hashed unique shared password for Apex Institute of Technology.",
       "status": "Success"
+    }
+  ],
+  "industryRoles": [
+    {
+      "id": "ind_role_swe",
+      "category": "Software",
+      "title": "Software Developer",
+      "description": "Builds, maintains, and scales modular software services, algorithmic workflows, and clean code pipelines.",
+      "requiredSkills": [
+        "C",
+        "C++",
+        "Java",
+        "Python",
+        "JavaScript",
+        "SQL",
+        "Git",
+        "Data Structures",
+        "Algorithms",
+        "HTML/CSS",
+        "React",
+        "Node.js"
+      ]
+    },
+    {
+      "id": "ind_role_fullstack",
+      "category": "Software",
+      "title": "Full Stack Developer",
+      "description": "Architects end-to-end web applications combining modern frontend frameworks, backend APIs, and cloud databases.",
+      "requiredSkills": [
+        "JavaScript",
+        "TypeScript",
+        "React",
+        "Node.js",
+        "Express",
+        "SQL",
+        "MongoDB",
+        "REST APIs",
+        "Git",
+        "HTML/CSS",
+        "Docker"
+      ]
+    },
+    {
+      "id": "ind_role_backend",
+      "category": "Software",
+      "title": "Backend Developer",
+      "description": "Designs high-performance microservices, database schemas, messaging queues, and robust server-side architecture.",
+      "requiredSkills": [
+        "Java",
+        "Python",
+        "Go",
+        "SQL",
+        "PostgreSQL",
+        "Redis",
+        "Docker",
+        "REST APIs",
+        "System Design",
+        "Git",
+        "Data Structures"
+      ]
+    },
+    {
+      "id": "ind_role_frontend",
+      "category": "Software",
+      "title": "Frontend Developer",
+      "description": "Constructs responsive, high-performance, and accessible web interfaces using modern component frameworks.",
+      "requiredSkills": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "TypeScript",
+        "React",
+        "Next.js",
+        "Tailwind CSS",
+        "Redux",
+        "Web Performance",
+        "Git"
+      ]
+    },
+    {
+      "id": "ind_role_data_analyst",
+      "category": "Software",
+      "title": "Data Analyst",
+      "description": "Extracts actionable business intelligence, builds interactive KPI dashboards, and models enterprise datasets.",
+      "requiredSkills": [
+        "SQL",
+        "Python",
+        "Pandas",
+        "PowerBI",
+        "Tableau",
+        "Excel",
+        "Data Visualization",
+        "Statistics",
+        "Git"
+      ]
+    },
+    {
+      "id": "ind_role_data_scientist",
+      "category": "Software",
+      "title": "Data Scientist",
+      "description": "Develops statistical models, machine learning algorithms, and predictive analytics for big data pipelines.",
+      "requiredSkills": [
+        "Python",
+        "R",
+        "Machine Learning",
+        "Deep Learning",
+        "SQL",
+        "NumPy",
+        "Scikit-Learn",
+        "Statistics",
+        "Git",
+        "Data Structures"
+      ]
+    },
+    {
+      "id": "ind_role_aiml",
+      "category": "Software",
+      "title": "AI/ML Engineer",
+      "description": "Trains deep neural networks, natural language models, computer vision systems, and generative AI pipelines.",
+      "requiredSkills": [
+        "Python",
+        "PyTorch",
+        "TensorFlow",
+        "Machine Learning",
+        "Deep Learning",
+        "NLP",
+        "Computer Vision",
+        "Generative AI",
+        "Docker",
+        "Data Structures",
+        "Git"
+      ]
+    },
+    {
+      "id": "ind_role_cloud",
+      "category": "Software",
+      "title": "Cloud Engineer",
+      "description": "Provisions, monitors, and optimizes scalable enterprise cloud infrastructure across multi-cloud environments.",
+      "requiredSkills": [
+        "AWS",
+        "Azure",
+        "GCP",
+        "Linux",
+        "Terraform",
+        "Docker",
+        "Kubernetes",
+        "Networking",
+        "Python",
+        "Shell Scripting",
+        "Git"
+      ]
+    },
+    {
+      "id": "ind_role_devops",
+      "category": "Software",
+      "title": "DevOps Engineer",
+      "description": "Automates CI/CD deployment pipelines, container orchestration, infrastructure-as-code, and production observability.",
+      "requiredSkills": [
+        "Docker",
+        "Kubernetes",
+        "Linux",
+        "CI/CD",
+        "GitHub Actions",
+        "Jenkins",
+        "Terraform",
+        "Ansible",
+        "Prometheus",
+        "Git",
+        "Python"
+      ]
+    },
+    {
+      "id": "ind_role_cybersecurity",
+      "category": "Software",
+      "title": "Cybersecurity Engineer",
+      "description": "Secures networks, endpoints, and applications against vulnerabilities, conducting penetration tests and threat assessments.",
+      "requiredSkills": [
+        "Network Security",
+        "Linux",
+        "Cryptography",
+        "Penetration Testing",
+        "SIEM",
+        "Firewalls",
+        "Ethical Hacking",
+        "Python",
+        "OWASP"
+      ]
+    },
+    {
+      "id": "ind_role_vlsi",
+      "category": "Hardware",
+      "title": "VLSI Engineer",
+      "description": "Designs integrated circuits, CMOS logic gates, ASICs, and implements FPGA hardware description models.",
+      "requiredSkills": [
+        "Digital Electronics",
+        "Verilog",
+        "SystemVerilog",
+        "VHDL",
+        "FPGA",
+        "CMOS",
+        "Semiconductor fundamentals",
+        "Computer Architecture"
+      ]
+    },
+    {
+      "id": "ind_role_embedded",
+      "category": "Hardware",
+      "title": "Embedded Systems Engineer",
+      "description": "Programs microcontrollers, firmware, and real-time operating systems for connected smart hardware devices.",
+      "requiredSkills": [
+        "C",
+        "C++",
+        "Microcontrollers",
+        "Embedded C",
+        "Arduino",
+        "ARM",
+        "RTOS",
+        "Communication protocols"
+      ]
+    },
+    {
+      "id": "ind_role_electronics",
+      "category": "Hardware",
+      "title": "Electronics Engineer",
+      "description": "Develops analog and digital circuits, PCB layouts, power distribution systems, and sensor integrations.",
+      "requiredSkills": [
+        "Analog Electronics",
+        "Digital Circuit Design",
+        "PCB Design",
+        "MATLAB",
+        "Circuit Simulation (SPICE)",
+        "Microprocessors",
+        "Signal Processing"
+      ]
+    },
+    {
+      "id": "ind_role_semiconductor",
+      "category": "Hardware",
+      "title": "Semiconductor Engineer",
+      "description": "Works on wafer fabrication, lithography, device physics, silicon manufacturing, and cleanroom quality processes.",
+      "requiredSkills": [
+        "Semiconductor Physics",
+        "Solid State Devices",
+        "Nanotechnology",
+        "Cleanroom Protocols",
+        "Device Characterization",
+        "VLSI Design",
+        "Material Science"
+      ]
+    },
+    {
+      "id": "ind_role_robotics",
+      "category": "Hardware",
+      "title": "Robotics Engineer",
+      "description": "Integrates electro-mechanical actuators, embedded controllers, ROS, and computer vision for autonomous robotic systems.",
+      "requiredSkills": [
+        "ROS (Robot Operating System)",
+        "C++",
+        "Python",
+        "Control Systems",
+        "Kinematics",
+        "Sensors & Actuators",
+        "Embedded C",
+        "Computer Vision"
+      ]
+    },
+    {
+      "id": "ind_role_electrical",
+      "category": "Core",
+      "title": "Electrical Engineer",
+      "description": "Designs electrical power generation, grid distribution, motor drives, transformers, and industrial power systems.",
+      "requiredSkills": [
+        "Power Systems",
+        "Electrical Machines",
+        "Control Systems",
+        "Circuit Theory",
+        "MATLAB / Simulink",
+        "Power Electronics",
+        "High Voltage Engineering"
+      ]
+    },
+    {
+      "id": "ind_role_mechanical",
+      "category": "Core",
+      "title": "Mechanical Engineer",
+      "description": "Engineers mechanical components, thermodynamics, fluid machinery, CAD modeling, and FEA stress simulations.",
+      "requiredSkills": [
+        "AutoCAD",
+        "SolidWorks",
+        "Thermodynamics",
+        "Fluid Mechanics",
+        "Strength of Materials",
+        "FEA (Finite Element Analysis)",
+        "Manufacturing Processes",
+        "GD&T"
+      ]
+    },
+    {
+      "id": "ind_role_civil",
+      "category": "Core",
+      "title": "Civil Engineer",
+      "description": "Plans, analyzes, and oversees infrastructure projects, structural design, geotechnical foundations, and site safety.",
+      "requiredSkills": [
+        "Structural Analysis",
+        "AutoCAD",
+        "STAAD Pro",
+        "Surveying",
+        "Concrete Technology",
+        "Geotechnical Engineering",
+        "Project Management",
+        "Estimation & Costing"
+      ]
+    },
+    {
+      "id": "ind_role_manufacturing",
+      "category": "Core",
+      "title": "Manufacturing Engineer",
+      "description": "Optimizes production assembly lines, CNC machining, Six Sigma quality control, and industrial automation.",
+      "requiredSkills": [
+        "CNC Programming",
+        "Lean Manufacturing",
+        "Six Sigma",
+        "Quality Assurance (QA/QC)",
+        "Industrial Automation",
+        "Supply Chain",
+        "PLC Programming"
+      ]
+    },
+    {
+      "id": "ind_role_automobile",
+      "category": "Core",
+      "title": "Automobile Engineer",
+      "description": "Specializes in vehicle dynamics, IC engines, EV powertrains, battery management systems, and chassis engineering.",
+      "requiredSkills": [
+        "Vehicle Dynamics",
+        "EV Powertrain & BMS",
+        "Automotive Electronics",
+        "Thermodynamics",
+        "CATIA / SolidWorks",
+        "Aerodynamics",
+        "CAN Bus Protocol"
+      ]
+    },
+    {
+      "id": "ind_role_1789093300926",
+      "category": "software",
+      "title": "Autonomous Systems Lead Engineer",
+      "description": "Industry software role focusing on modern engineering practices.",
+      "requiredSkills": [
+        "Python",
+        "ROS 2",
+        "C++",
+        "Computer Vision",
+        "Linux",
+        "PyTorch"
+      ],
+      "updatedAt": "2026-09-11T02:21:40.929Z"
+    },
+    {
+      "id": "ind_role_1789093123041",
+      "category": "software",
+      "title": "Autonomous Systems Lead Engineer",
+      "description": "Industry software role focusing on modern engineering practices.",
+      "requiredSkills": [
+        "Python",
+        "ROS 2",
+        "C++",
+        "Computer Vision",
+        "Linux",
+        "PyTorch"
+      ],
+      "updatedAt": "2026-09-11T02:18:43.041Z"
+    },
+    {
+      "id": "ind_role_1789093300926",
+      "category": "software",
+      "title": "Autonomous Systems Engineer",
+      "description": "Industry software role focusing on modern engineering practices.",
+      "requiredSkills": [
+        "Python",
+        "ROS",
+        "C++",
+        "Computer Vision",
+        "Linux"
+      ],
+      "updatedAt": "2026-09-11T02:21:40.926Z"
+    }
+  ],
+  "industryRequirements": [
+    {
+      "id": "ind_req_1789093300932",
+      "roleTitle": "Cloud Solutions Architect",
+      "category": "software",
+      "currentSkills": [
+        "AWS",
+        "Kubernetes",
+        "Terraform",
+        "Golang"
+      ],
+      "emergingSkills": [
+        "eBPF",
+        "WasmEdge",
+        "Service Mesh"
+      ],
+      "technologyTrends": "",
+      "recruitmentRequirements": "",
+      "preferredCertifications": [
+        "AWS Solutions Architect Professional",
+        "CKA"
+      ],
+      "preferredTools": [
+        "Docker",
+        "Prometheus",
+        "Grafana"
+      ],
+      "decliningSkills": [
+        "Monolithic Bare Metal Shell Scripts"
+      ],
+      "futureRequirements": [],
+      "updatedBy": "Verified Industry Partner",
+      "updatedAt": "2026-09-11T02:21:40.932Z"
+    },
+    {
+      "id": "ind_req_1789093218826",
+      "roleTitle": "Cloud Solutions Architect",
+      "category": "software",
+      "currentSkills": [],
+      "emergingSkills": [
+        "eBPF",
+        "WasmEdge",
+        "Service Mesh"
+      ],
+      "technologyTrends": "",
+      "recruitmentRequirements": "",
+      "preferredCertifications": [],
+      "preferredTools": [],
+      "decliningSkills": [
+        "Monolithic Bare Metal Shell Scripts"
+      ],
+      "futureRequirements": [],
+      "updatedBy": "Verified Industry Partner",
+      "updatedAt": "2026-09-11T02:20:18.826Z"
+    },
+    {
+      "id": "ind_req_1",
+      "roleTitle": "Software Developer",
+      "category": "Software",
+      "currentSkills": [
+        "Java",
+        "Python",
+        "SQL",
+        "Data Structures",
+        "Git",
+        "React",
+        "Node.js"
+      ],
+      "emergingSkills": [
+        "Generative AI",
+        "Cloud Computing",
+        "AI-assisted Development",
+        "FastAPI",
+        "Microservices Architecture"
+      ],
+      "technologyTrends": "Rapid enterprise shift towards full-stack TypeScript, vector databases, and LLM orchestration.",
+      "recruitmentRequirements": "Minimum 75% skill compatibility, hands-on GitHub project repository, proficiency in relational schema design.",
+      "preferredCertifications": [
+        "AWS Certified Developer",
+        "Oracle Certified Java Associate",
+        "Meta Frontend Specialist"
+      ],
+      "preferredTools": [
+        "Docker",
+        "PostgreSQL",
+        "GitHub Actions",
+        "VS Code",
+        "Postman"
+      ],
+      "decliningSkills": [
+        "Legacy Monolithic PHP 5",
+        "jQuery DOM manipulation",
+        "SVN / CVS"
+      ],
+      "futureRequirements": [
+        "Agentic AI pipelines",
+        "Event-driven streaming (Kafka)",
+        "Zero-Trust API Security"
+      ],
+      "updatedBy": "TechNova Solutions (HR Lead)",
+      "updatedAt": "2026-09-08T19:53:04.922Z"
+    },
+    {
+      "id": "ind_req_2",
+      "roleTitle": "VLSI Engineer",
+      "category": "Hardware",
+      "currentSkills": [
+        "Digital Electronics",
+        "Verilog",
+        "SystemVerilog",
+        "VHDL",
+        "FPGA",
+        "CMOS",
+        "Semiconductor Fundamentals",
+        "Computer Architecture"
+      ],
+      "emergingSkills": [
+        "RISC-V Architecture",
+        "UVM Verification Methodology",
+        "FinFET Technology",
+        "AI Chip Accelerators",
+        "High-Level Synthesis (HLS)"
+      ],
+      "technologyTrends": "India Semiconductor Mission driving 45% hiring surge in ASIC verification and physical design.",
+      "recruitmentRequirements": "Deep understanding of digital logic timing, RTL coding, gate-level simulation, and FPGA synthesis.",
+      "preferredCertifications": [
+        "Certified VLSI Design Engineer",
+        "ARM Architecture Specialist"
+      ],
+      "preferredTools": [
+        "Cadence Virtuoso",
+        "Synopsys Design Compiler",
+        "ModelSim",
+        "Xilinx Vivado"
+      ],
+      "decliningSkills": [
+        "Manual non-HDL schematic capture",
+        "Obsolete planar bipolar tech"
+      ],
+      "futureRequirements": [
+        "Universal Chiplet Interconnect (UCIe)",
+        "Photonic ICs",
+        "Cryogenic CMOS for Quantum Computing"
+      ],
+      "updatedBy": "Qualcomm / TechNova Labs",
+      "updatedAt": "2026-09-06T19:53:04.922Z"
+    },
+    {
+      "id": "ind_req_3",
+      "roleTitle": "Embedded Systems Engineer",
+      "category": "Hardware",
+      "currentSkills": [
+        "C",
+        "C++",
+        "Microcontrollers",
+        "Embedded C",
+        "Arduino",
+        "ARM",
+        "RTOS",
+        "Communication Protocols (I2C/SPI/UART/CAN)"
+      ],
+      "emergingSkills": [
+        "Embedded Linux (Yocto)",
+        "IoT Device Security",
+        "TinyML on Edge",
+        "BLE / Zigbee Mesh",
+        "Rust for Embedded Systems"
+      ],
+      "technologyTrends": "High surge in EV battery management systems, smart medical IoT wearables, and robotics automation.",
+      "recruitmentRequirements": "Demonstrated hardware interfacing experience, interrupt-driven programming, and RTOS task synchronization.",
+      "preferredCertifications": [
+        "ARM Accredited Engineer",
+        "Embedded Linux System Architecture"
+      ],
+      "preferredTools": [
+        "FreeRTOS",
+        "Keil uVision",
+        "STM32CubeIDE",
+        "Saleae Logic Analyzers"
+      ],
+      "decliningSkills": [
+        "8-bit 8051 legacy assembly",
+        "Unstructured busy-wait superloops"
+      ],
+      "futureRequirements": [
+        "On-device AI inference accelerators",
+        "ISO 26262 Automotive Functional Safety"
+      ],
+      "updatedBy": "Bosch / TechNova Hardware Group",
+      "updatedAt": "2026-09-04T19:53:04.922Z"
+    },
+    {
+      "id": "ind_req_4",
+      "roleTitle": "Full Stack Developer",
+      "category": "Software",
+      "currentSkills": [
+        "React",
+        "Node.js",
+        "JavaScript",
+        "TypeScript",
+        "SQL",
+        "MongoDB",
+        "Git",
+        "HTML/CSS"
+      ],
+      "emergingSkills": [
+        "Next.js App Router",
+        "Server Actions",
+        "GraphQL",
+        "Tailwind CSS",
+        "Docker"
+      ],
+      "technologyTrends": "Convergence towards TypeScript across client and edge serverless runtimes.",
+      "recruitmentRequirements": "Proven full-stack CRUD application with secure JWT authentication and live deployment.",
+      "preferredCertifications": [
+        "Meta Certified Full Stack Developer",
+        "AWS Certified Solutions Architect Associate"
+      ],
+      "preferredTools": [
+        "VS Code",
+        "Docker",
+        "Postman",
+        "Supabase",
+        "Vercel"
+      ],
+      "decliningSkills": [
+        "Ruby on Rails for greenfield apps",
+        "AngularJS 1.x"
+      ],
+      "futureRequirements": [
+        "Edge database synchronization",
+        "Micro-frontends"
+      ],
+      "updatedBy": "CloudMatrix Labs",
+      "updatedAt": "2026-09-02T19:53:04.922Z"
+    }
+  ],
+  "recruitmentFeedbacks": [
+    {
+      "id": "rfb_1789093300936",
+      "studentId": "usr_student_1",
+      "studentName": "Rahul Sharma",
+      "companyName": "TechNova Solutions",
+      "role": "Full Stack Engineer",
+      "selected": true,
+      "technicalPerformance": 5,
+      "overallPerformance": 5,
+      "strongSkills": [
+        "Java",
+        "SQL",
+        "System Architecture"
+      ],
+      "weakSkills": [
+        "Terraform",
+        "Kubernetes"
+      ],
+      "areasForImprovement": "",
+      "comments": "Rahul performed exceptionally in the live data structures pair-programming challenge.",
+      "submittedAt": "2026-09-11T02:21:40.936Z"
+    },
+    {
+      "id": "rfb_1789093218828",
+      "studentId": "usr_student_1",
+      "studentName": "Rahul Sharma",
+      "companyName": "TechNova Solutions",
+      "role": "Full Stack Engineer",
+      "selected": true,
+      "technicalPerformance": 5,
+      "overallPerformance": 5,
+      "strongSkills": [
+        "Java",
+        "SQL",
+        "System Architecture"
+      ],
+      "weakSkills": [
+        "Terraform",
+        "Kubernetes"
+      ],
+      "areasForImprovement": "",
+      "comments": "Rahul performed exceptionally in the live data structures pair-programming challenge.",
+      "submittedAt": "2026-09-11T02:20:18.828Z"
+    },
+    {
+      "id": "rfb_1789069984929",
+      "studentId": "usr_student_1",
+      "studentName": "Rahul Sharma",
+      "companyName": "TechNova Solutions",
+      "role": "Software Developer Intern",
+      "selected": true,
+      "technicalPerformance": 4.9,
+      "overallPerformance": 5,
+      "strongSkills": [
+        "Java",
+        "SQL",
+        "Python"
+      ],
+      "weakSkills": [
+        "React"
+      ],
+      "areasForImprovement": "Deepen React component lifecycle and hook optimization.",
+      "comments": "Outstanding algorithmic efficiency and exceptional engineering attitude.",
+      "submittedAt": "2026-09-10T19:53:04.929Z"
+    },
+    {
+      "id": "rfb_1",
+      "studentId": "usr_student_1",
+      "studentName": "Rahul Sharma",
+      "companyName": "TechNova Solutions",
+      "role": "Software Developer",
+      "selected": true,
+      "technicalPerformance": 4.8,
+      "overallPerformance": 4.9,
+      "strongSkills": [
+        "Java",
+        "SQL",
+        "Python",
+        "Data Structures",
+        "Communication"
+      ],
+      "weakSkills": [
+        "React",
+        "Git branching strategies"
+      ],
+      "areasForImprovement": "Further enhance complex database indexing and practice React custom hooks.",
+      "comments": "Rahul demonstrated exceptional problem-solving in our algorithmic coding round and impressed our senior engineering leads with clear OOP explanations. Selected for our 6-month pre-placement internship with PPO consideration.",
+      "submittedAt": "2026-08-27T19:53:04.922Z"
+    },
+    {
+      "id": "rfb_2",
+      "studentId": "usr_student_2",
+      "studentName": "Priya Patel",
+      "companyName": "TechNova Solutions",
+      "role": "Frontend Developer",
+      "selected": true,
+      "technicalPerformance": 4.6,
+      "overallPerformance": 4.7,
+      "strongSkills": [
+        "JavaScript",
+        "React",
+        "HTML/CSS",
+        "Tailwind CSS",
+        "UI/UX Design"
+      ],
+      "weakSkills": [
+        "Node.js Backend APIs",
+        "Complex SQL Joins"
+      ],
+      "areasForImprovement": "Strengthen full-stack integration and backend API error handling.",
+      "comments": "Outstanding frontend execution, pixel-perfect layout skills, and clean component modularity. Successfully selected for the Frontend Engineering track.",
+      "submittedAt": "2026-08-31T19:53:04.922Z"
+    },
+    {
+      "id": "rfb_3",
+      "studentId": "usr_student_3",
+      "studentName": "Amit Verma",
+      "companyName": "CyberPeak Security",
+      "role": "AI/ML Engineer",
+      "selected": true,
+      "technicalPerformance": 4.5,
+      "overallPerformance": 4.6,
+      "strongSkills": [
+        "Python",
+        "PyTorch",
+        "Data Structures",
+        "Machine Learning"
+      ],
+      "weakSkills": [
+        "Docker container deployment",
+        "REST API microservices"
+      ],
+      "areasForImprovement": "Learn containerization and production ML model deployment pipelines.",
+      "comments": "Strong mathematical foundation in deep learning models. Selected for AI inference research internship.",
+      "submittedAt": "2026-09-05T19:53:04.922Z"
     }
   ]
 }

@@ -42,7 +42,7 @@ export const ApplicationManagement = ({ setActivePage }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           status: newStatus,
-          note: `Recruiter moved candidate to ${newStatus}`
+          note: `Industry talent team moved candidate to ${newStatus}`
         })
       });
 
@@ -66,7 +66,7 @@ export const ApplicationManagement = ({ setActivePage }) => {
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold border border-emerald-500/30">
             <FileCheck className="w-4 h-4" />
-            Recruiter Candidate Pipeline
+            Industry Candidate Pipeline
           </div>
           <h1 className="text-2xl sm:text-4xl font-extrabold font-display">
             Application Pipeline & Stage Management

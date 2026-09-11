@@ -4,27 +4,28 @@
 
 @layer base {
   body {
-    @apply bg-[#050806] text-white;
+    @apply bg-[#102A38] text-[#D3C3B9];
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
-  /* Universal form control base styling - default to high contrast dark text */
+  /* Universal form control base styling - default to high contrast charcoal on light surfaces */
   input,
   select,
   textarea {
-    color: #0f172a; /* Slate-900: high contrast dark text */
-    caret-color: #026fc7; /* Visible brand blue typing cursor */
+    color: #161616; /* Charcoal Black: high contrast deep text */
+    caret-color: #B58863; /* Caramel typing cursor */
   }
 
   /* Accessible placeholders: clearly visible, lighter than typed text */
   input::placeholder,
   textarea::placeholder {
-    color: #64748b !important; /* Slate-500 */
+    color: #A79E9C !important; /* Muted Taupe */
     opacity: 1 !important;
   }
 
   /* Password masking: keep masked as dots, but bullets must be bold, dark, and clearly visible */
   input[type="password"] {
-    color: #0f172a !important;
+    color: #161616 !important;
     letter-spacing: 0.15em;
   }
 
@@ -34,8 +35,8 @@
   input:-webkit-autofill:focus, 
   input:-webkit-autofill:active,
   input:autofill {
-    -webkit-text-fill-color: #0f172a !important;
-    caret-color: #0f172a !important;
+    -webkit-text-fill-color: #161616 !important;
+    caret-color: #B58863 !important;
     box-shadow: 0 0 0 1000px #ffffff inset !important;
     transition: background-color 5000s ease-in-out 0s;
   }
@@ -45,88 +46,95 @@
   input.bg-slate-900,
   input.bg-slate-950,
   input.bg-black,
+  input.bg-navy,
+  input.bg-slate,
+  input.bg-\[\#102A38\],
+  input.bg-\[\#3D4D55\],
   textarea.bg-slate-800,
   textarea.bg-slate-900,
   textarea.bg-slate-950,
   textarea.bg-black,
+  textarea.bg-navy,
+  textarea.bg-slate,
   select.bg-slate-800,
   select.bg-slate-900,
   select.bg-slate-950,
   select.bg-black,
+  select.bg-navy,
+  select.bg-slate,
   .dark-input {
-    color: #f8fafc !important;
-    caret-color: #38a9f7 !important;
+    color: #D3C3B9 !important; /* Warm Cream text */
+    caret-color: #B58863 !important; /* Caramel accent */
   }
 
   input.bg-slate-800::placeholder,
   input.bg-slate-900::placeholder,
   input.bg-slate-950::placeholder,
   input.bg-black::placeholder,
+  input.bg-navy::placeholder,
+  input.bg-slate::placeholder,
   textarea.bg-slate-800::placeholder,
   textarea.bg-slate-900::placeholder,
   textarea.bg-slate-950::placeholder,
   textarea.bg-black::placeholder,
+  textarea.bg-navy::placeholder,
+  textarea.bg-slate::placeholder,
   .dark-input::placeholder {
-    color: #94a3b8 !important;
+    color: #A79E9C !important; /* Muted Taupe */
     opacity: 1 !important;
   }
 
   .dark-input:-webkit-autofill,
   .dark-input:autofill,
   input.bg-slate-800:-webkit-autofill,
-  input.bg-slate-900:-webkit-autofill {
-    -webkit-text-fill-color: #f8fafc !important;
-    caret-color: #f8fafc !important;
-    box-shadow: 0 0 0 1000px #0f172a inset !important;
+  input.bg-slate-900:-webkit-autofill,
+  input.bg-navy:-webkit-autofill {
+    -webkit-text-fill-color: #D3C3B9 !important;
+    caret-color: #B58863 !important;
+    box-shadow: 0 0 0 1000px #3D4D55 inset !important;
   }
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar using 6-color palette */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #050806;
+  background: #102A38; /* Dark Navy */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #166534;
+  background: #3D4D55; /* Slate Blue-Grey */
   border-radius: 8px;
+  border: 2px solid #102A38;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #22c55e;
+  background: #B58863; /* Caramel/Tan */
 }
 
-
-/* Glassmorphism helpers */
+/* Glassmorphism helpers using strictly the 6 approved colors */
 .glass-card {
-  background: rgba(10, 20, 14, 0.72);
+  background: rgba(61, 77, 85, 0.75); /* Slate Blue-Grey with alpha */
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(34, 197, 94, 0.16);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(181, 136, 99, 0.22); /* Subtle Caramel border */
+  box-shadow: 0 8px 32px rgba(16, 42, 56, 0.45);
 }
 
 .gradient-brand {
-  background: linear-gradient(135deg, #0e8ce9 0%, #0358a1 100%);
+  background: linear-gradient(135deg, #102A38 0%, #3D4D55 50%, #B58863 100%);
 }
 
 .gradient-emerald {
-  background: linear-gradient(
-    135deg,
-    #22c55e 0%,
-    #16a34a 45%,
-    #065f46 100%
-  );
+  background: linear-gradient(135deg, #102A38 0%, #3D4D55 100%);
 }
 
-
 .gradient-purple {
-  background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+  background: linear-gradient(135deg, #3D4D55 0%, #102A38 100%);
 }
 
 .gradient-amber {
-  background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%);
+  background: linear-gradient(135deg, #3D4D55 0%, #B58863 100%);
 }

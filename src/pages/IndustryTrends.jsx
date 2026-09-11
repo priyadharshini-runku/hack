@@ -85,7 +85,7 @@ export const IndustryTrends = ({ setActivePage }) => {
               <BarChart3 className="w-5 h-5 text-brand-600" />
               Top Demanded Industry Skills (Active Job Openings)
             </h2>
-            <p className="text-xs text-slate-500">Aggregated hiring volumes across enterprise and startup recruiters</p>
+            <p className="text-xs text-slate-500">Aggregated hiring volumes across enterprise and startup industry partners</p>
           </div>
         </div>
 

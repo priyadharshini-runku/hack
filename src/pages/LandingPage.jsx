@@ -134,7 +134,7 @@ export const LandingPage = ({ setActivePage }) => {
                     onClick={() => handleQuickDemo('company', 'usr_company_1', 'company-dashboard')}
                     className="text-xs px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg font-medium flex items-center gap-1.5 transition-colors"
                   >
-                    🏢 Industry Recruiter
+                    🏢 Industry Partner
                   </button>
                 </div>
               </div>
@@ -359,7 +359,7 @@ export const LandingPage = ({ setActivePage }) => {
                 onClick={() => handleQuickDemo('company', 'usr_company_1', 'company-dashboard')}
                 className="w-full py-2.5 px-4 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold text-sm transition-colors flex items-center justify-center gap-2"
               >
-                Launch Recruiter Dashboard <ArrowRight className="w-4 h-4" />
+                Launch Industry Dashboard <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>
