@@ -75,7 +75,7 @@ export const initialData = {
     },
     {
       id: 'usr_company_2',
-      name: 'David Wilson (Tech Recruiter)',
+      name: 'David Wilson (Tech Industry Lead)',
       email: 'talent@cloudmatrix.com',
       role: 'company',
       avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',

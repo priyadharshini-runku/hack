@@ -1840,7 +1840,7 @@ class DataStore {
           requiredLevel: req.level,
           weight: req.weight,
           priority,
-          whyLearn: `Frequently evaluated (${req.weight}% role impact) by enterprise recruiters for ${role.title} positions.`
+          whyLearn: `Frequently evaluated (${req.weight}% role impact) by enterprise industry hiring teams for ${role.title} positions.`
         });
       }
     });

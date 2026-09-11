@@ -183,7 +183,7 @@ app.get('/api/students', (req, res) => {
         (assignedCollege && (sColName.includes(assignedCollege) || assignedCollege.includes(sColName)));
     });
   } else if (collegeName || collegeId || req.query.institutionId) {
-    // For Industry Recruiters or Admins filtering by institution/college
+    // For Industry or Admins filtering by institution/college
     const term = (req.query.institutionId || collegeName || collegeId).toLowerCase().trim();
     students = students.filter(s => {
       const sInstId = (s.institutionId || '').toLowerCase().trim();

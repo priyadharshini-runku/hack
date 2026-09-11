@@ -224,7 +224,7 @@ export const RegisterPage = ({ setActivePage }) => {
       return;
     }
 
-    // Student & Recruiter Password Validation
+    // Student & Industry Password Validation
     if (!password || password.length < 6) {
       setErrorMsg('Password must be at least 6 characters long for account security.');
       return;
@@ -518,7 +518,7 @@ export const RegisterPage = ({ setActivePage }) => {
             </p>
           </div>
 
-          {/* Institutional / Academic Dropdown Selection (Only for Student and Recruiter) */}
+          {/* Institutional / Academic Dropdown Selection (Only for Student and Industry) */}
           {role === 'admin' ? (
             <div className="p-5 rounded-2xl bg-purple-50 border border-purple-200 space-y-2">
               <div className="flex items-center gap-2 text-xs font-bold text-purple-900 uppercase tracking-wider">
